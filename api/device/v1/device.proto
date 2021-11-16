@@ -1,0 +1,86 @@
+
+syntax = "proto3";
+
+package api.device.v1;
+
+import "google/api/annotations.proto";
+option go_package = "device/api/device/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.device.v1";
+
+service Device {
+	rpc CreateDevice (CreateDeviceRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			post : "/device"
+			body : "dev" // api/device/v1/device_http.pb.go  GetBody() should use &in.Dev
+		};
+	};
+	rpc UpdateDevice (UpdateDeviceRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			put : "/device/{id}"
+			body : "dev"
+		};
+	};
+	rpc DeleteDevice (DeleteDeviceRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			delete : "/device/{id}"
+		};
+	};
+	rpc GetDevice (GetDeviceRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			get : "/device/{id}"
+		};
+	};
+	rpc ListDevice (ListDeviceRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			get : "/device"
+		};
+	};
+}
+
+message DeviceObject {
+	string id = 1;
+}
+
+message CreateDeviceRequest {
+	DeviceEntity     dev   = 1;
+}
+
+message UpdateDeviceRequest {
+	string            id   = 1;
+	DeviceEntity     dev   = 2;
+}
+
+message DeleteDeviceRequest { string id = 1; }
+
+message GetDeviceRequest { string id = 1;}
+
+message ListDeviceRequest {}
+
+
+//------------------------------------------------------------------------------
+// Basic data types
+//------------------------------------------------------------------------------
+message DeviceEntity {
+	string name 							 = 1;
+
+	string desc 							 = 2;
+
+	string group      				 = 3;
+
+	map<string, string> ext    = 4;
+
+	string _id        				 = 5;
+
+	uint64 _createdAt 				 = 6;
+
+	uint64 _updatedAt 				 = 7;
+
+	bool _status      				 = 8;
+
+	bool _enable      				 = 9;
+}
+
+message CommonResponse {
+	string result = 1;
+}
