@@ -18,6 +18,8 @@ import (//User import
 	helloworld "device/api/helloworld/v1"
 	openapi "device/api/openapi/v1"
 	Device_v1 "device/api/device/v1"
+	Group_v1 "device/api/group/v1"
+	Measure_v1 "device/api/measure/v1"
 )
 
 var (
@@ -64,6 +66,14 @@ func main() {
 		DeviceSrv := service.NewDeviceService()
 		Device_v1.RegisterDeviceHTTPServer(httpSrv.Container, DeviceSrv)
 		Device_v1.RegisterDeviceServer(grpcSrv.GetServe(), DeviceSrv)
+
+		GroupSrv := service.NewGroupService()
+		Group_v1.RegisterGroupHTTPServer(httpSrv.Container, GroupSrv)
+		Group_v1.RegisterGroupServer(grpcSrv.GetServe(), GroupSrv)
+
+		MeasureSrv := service.NewMeasureService()
+		Measure_v1.RegisterMeasureHTTPServer(httpSrv.Container, MeasureSrv)
+		Measure_v1.RegisterMeasureServer(grpcSrv.GetServe(), MeasureSrv)
 
 	}
 
