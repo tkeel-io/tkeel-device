@@ -11,29 +11,29 @@ option java_package = "api.device.v1";
 service Device {
 	rpc CreateDevice (CreateDeviceRequest) returns (CommonResponse) {
 		option (google.api.http) = {
-			post : "/device"
+			post : "/devices"
 			body : "dev" // api/device/v1/device_http.pb.go  GetBody() should use &in.Dev
 		};
 	};
 	rpc UpdateDevice (UpdateDeviceRequest) returns (CommonResponse) {
 		option (google.api.http) = {
-			put : "/device/{id}"
+			put : "/devices/{id}"
 			body : "dev"
 		};
 	};
 	rpc DeleteDevice (DeleteDeviceRequest) returns (CommonResponse) {
 		option (google.api.http) = {
-			delete : "/device/{id}"
+			delete : "/devices/{id}"
 		};
 	};
 	rpc GetDevice (GetDeviceRequest) returns (CommonResponse) {
 		option (google.api.http) = {
-			get : "/device/{id}"
+			get : "/devices/{id}"
 		};
 	};
 	rpc ListDevice (ListDeviceRequest) returns (CommonResponse) {
 		option (google.api.http) = {
-			get : "/device"
+			get : "/devices"
 		};
 	};
 }
@@ -51,7 +51,9 @@ message UpdateDeviceRequest {
 	DeviceEntity     dev   = 2;
 }
 
-message DeleteDeviceRequest { string id = 1; }
+message DeleteDeviceRequest {
+	string id = 1;
+}
 
 message GetDeviceRequest { string id = 1;}
 

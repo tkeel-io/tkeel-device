@@ -182,14 +182,14 @@ func RegisterDeviceHTTPServer(container *go_restful.Container, srv DeviceHTTPSer
 	}
 
 	handler := newDeviceHTTPHandler(srv)
-	ws.Route(ws.POST("/device").
+	ws.Route(ws.POST("/devices").
 		To(handler.CreateDevice))
-	ws.Route(ws.PUT("/device/{id}").
+	ws.Route(ws.PUT("/devices/{id}").
 		To(handler.UpdateDevice))
-	ws.Route(ws.DELETE("/device/{id}").
+	ws.Route(ws.DELETE("/devices/{id}").
 		To(handler.DeleteDevice))
-	ws.Route(ws.GET("/device/{id}").
+	ws.Route(ws.GET("/devices/{id}").
 		To(handler.GetDevice))
-	ws.Route(ws.GET("/device").
+	ws.Route(ws.GET("/devices").
 		To(handler.ListDevice))
 }
