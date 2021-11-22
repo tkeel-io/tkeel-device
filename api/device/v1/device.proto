@@ -84,7 +84,7 @@ message DeleteDeviceRequest {
 message GetDeviceRequest { string id = 1;}
 
 message ListDeviceRequest {
-		Filter filter = 1;
+	Filter filter = 1;
 }
 
 message EnableDeviceRequest {
@@ -98,13 +98,13 @@ message AddDeviceExtRequest {
 }
 
 message DeleteDeviceExtRequest {
-		Keys keys = 1;
-		string id = 2;
+	Keys keys = 1;
+	string id = 2;
 }
 
 message UpdateDeviceExtRequest {
 	string    id   = 1;
-		Ext     Ext  = 2;
+	Ext     Ext  = 2;
 }
 
 //------------------------------------------------------------------------------
