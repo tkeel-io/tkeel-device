@@ -30,13 +30,17 @@ func newGreeterHTTPHandler(s GreeterHTTPServer) *GreeterHTTPHandler {
 }
 
 func (h *GreeterHTTPHandler) SayHello(req *go_restful.Request, resp *go_restful.Response) {
-	in := HelloRequest{}
-	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+	in := &HelloRequest{}
+	if err := transportHTTP.GetQuery(req, in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.SayHello(req.Request.Context(), &in)
+	out, err := h.srv.SayHello(req.Request.Context(), in)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
 		return

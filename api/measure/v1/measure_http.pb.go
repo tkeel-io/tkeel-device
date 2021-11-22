@@ -34,17 +34,13 @@ func newMeasureHTTPHandler(s MeasureHTTPServer) *MeasureHTTPHandler {
 }
 
 func (h *MeasureHTTPHandler) CreateMeasure(req *go_restful.Request, resp *go_restful.Response) {
-	in := CreateMeasureRequest{}
-	if err := transportHTTP.GetBody(req, &in.Measure); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
-		return
-	}
-	if err := transportHTTP.GetQuery(req, &in); err != nil {
+	in := &CreateMeasureRequest{}
+	if err := transportHTTP.GetBody(req, in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.CreateMeasure(req.Request.Context(), &in)
+	out, err := h.srv.CreateMeasure(req.Request.Context(), in)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
 		return
@@ -63,13 +59,17 @@ func (h *MeasureHTTPHandler) CreateMeasure(req *go_restful.Request, resp *go_res
 }
 
 func (h *MeasureHTTPHandler) DeleteMeasure(req *go_restful.Request, resp *go_restful.Response) {
-	in := DeleteMeasureRequest{}
-	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+	in := &DeleteMeasureRequest{}
+	if err := transportHTTP.GetQuery(req, in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.DeleteMeasure(req.Request.Context(), &in)
+	out, err := h.srv.DeleteMeasure(req.Request.Context(), in)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
 		return
@@ -88,13 +88,17 @@ func (h *MeasureHTTPHandler) DeleteMeasure(req *go_restful.Request, resp *go_res
 }
 
 func (h *MeasureHTTPHandler) GetMeasure(req *go_restful.Request, resp *go_restful.Response) {
-	in := GetMeasureRequest{}
-	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+	in := &GetMeasureRequest{}
+	if err := transportHTTP.GetQuery(req, in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.GetMeasure(req.Request.Context(), &in)
+	out, err := h.srv.GetMeasure(req.Request.Context(), in)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
 		return
@@ -113,9 +117,13 @@ func (h *MeasureHTTPHandler) GetMeasure(req *go_restful.Request, resp *go_restfu
 }
 
 func (h *MeasureHTTPHandler) ListMeasure(req *go_restful.Request, resp *go_restful.Response) {
-	in := ListMeasureRequest{}
+	in := &ListMeasureRequest{}
+	if err := transportHTTP.GetQuery(req, in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
 
-	out, err := h.srv.ListMeasure(req.Request.Context(), &in)
+	out, err := h.srv.ListMeasure(req.Request.Context(), in)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
 		return
@@ -134,21 +142,17 @@ func (h *MeasureHTTPHandler) ListMeasure(req *go_restful.Request, resp *go_restf
 }
 
 func (h *MeasureHTTPHandler) UpdateMeasure(req *go_restful.Request, resp *go_restful.Response) {
-	in := UpdateMeasureRequest{}
-	if err := transportHTTP.GetBody(req, &in.Measure); err != nil {
+	in := &UpdateMeasureRequest{}
+	if err := transportHTTP.GetBody(req, in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
-		return
-	}
-	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+	if err := transportHTTP.GetPathValue(req, in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.UpdateMeasure(req.Request.Context(), &in)
+	out, err := h.srv.UpdateMeasure(req.Request.Context(), in)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
 		return

@@ -32,6 +32,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	}
 	return &pb.CommonResponse{Result: string(res)}, nil
 }
+
 func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRequest) (*pb.CommonResponse, error) {
 	log.Debug("UpdateDevice")
 	log.Debug("req:", req)
@@ -46,6 +47,7 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	}
 	return &pb.CommonResponse{Result: string(res)}, nil
 }
+
 func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRequest) (*pb.CommonResponse, error) {
 	log.Debug("DeleteDevice")
 	log.Debug("req:", req)
@@ -60,6 +62,7 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 	}
 	return &pb.CommonResponse{Result: "ok"}, nil
 }
+
 func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest) (*pb.CommonResponse, error) {
 	log.Debug("GetDevice")
 	log.Debug("req:", req)
@@ -70,6 +73,7 @@ func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest)
 	}
 	return &pb.CommonResponse{Result: string(res)}, nil
 }
+
 func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceRequest) (*pb.CommonResponse, error) {
 	log.Debug("ListDevice")
 	log.Debug("req:", req)
@@ -83,4 +87,39 @@ func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceReques
 		return nil, err2
 	}
 	return &pb.CommonResponse{Result: string(res)}, nil
+}
+
+func (s *DeviceService) EnableDevice(ctx context.Context, req *pb.EnableDeviceRequest) (*pb.CommonResponse, error) {
+	log.Debug("EnableDevice")
+	log.Debug("req:", req)
+	ext := map[string]interface{}{
+		"enable": req.Enable,
+		//device id
+		"id": req.Id,
+	}
+	data, err := json.Marshal(ext)
+	if err != nil {
+		return &pb.CommonResponse{Result: "failed"}, err
+	}
+	_, err2 := s.client.Put(data)
+	if nil != err2{
+		log.Error("error put data to core")
+		return &pb.CommonResponse{Result: "failed"}, err2
+	}
+	return &pb.CommonResponse{Result: "ok"}, nil
+}
+func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRequest) (*pb.CommonResponse, error) {
+	log.Debug("AddDeviceExt")
+	log.Debug("req:", req)
+	return &pb.CommonResponse{}, nil
+}
+func (s *DeviceService) DeleteDeviceExt(ctx context.Context, req *pb.DeleteDeviceExtRequest) (*pb.CommonResponse, error) {
+	log.Debug("DeleteDeviceExt")
+	log.Debug("req:", req)
+	return &pb.CommonResponse{}, nil
+}
+func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDeviceExtRequest) (*pb.CommonResponse, error) {
+	log.Debug("UpdateDeviceExt")
+	log.Debug("req:", req)
+	return &pb.CommonResponse{}, nil
 }
