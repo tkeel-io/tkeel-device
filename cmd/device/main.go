@@ -32,7 +32,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&Name, "name", "hello", "app name.")
+	flag.StringVar(&Name, "name", "device", "app name.")
 	flag.StringVar(&HTTPAddr, "http_addr", ":31234", "http listen address.")
 	flag.StringVar(&GRPCAddr, "grpc_addr", ":31233", "grpc listen address.")
 }

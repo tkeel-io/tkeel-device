@@ -64,7 +64,11 @@ func (h *DeviceHTTPHandler) CreateDevice(req *go_restful.Request, resp *go_restf
 
 func (h *DeviceHTTPHandler) DeleteDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := DeleteDeviceRequest{}
-	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
@@ -114,6 +118,14 @@ func (h *DeviceHTTPHandler) GetDevice(req *go_restful.Request, resp *go_restful.
 
 func (h *DeviceHTTPHandler) ListDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := ListDeviceRequest{}
+	if err := transportHTTP.GetBody(req, &in.Filter); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
 
 	out, err := h.srv.ListDevice(req.Request.Context(), &in)
 	if err != nil {
@@ -182,14 +194,14 @@ func RegisterDeviceHTTPServer(container *go_restful.Container, srv DeviceHTTPSer
 	}
 
 	handler := newDeviceHTTPHandler(srv)
-	ws.Route(ws.POST("/device").
+	ws.Route(ws.POST("/devices").
 		To(handler.CreateDevice))
-	ws.Route(ws.PUT("/device/{id}").
+	ws.Route(ws.PUT("/devices/{id}").
 		To(handler.UpdateDevice))
-	ws.Route(ws.DELETE("/device/{id}").
+	ws.Route(ws.POST("/devices/delete").
 		To(handler.DeleteDevice))
-	ws.Route(ws.GET("/device/{id}").
+	ws.Route(ws.GET("/devices/{id}").
 		To(handler.GetDevice))
-	ws.Route(ws.GET("/device").
+	ws.Route(ws.POST("/devices/search").
 		To(handler.ListDevice))
 }
