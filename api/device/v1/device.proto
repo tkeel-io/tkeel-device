@@ -12,7 +12,7 @@ service Device {
 	rpc CreateDevice (CreateDeviceRequest) returns (CommonResponse) {
 		option (google.api.http) = {
 			post : "/devices"
-			body : "dev" // api/device/v1/device_http.pb.go  GetBody() should use &in.Dev
+			body : "dev"
 		};
 	};
 	rpc UpdateDevice (UpdateDeviceRequest) returns (CommonResponse) {
@@ -23,7 +23,8 @@ service Device {
 	};
 	rpc DeleteDevice (DeleteDeviceRequest) returns (CommonResponse) {
 		option (google.api.http) = {
-			delete : "/devices/{id}"
+			post : "/devices/delete"
+			body: "ids"
 		};
 	};
 	rpc GetDevice (GetDeviceRequest) returns (CommonResponse) {
@@ -33,7 +34,8 @@ service Device {
 	};
 	rpc ListDevice (ListDeviceRequest) returns (CommonResponse) {
 		option (google.api.http) = {
-			get : "/devices"
+			post : "/devices/search"
+			body: "filter"
 		};
 	};
 }
@@ -52,12 +54,14 @@ message UpdateDeviceRequest {
 }
 
 message DeleteDeviceRequest {
-	string id = 1;
+	Ids ids = 1;
 }
 
 message GetDeviceRequest { string id = 1;}
 
-message ListDeviceRequest {}
+message ListDeviceRequest {
+		Filter filter = 1;
+}
 
 
 //------------------------------------------------------------------------------
@@ -85,4 +89,27 @@ message DeviceEntity {
 
 message CommonResponse {
 	string result = 1;
+}
+
+message Filter {
+	Page page      = 1;
+
+	repeated Condition condition = 2;
+}
+
+message Page {
+	uint32 offset = 1;
+	uint32 limit  = 2;
+	string sort   = 3;
+	bool reverse  = 4;
+}
+
+message Condition {
+	string field 		= 1;
+	string value  	= 2;
+	string operator = 3;
+}
+
+message Ids {
+	repeated string ids = 1;
 }
