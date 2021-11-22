@@ -38,6 +38,30 @@ service Device {
 			body: "filter"
 		};
 	};
+	rpc EnableDevice (EnableDeviceRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			put : "/devices/{id}/enable"
+			body: "enable"
+		};
+	};
+	rpc AddDeviceExt (AddDeviceExtRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			post : "/devices/{id}/ext"
+			body: "ext"
+		};
+	};
+	rpc DeleteDeviceExt (DeleteDeviceExtRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			post : "/devices/{id}/ext/delete"
+			body: "keys"
+		};
+	};
+	rpc UpdateDeviceExt (UpdateDeviceExtRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			put : "/devices/{id}/ext"
+			body: "ext"
+		};
+	};
 }
 
 message DeviceObject {
@@ -60,9 +84,28 @@ message DeleteDeviceRequest {
 message GetDeviceRequest { string id = 1;}
 
 message ListDeviceRequest {
-		Filter filter = 1;
+	Filter filter = 1;
 }
 
+message EnableDeviceRequest {
+	bool enable = 1;
+	string id   = 2;
+}
+
+message AddDeviceExtRequest {
+	map<string, string> ext = 1;
+	string id 							= 2;
+}
+
+message DeleteDeviceExtRequest {
+	Keys keys = 1;
+	string id = 2;
+}
+
+message UpdateDeviceExtRequest {
+	string    id   = 1;
+	Ext     Ext  = 2;
+}
 
 //------------------------------------------------------------------------------
 // Basic data types
@@ -112,4 +155,14 @@ message Condition {
 
 message Ids {
 	repeated string ids = 1;
+}
+
+message Keys {
+	repeated string keys = 1;
+}
+
+message Ext {
+	string old_key = 1;
+	string new_key = 2;
+	string value   = 3;
 }
