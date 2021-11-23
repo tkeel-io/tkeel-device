@@ -8,6 +8,7 @@ import (
 	context "context"
 	json "encoding/json"
 	go_restful "github.com/emicklei/go-restful"
+	errors "github.com/tkeel-io/kit/errors"
 	http "net/http"
 )
 
@@ -15,7 +16,7 @@ import transportHTTP "github.com/tkeel-io/kit/transport/http"
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the tkeel package it is being compiled against.
-// import package.context.http.go_restful.json.
+// import package.context.http.go_restful.json.errors.
 
 type DeviceHTTPServer interface {
 	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*CommonResponse, error)
@@ -38,19 +39,27 @@ func newDeviceHTTPHandler(s DeviceHTTPServer) *DeviceHTTPHandler {
 }
 
 func (h *DeviceHTTPHandler) AddDeviceExt(req *go_restful.Request, resp *go_restful.Response) {
-	in := &AddDeviceExtRequest{}
-	if err := transportHTTP.GetBody(req, in); err != nil {
+	in := AddDeviceExtRequest{}
+	if err := transportHTTP.GetBody(req, &in.Ext); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := transportHTTP.GetPathValue(req, in); err != nil {
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.AddDeviceExt(req.Request.Context(), in)
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.AddDeviceExt(ctx, &in)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
 
@@ -67,15 +76,23 @@ func (h *DeviceHTTPHandler) AddDeviceExt(req *go_restful.Request, resp *go_restf
 }
 
 func (h *DeviceHTTPHandler) CreateDevice(req *go_restful.Request, resp *go_restful.Response) {
-	in := &CreateDeviceRequest{}
-	if err := transportHTTP.GetBody(req, in); err != nil {
+	in := CreateDeviceRequest{}
+	if err := transportHTTP.GetBody(req, &in.Dev); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.CreateDevice(req.Request.Context(), in)
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.CreateDevice(ctx, &in)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
 
@@ -92,15 +109,23 @@ func (h *DeviceHTTPHandler) CreateDevice(req *go_restful.Request, resp *go_restf
 }
 
 func (h *DeviceHTTPHandler) DeleteDevice(req *go_restful.Request, resp *go_restful.Response) {
-	in := &DeleteDeviceRequest{}
-	if err := transportHTTP.GetBody(req, in); err != nil {
+	in := DeleteDeviceRequest{}
+	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.DeleteDevice(req.Request.Context(), in)
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.DeleteDevice(ctx, &in)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
 
@@ -117,19 +142,27 @@ func (h *DeviceHTTPHandler) DeleteDevice(req *go_restful.Request, resp *go_restf
 }
 
 func (h *DeviceHTTPHandler) DeleteDeviceExt(req *go_restful.Request, resp *go_restful.Response) {
-	in := &DeleteDeviceExtRequest{}
-	if err := transportHTTP.GetBody(req, in); err != nil {
+	in := DeleteDeviceExtRequest{}
+	if err := transportHTTP.GetBody(req, &in.Keys); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := transportHTTP.GetPathValue(req, in); err != nil {
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.DeleteDeviceExt(req.Request.Context(), in)
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.DeleteDeviceExt(ctx, &in)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
 
@@ -146,19 +179,27 @@ func (h *DeviceHTTPHandler) DeleteDeviceExt(req *go_restful.Request, resp *go_re
 }
 
 func (h *DeviceHTTPHandler) EnableDevice(req *go_restful.Request, resp *go_restful.Response) {
-	in := &EnableDeviceRequest{}
-	if err := transportHTTP.GetBody(req, in); err != nil {
+	in := EnableDeviceRequest{}
+	if err := transportHTTP.GetBody(req, &in.Enable); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := transportHTTP.GetPathValue(req, in); err != nil {
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.EnableDevice(req.Request.Context(), in)
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.EnableDevice(ctx, &in)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
 
@@ -175,19 +216,23 @@ func (h *DeviceHTTPHandler) EnableDevice(req *go_restful.Request, resp *go_restf
 }
 
 func (h *DeviceHTTPHandler) GetDevice(req *go_restful.Request, resp *go_restful.Response) {
-	in := &GetDeviceRequest{}
-	if err := transportHTTP.GetQuery(req, in); err != nil {
+	in := GetDeviceRequest{}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := transportHTTP.GetPathValue(req, in); err != nil {
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.GetDevice(req.Request.Context(), in)
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.GetDevice(ctx, &in)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
 
@@ -204,15 +249,23 @@ func (h *DeviceHTTPHandler) GetDevice(req *go_restful.Request, resp *go_restful.
 }
 
 func (h *DeviceHTTPHandler) ListDevice(req *go_restful.Request, resp *go_restful.Response) {
-	in := &ListDeviceRequest{}
-	if err := transportHTTP.GetBody(req, in); err != nil {
+	in := ListDeviceRequest{}
+	if err := transportHTTP.GetBody(req, &in.Filter); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.ListDevice(req.Request.Context(), in)
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.ListDevice(ctx, &in)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
 
@@ -229,19 +282,27 @@ func (h *DeviceHTTPHandler) ListDevice(req *go_restful.Request, resp *go_restful
 }
 
 func (h *DeviceHTTPHandler) UpdateDevice(req *go_restful.Request, resp *go_restful.Response) {
-	in := &UpdateDeviceRequest{}
-	if err := transportHTTP.GetBody(req, in); err != nil {
+	in := UpdateDeviceRequest{}
+	if err := transportHTTP.GetBody(req, &in.Dev); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := transportHTTP.GetPathValue(req, in); err != nil {
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.UpdateDevice(req.Request.Context(), in)
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.UpdateDevice(ctx, &in)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
 
@@ -258,19 +319,27 @@ func (h *DeviceHTTPHandler) UpdateDevice(req *go_restful.Request, resp *go_restf
 }
 
 func (h *DeviceHTTPHandler) UpdateDeviceExt(req *go_restful.Request, resp *go_restful.Response) {
-	in := &UpdateDeviceExtRequest{}
-	if err := transportHTTP.GetBody(req, in); err != nil {
+	in := UpdateDeviceExtRequest{}
+	if err := transportHTTP.GetBody(req, &in.Ext); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := transportHTTP.GetPathValue(req, in); err != nil {
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.UpdateDeviceExt(req.Request.Context(), in)
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.UpdateDeviceExt(ctx, &in)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
 
