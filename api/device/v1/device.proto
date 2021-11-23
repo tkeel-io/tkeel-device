@@ -93,8 +93,8 @@ message EnableDeviceRequest {
 }
 
 message AddDeviceExtRequest {
-    Kvs           ext = 1;
-	string id 							= 2;
+	Kvs     ext  = 1;
+	string  id 	 = 2;
 }
 
 message DeleteDeviceExtRequest {
