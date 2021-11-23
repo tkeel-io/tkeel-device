@@ -8,6 +8,7 @@ import (
 	context "context"
 	json "encoding/json"
 	go_restful "github.com/emicklei/go-restful"
+	errors "github.com/tkeel-io/kit/errors"
 	http "net/http"
 )
 
@@ -15,7 +16,7 @@ import transportHTTP "github.com/tkeel-io/kit/transport/http"
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the tkeel package it is being compiled against.
-// import package.context.http.go_restful.json.
+// import package.context.http.go_restful.json.errors.
 
 type GreeterHTTPServer interface {
 	SayHello(context.Context, *HelloRequest) (*HelloResponse, error)
@@ -30,19 +31,23 @@ func newGreeterHTTPHandler(s GreeterHTTPServer) *GreeterHTTPHandler {
 }
 
 func (h *GreeterHTTPHandler) SayHello(req *go_restful.Request, resp *go_restful.Response) {
-	in := &HelloRequest{}
-	if err := transportHTTP.GetQuery(req, in); err != nil {
+	in := HelloRequest{}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := transportHTTP.GetPathValue(req, in); err != nil {
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	out, err := h.srv.SayHello(req.Request.Context(), in)
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.SayHello(ctx, &in)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
 
