@@ -93,7 +93,7 @@ message EnableDeviceRequest {
 }
 
 message AddDeviceExtRequest {
-	map<string, string> ext = 1;
+    Kvs           ext = 1;
 	string id 							= 2;
 }
 
@@ -104,9 +104,12 @@ message DeleteDeviceExtRequest {
 
 message UpdateDeviceExtRequest {
 	string    id   = 1;
-	Ext     Ext  = 2;
+	Ext     ext  = 2;
 }
 
+message Kvs {
+	map<string, string> kvs = 1;
+}
 //------------------------------------------------------------------------------
 // Basic data types
 //------------------------------------------------------------------------------
