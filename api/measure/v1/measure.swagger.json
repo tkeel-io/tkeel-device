@@ -1,0 +1,248 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/measure/v1/measure.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Measure"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/measure": {
+      "get": {
+        "operationId": "Measure_ListMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Measure"
+        ]
+      },
+      "post": {
+        "operationId": "Measure_CreateMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1MeasureEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      }
+    },
+    "/measure/{id}": {
+      "get": {
+        "operationId": "Measure_GetMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      },
+      "delete": {
+        "operationId": "Measure_DeleteMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      },
+      "put": {
+        "operationId": "Measure_UpdateMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1MeasureEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "apimeasurev1CommonResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1MeasureEntity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "device": {
+          "type": "string"
+        },
+        "data_type": {
+          "type": "string"
+        },
+        "precision": {
+          "type": "number",
+          "format": "float"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "measure_type": {
+          "type": "string"
+        },
+        "ext": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "_id": {
+          "type": "string"
+        },
+        "_createdAt": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "_updatedAt": {
+          "type": "string",
+          "format": "uint64"
+        }
+      },
+      "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
+    }
+  }
+}
