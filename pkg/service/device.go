@@ -94,7 +94,6 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest) (*pb.CommonResponse, error) {
 	log.Debug("GetDevice")
 	log.Debug("req:", req)
-
 	tm, err := s.client.GetTokenMap(ctx)
 	if nil != err{
 		return nil, err

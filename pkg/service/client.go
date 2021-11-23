@@ -81,10 +81,6 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 	tokenMap := res["data"].(map[string]interface{})
 
 	// save token, map[entity_id:406c79543e0245a994a742e69ce48e71 entity_type:device tenant_id: token_id:de25624a-1d0a-4ab0-b1f1-5b0db5a12c30 user_id:abc]
-	c.owner = tokenMap["user_id"].(string)
-	c.id    = tokenMap["entity_id"].(string)
-	c.entityType    = tokenMap["entity_type"].(string)
-	c.source        = "device"
 	urlMap := map[string]string{
 		"owner": 	  tokenMap["user_id"].(string),
 		"id":    	  tokenMap["entity_id"].(string),
