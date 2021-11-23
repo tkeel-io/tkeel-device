@@ -32,54 +32,50 @@ func NewCoreClient() *CoreClient {
 }
 
 // get core url
-func (c *CoreClient) GetCoreUrl(midUrl string) string {
-	url :=  fmt.Sprintf(coreUrl + midUrl + "?" +  "id=%s&type=%s&owner=%s&source=%s", c.id, c.entityType, c.owner, c.source)
-	c.url = url
+func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string) string {
+	url :=  fmt.Sprintf(coreUrl + midUrl + "?" +  "id=%s&type=%s&owner=%s&source=%s", mapUrl["id"], mapUrl["entityType"], mapUrl["owner"], mapUrl["source"])
 	return url
 }
 
 //get token
-func (c *CoreClient) GetToken(ctx context.Context) (string, error) {
+func (c *CoreClient) GetTokenMap(ctx context.Context) (map[string]string, error) {
 	header := transportHTTP.HeaderFromContext(ctx)
 	token, ok := header[tokenKey]
 	if !ok {
-		return "", errors.New("invalid Authentication")
+		return nil, errors.New("invalid Authentication")
 	}
 	// only use the first one
-	if err := c.parseToken(token[0]); nil != err{
-		return "", err
-	}
-	return token[0], nil
+	return c.parseToken(token[0])
 }
 
-func (c *CoreClient) parseToken(token string) (error) {
+func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 	data := map[string]string{
 		"entity_token": token,
 	}
 	dt, err := json.Marshal(data)
 	if nil != err {
 		log.Error("Marshal err", err)
-		return err
+		return nil, err
 	}
 	resp, err := http.Post(authUrl, "application/json", bytes.NewBuffer(dt))
 
 	resp2, err2 := c.ParseResp(resp, err)
 	if nil != err2 {
 		log.Debug("error parse token, ", err)
-		return err2
+		return nil, err2
 	}
 	var ar interface{}
 	if err3 := json.Unmarshal(resp2, &ar); nil != err3 {
 		log.Error("resp Unmarshal error", err3)
-		return err3
+		return nil, err3
 	}
 	//log.Debug("Unmarshal res:", ar)
 	res, err4 := ar.(map[string]interface{})
 	if false == err4 {
-		return errors.New("auth error")
+		return nil, errors.New("auth error")
 	}
 	if res["ret"].(float64) != 0 {
-		return errors.New(res["msg"].(string))
+		return nil, errors.New(res["msg"].(string))
 
 	}
 	tokenMap := res["data"].(map[string]interface{})
@@ -89,26 +85,31 @@ func (c *CoreClient) parseToken(token string) (error) {
 	c.id    = tokenMap["entity_id"].(string)
 	c.entityType    = tokenMap["entity_type"].(string)
 	c.source        = "device"
-
-	return nil
+	urlMap := map[string]string{
+		"owner": 	  tokenMap["user_id"].(string),
+		"id":    	  tokenMap["entity_id"].(string),
+		"entityType": tokenMap["entity_type"].(string),
+		"source":     "device",
+	}
+	return urlMap, nil
 }
 
-func (c *CoreClient) Post(ctx context.Context, data []byte) ([]byte, error) {
-	resp, err := http.Post(c.url, "application/json", bytes.NewBuffer(data))
+func (c *CoreClient) Post(url string, data []byte) ([]byte, error) {
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(data))
 
 	return c.ParseResp(resp, err)
 }
 
-func (c *CoreClient) Get(ctx context.Context, id string) ([]byte, error) {
+func (c *CoreClient) Get(url string, id string) ([]byte, error) {
 	log.Debug("fixme id", id)
-	resp, err := http.Get(c.url)
+	resp, err := http.Get(url)
 
 	return c.ParseResp(resp, err)
 }
 
-func (c *CoreClient) Put(ctx context.Context, data []byte) ([]byte, error) {
+func (c *CoreClient) Put(url string, data []byte) ([]byte, error) {
 	payload := strings.NewReader(string(data))
-	req, _ := http.NewRequest("PUT", c.url, payload)
+	req, _ := http.NewRequest("PUT", url, payload)
 
 	req.Header.Add("Content-Type", "application/json")
 
@@ -116,8 +117,8 @@ func (c *CoreClient) Put(ctx context.Context, data []byte) ([]byte, error) {
 	return c.ParseResp(resp, err)
 }
 
-func (c *CoreClient) Delete(ctx context.Context, data []byte) ([]byte, error) {
-	req, _ := http.NewRequest("DELETE", c.url, nil)
+func (c *CoreClient) Delete(url string, data []byte) ([]byte, error) {
+	req, _ := http.NewRequest("DELETE", url, nil)
 	//req.Header.Add("Authorization", "xxxx")
 
 	resp, err := http.DefaultClient.Do(req)
@@ -126,7 +127,7 @@ func (c *CoreClient) Delete(ctx context.Context, data []byte) ([]byte, error) {
 
 func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 	if err != nil {
-		log.Error("error get", err, c.url)
+		log.Error("error get", err)
 		return nil, err
 	}
 
