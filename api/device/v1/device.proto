@@ -4,12 +4,15 @@ syntax = "proto3";
 package api.device.v1;
 
 import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "tkeel-io/core/api/v1/entity.proto";
+
 option go_package = "device/api/device/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.device.v1";
 
 service Device {
-	rpc CreateDevice (CreateDeviceRequest) returns (CommonResponse) {
+	rpc CreateDevice (CreateDeviceRequest) returns (CreateDeviceResponse) {
 		option (google.api.http) = {
 			post : "/devices"
 			body : "dev"
@@ -68,6 +71,7 @@ message DeviceObject {
 	string id = 1;
 }
 
+//user to device
 message CreateDeviceRequest {
 	DeviceEntity     dev   = 1;
 }
@@ -88,13 +92,13 @@ message ListDeviceRequest {
 }
 
 message EnableDeviceRequest {
-	bool enable = 1;
+	Enable enable = 1;
 	string id   = 2;
 }
 
 message AddDeviceExtRequest {
-	Kvs     ext  = 1;
-	string  id 	 = 2;
+	string                id 	 = 1;
+	google.protobuf.Value	ext  = 2;
 }
 
 message DeleteDeviceExtRequest {
@@ -107,9 +111,20 @@ message UpdateDeviceExtRequest {
 	Ext     ext  = 2;
 }
 
-message Kvs {
-	map<string, string> kvs = 1;
+// device to core
+message DeviceEntityCoreInfo {
+	DeviceEntity     			dev = 1;
+	DeviceEntitySysField	sysField = 2;
 }
+
+message CreateDeviceResponse {
+	string result = 1;
+	DeviceEntitySysField sysField = 2;
+}
+
+
+
+
 //------------------------------------------------------------------------------
 // Basic data types
 //------------------------------------------------------------------------------
@@ -120,17 +135,32 @@ message DeviceEntity {
 
 	string group      				 = 3;
 
-	map<string, string> ext    = 4;
+	google.protobuf.Value ext  = 4;
+}
 
+// system fields
+message DeviceEntitySysField {
 	string _id        				 = 5;
 
-	uint64 _createdAt 				 = 6;
+	int64 _createdAt 				 = 6;
 
-	uint64 _updatedAt 				 = 7;
+	int64 _updatedAt 				 = 7;
 
 	bool _status      				 = 8;
 
 	bool _enable      				 = 9;
+
+	string _token              = 10;
+
+	string _clientid           = 11;
+
+	string _username           = 12;
+
+	string _peerhost           = 14;
+
+	int32 _sockport            = 15;
+
+	string _protocol           = 16;
 }
 
 message CommonResponse {
@@ -165,7 +195,10 @@ message Keys {
 }
 
 message Ext {
-	string old_key = 1;
-	string new_key = 2;
-	string value   = 3;
+	string key   = 1;
+	string value = 2;
+}
+
+message Enable {
+	bool enable = 1;
 }
