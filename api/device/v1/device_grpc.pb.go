@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DeviceClient interface {
-	CreateDevice(ctx context.Context, in *CreateDeviceRequest, opts ...grpc.CallOption) (*CommonResponse, error)
+	CreateDevice(ctx context.Context, in *CreateDeviceRequest, opts ...grpc.CallOption) (*CreateDeviceResponse, error)
 	UpdateDevice(ctx context.Context, in *UpdateDeviceRequest, opts ...grpc.CallOption) (*CommonResponse, error)
 	DeleteDevice(ctx context.Context, in *DeleteDeviceRequest, opts ...grpc.CallOption) (*CommonResponse, error)
 	GetDevice(ctx context.Context, in *GetDeviceRequest, opts ...grpc.CallOption) (*CommonResponse, error)
@@ -37,8 +37,8 @@ func NewDeviceClient(cc grpc.ClientConnInterface) DeviceClient {
 	return &deviceClient{cc}
 }
 
-func (c *deviceClient) CreateDevice(ctx context.Context, in *CreateDeviceRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	out := new(CommonResponse)
+func (c *deviceClient) CreateDevice(ctx context.Context, in *CreateDeviceRequest, opts ...grpc.CallOption) (*CreateDeviceResponse, error) {
+	out := new(CreateDeviceResponse)
 	err := c.cc.Invoke(ctx, "/api.device.v1.Device/CreateDevice", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func (c *deviceClient) UpdateDeviceExt(ctx context.Context, in *UpdateDeviceExtR
 // All implementations must embed UnimplementedDeviceServer
 // for forward compatibility
 type DeviceServer interface {
-	CreateDevice(context.Context, *CreateDeviceRequest) (*CommonResponse, error)
+	CreateDevice(context.Context, *CreateDeviceRequest) (*CreateDeviceResponse, error)
 	UpdateDevice(context.Context, *UpdateDeviceRequest) (*CommonResponse, error)
 	DeleteDevice(context.Context, *DeleteDeviceRequest) (*CommonResponse, error)
 	GetDevice(context.Context, *GetDeviceRequest) (*CommonResponse, error)
@@ -138,7 +138,7 @@ type DeviceServer interface {
 type UnimplementedDeviceServer struct {
 }
 
-func (UnimplementedDeviceServer) CreateDevice(context.Context, *CreateDeviceRequest) (*CommonResponse, error) {
+func (UnimplementedDeviceServer) CreateDevice(context.Context, *CreateDeviceRequest) (*CreateDeviceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateDevice not implemented")
 }
 func (UnimplementedDeviceServer) UpdateDevice(context.Context, *UpdateDeviceRequest) (*CommonResponse, error) {

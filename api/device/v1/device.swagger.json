@@ -23,7 +23,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apidevicev1CommonResponse"
+              "$ref": "#/definitions/v1CreateDeviceResponse"
             }
           },
           "default": {
@@ -71,7 +71,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apidevicev1Ids"
+              "$ref": "#/definitions/v1Ids"
             }
           }
         ],
@@ -103,7 +103,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apidevicev1Filter"
+              "$ref": "#/definitions/v1Filter"
             }
           }
         ],
@@ -207,7 +207,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "boolean"
+              "$ref": "#/definitions/v1Enable"
             }
           }
         ],
@@ -245,7 +245,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apidevicev1Kvs"
+              "type": "object"
             }
           }
         ],
@@ -319,7 +319,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apidevicev1Keys"
+              "$ref": "#/definitions/v1Keys"
             }
           }
         ],
@@ -338,86 +338,6 @@
         }
       }
     },
-    "apidevicev1Condition": {
-      "type": "object",
-      "properties": {
-        "field": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        },
-        "operator": {
-          "type": "string"
-        }
-      }
-    },
-    "apidevicev1Filter": {
-      "type": "object",
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/apidevicev1Page"
-        },
-        "condition": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apidevicev1Condition"
-          }
-        }
-      }
-    },
-    "apidevicev1Ids": {
-      "type": "object",
-      "properties": {
-        "ids": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "apidevicev1Keys": {
-      "type": "object",
-      "properties": {
-        "keys": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "apidevicev1Kvs": {
-      "type": "object",
-      "properties": {
-        "kvs": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "apidevicev1Page": {
-      "type": "object",
-      "properties": {
-        "offset": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "sort": {
-          "type": "string"
-        },
-        "reverse": {
-          "type": "boolean"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -426,6 +346,14 @@
         }
       },
       "additionalProperties": {}
+    },
+    "protobufNullValue": {
+      "type": "string",
+      "enum": [
+        "NULL_VALUE"
+      ],
+      "default": "NULL_VALUE",
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
     },
     "rpcStatus": {
       "type": "object",
@@ -445,6 +373,31 @@
         }
       }
     },
+    "v1Condition": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateDeviceResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        },
+        "sysField": {
+          "$ref": "#/definitions/v1DeviceEntitySysField"
+        }
+      }
+    },
     "v1DeviceEntity": {
       "type": "object",
       "properties": {
@@ -458,42 +411,124 @@
           "type": "string"
         },
         "ext": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
+          "type": "object"
+        }
+      },
+      "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
+    },
+    "v1DeviceEntitySysField": {
+      "type": "object",
+      "properties": {
         "_id": {
           "type": "string"
         },
         "_createdAt": {
           "type": "string",
-          "format": "uint64"
+          "format": "int64"
         },
         "_updatedAt": {
           "type": "string",
-          "format": "uint64"
+          "format": "int64"
         },
         "_status": {
           "type": "boolean"
         },
         "_enable": {
           "type": "boolean"
+        },
+        "_token": {
+          "type": "string"
+        },
+        "_clientid": {
+          "type": "string"
+        },
+        "_username": {
+          "type": "string"
+        },
+        "_peerhost": {
+          "type": "string"
+        },
+        "_sockport": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "_protocol": {
+          "type": "string"
         }
       },
-      "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
+      "title": "system fields"
+    },
+    "v1Enable": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "type": "boolean"
+        }
+      }
     },
     "v1Ext": {
       "type": "object",
       "properties": {
-        "old_key": {
-          "type": "string"
-        },
-        "new_key": {
+        "key": {
           "type": "string"
         },
         "value": {
           "type": "string"
+        }
+      }
+    },
+    "v1Filter": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/v1Page"
+        },
+        "condition": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Condition"
+          }
+        }
+      }
+    },
+    "v1Ids": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1Keys": {
+      "type": "object",
+      "properties": {
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1Page": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sort": {
+          "type": "string"
+        },
+        "reverse": {
+          "type": "boolean"
         }
       }
     }

@@ -20,7 +20,7 @@ import transportHTTP "github.com/tkeel-io/kit/transport/http"
 
 type DeviceHTTPServer interface {
 	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*CommonResponse, error)
-	CreateDevice(context.Context, *CreateDeviceRequest) (*CommonResponse, error)
+	CreateDevice(context.Context, *CreateDeviceRequest) (*CreateDeviceResponse, error)
 	DeleteDevice(context.Context, *DeleteDeviceRequest) (*CommonResponse, error)
 	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*CommonResponse, error)
 	EnableDevice(context.Context, *EnableDeviceRequest) (*CommonResponse, error)

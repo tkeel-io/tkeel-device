@@ -12,10 +12,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 )
 
-const coreUrl string = "http://192.168.123.5:30707/v0.1.0/core/plugins/device/entities"
-const authUrl string = "http://192.168.123.5:30707/v0.1.0/auth/token/parse" // /invoke/keel/method
+//"http://192.168.123.5:30707/v0.1.0/core/plugins/device/entities"
+const coreUrl string = "http://192.168.123.9:32246/v1/plugins/device/entities"
+const authUrl string = "http://192.168.123.5:30707" // /invoke/keel/method
 const tokenKey string = "Authentication"
 
 type CoreClient struct {
@@ -57,7 +59,8 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 		log.Error("Marshal err", err)
 		return nil, err
 	}
-	resp, err := http.Post(authUrl, "application/json", bytes.NewBuffer(dt))
+	url := authUrl + "/v0.1.0/auth/token/parse"
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(dt))
 
 	resp2, err2 := c.ParseResp(resp, err)
 	if nil != err2 {
@@ -96,8 +99,7 @@ func (c *CoreClient) Post(url string, data []byte) ([]byte, error) {
 	return c.ParseResp(resp, err)
 }
 
-func (c *CoreClient) Get(url string, id string) ([]byte, error) {
-	log.Debug("fixme id", id)
+func (c *CoreClient) Get(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 
 	return c.ParseResp(resp, err)
@@ -113,7 +115,7 @@ func (c *CoreClient) Put(url string, data []byte) ([]byte, error) {
 	return c.ParseResp(resp, err)
 }
 
-func (c *CoreClient) Delete(url string, data []byte) ([]byte, error) {
+func (c *CoreClient) Delete(url string) ([]byte, error) {
 	req, _ := http.NewRequest("DELETE", url, nil)
 	//req.Header.Add("Authorization", "xxxx")
 
@@ -143,8 +145,24 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 	return body, nil
 }
 
+func (c *CoreClient) CreatEntityToken(entityType,id string)(string, error) {
+	url:= authUrl + fmt.Sprintf("/v1/entity/%s/%s/token", entityType, id)
+	resp, err := http.Get(url)
+
+	body, err2 := c.ParseResp(resp, err)
+	if nil != err2{
+		return "", err2
+	}
+	return string(body), nil
+}
+
 // generate uuid
 func GetUUID() string {
 	id := uuid.New()
 	return id.String()
+}
+
+// get time
+func GetTime() int64 {
+	return time.Now().UnixNano()
 }
