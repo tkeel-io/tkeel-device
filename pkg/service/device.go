@@ -4,8 +4,13 @@ import (
 	"context"
 	pb "device/api/device/v1"
 	json "encoding/json"
+	"errors"
+	"fmt"
 	"github.com/tkeel-io/kit/log"
+	go_struct "google.golang.org/protobuf/types/known/structpb"
 )
+const ResOK string = "ok"
+const ResFailed string = "failed"
 
 type DeviceService struct {
 	pb.UnimplementedDeviceServer
@@ -18,55 +23,129 @@ func NewDeviceService() *DeviceService {
 	}
 }
 
-func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRequest) (*pb.CommonResponse, error) {
+func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRequest) (*pb.CreateDeviceResponse, error) {
 	log.Debug("CreateDevice")
 	log.Debug("req:", req)
 
-	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
-		return nil, err
+	//1. verify Authentication in header and get user token map
+	//tm, err := s.client.GetTokenMap(ctx)
+	//if nil != err{
+	//	return nil, err
+	//}
+	tm := map[string]string{
+		//"id": "uuid",
+		"entityType": "device",
+		"owner": "abc",
+		"source": "device",
 	}
-	url := s.client.GetCoreUrl("", tm)
+
+	//2. get url
+	devId := GetUUID()
+	url := s.client.GetCoreUrl("", tm) + "&id=" + devId
 	log.Debug("get url: ", url)
 
-	dev, err3 := json.Marshal(req.Dev)
+	//3. build coreInfo and add system value
+	coreInfo := new(pb.DeviceEntityCoreInfo)
+	coreInfo.Dev = new(pb.DeviceEntity)
+	coreInfo.Dev = req.Dev
+	coreInfo.SysField = new(pb.DeviceEntitySysField)
+	coreInfo.SysField.XId = devId
+	coreInfo.SysField.XCreatedAt = GetTime()
+	coreInfo.SysField.XUpdatedAt = GetTime()
+	coreInfo.SysField.XEnable = true
+	coreInfo.SysField.XStatus = false
+
+	//4. create device token
+	//token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId)
+	//if nil != err2{
+	//	return nil, err2
+	//}
+	token := "token"
+	coreInfo.SysField.XToken = token
+
+	//4. add internal values and marshal Dev
+	dev, err3 := json.Marshal(coreInfo)
 	if nil != err3 {
 		return nil, err3
 	}
 
+	//5. core request
 	res, err4 := s.client.Post(url, dev)
 	if nil != err4 {
-		log.Error("error post data to core", dev)
+		log.Error("error post data to core", string(dev))
 		return nil, err4
 	}
-	return &pb.CommonResponse{Result: string(res)}, nil
+	er := new(pb.EntityResponse)
+	if err5 := json.Unmarshal(res, er); nil!=err5{
+		return nil, err5
+	}
+
+	kv := er.Properties.GetStructValue().Fields
+	devRes := new(pb.CreateDeviceResponse)
+	fieldV, err6 := json.Marshal(kv)
+	if nil != err6{
+		return nil, err6
+	}
+	err7 := json.Unmarshal(fieldV, devRes)
+	if nil != err7{
+		return nil, err7
+	}
+
+	return devRes, nil
 }
 
-func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRequest) (*pb.CommonResponse, error) {
+func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRequest) (*pb.UpdateDeviceResponse, error) {
 	log.Debug("UpdateDevice")
 	log.Debug("req:", req)
 
-	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
-		return nil, err
+	//tm, err := s.client.GetTokenMap(ctx)
+	//if nil != err{
+	//	return nil, err
+	//}
+	tm := map[string]string{
+		//"id": "uuid",
+		"entityType": "device",
+		"owner": "abc",
+		"source": "device",
 	}
-	midUrl := "/" + req.Dev.XId
+	midUrl := "/" + req.Id
 	url := s.client.GetCoreUrl(midUrl, tm)
-	log.Debug("get url :", url)
+	log.Debug("get url :", url, req.Dev)
 
-	dev, err := json.Marshal(req.Dev)
+	coreInfo := new(pb.DeviceEntityCoreInfo)
+	coreInfo.Dev = new(pb.DeviceEntity)
+	coreInfo.Dev = req.Dev
+	coreInfo.SysField = new(pb.DeviceEntitySysField)
+	coreInfo.SysField.XUpdatedAt = GetTime()
+
+	dev, err := json.Marshal(coreInfo)
 	if err != nil {
 		return nil, err
 	}
 	res, err2 := s.client.Put(url, dev)
 	if nil != err2{
-		log.Error("error put data to core", dev)
 		return nil, err2
 	}
-	return &pb.CommonResponse{Result: string(res)}, nil
+	er := new(pb.EntityResponse)
+	if err3 := json.Unmarshal(res, er); nil!=err3{
+		return nil, err3
+	}
+
+	kv := er.Properties.GetStructValue().Fields
+	devRes := new(pb.UpdateDeviceResponse)
+	fieldV, err6 := json.Marshal(kv)
+	if nil != err6{
+		return nil, err6
+	}
+	err7 := json.Unmarshal(fieldV, devRes)
+	if nil != err7{
+		return nil, err7
+	}
+
+	return devRes, nil
 }
 
-func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRequest) (*pb.CommonResponse, error) {
+func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRequest) (*pb.DeleteDeviceResponse, error) {
 	log.Debug("DeleteDevice")
 	log.Debug("req:", req)
 
@@ -74,24 +153,21 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 	if nil != err{
 		return nil, err
 	}
-	//fixme
-	midUrl := "/" + req.Ids.GetIds()[0]
-	url := s.client.GetCoreUrl(midUrl, tm)
-	log.Debug("get url:", url)
+	ids := req.Ids.GetIds()
+	for _, id :=range ids{
+		midUrl := "/" + id
+		url := s.client.GetCoreUrl(midUrl, tm)
+		log.Debug("get url:", url)
 
-	ids, err := json.Marshal(req.Ids)
-	if err != nil {
-		return &pb.CommonResponse{Result: "failed"}, nil
+		_, err2 := s.client.Delete(url)
+		if nil != err2{
+			return &pb.DeleteDeviceResponse{Result: ResFailed}, nil
+		}
 	}
-	_, err2 := s.client.Post("", ids)
-	if nil != err2{
-		log.Error("error delete data", ids)
-		return &pb.CommonResponse{Result: "failed"}, nil
-	}
-	return &pb.CommonResponse{Result: "ok"}, nil
+	return &pb.DeleteDeviceResponse{Result: ResOK}, nil
 }
 
-func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest) (*pb.CommonResponse, error) {
+func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest) (*pb.GetDeviceResponse, error) {
 	log.Debug("GetDevice")
 	log.Debug("req:", req)
 	tm, err := s.client.GetTokenMap(ctx)
@@ -102,67 +178,196 @@ func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest)
 	url := s.client.GetCoreUrl(midUrl, tm)
 	log.Debug("get url :", url)
 
-	res, err := s.client.Get(url, req.Id)
-	if nil != err{
-		log.Error("error get data from core")
-		return nil, err
+	res, err2 := s.client.Get(url)
+	if nil != err2{
+		return nil, err2
 	}
-	return &pb.CommonResponse{Result: string(res)}, nil
+	er := new(pb.EntityResponse)
+	if err3 := json.Unmarshal(res, er); nil!=err3{
+		return nil, err3
+	}
+
+	kv := er.Properties.GetStructValue().Fields
+	devRes := new(pb.GetDeviceResponse)
+	fieldV, err6 := json.Marshal(kv)
+	if nil != err6{
+		return nil, err6
+	}
+	err7 := json.Unmarshal(fieldV, devRes)
+	if nil != err7{
+		return nil, err7
+	}
+
+	return devRes, nil
 }
 
-func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceRequest) (*pb.CommonResponse, error) {
+func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceRequest) (*pb.ListDeviceResponse, error) {
 	log.Debug("ListDevice")
-	log.Debug("req:", req)
+	req.Filter.Page.Reverse = req.Filter.Page.GetReverse()
+	req.Filter.Page.Limit = req.Filter.Page.GetLimit()
+	req.Filter.Page.Offset = req.Filter.Page.GetOffset()
+	log.Debug("req:", req, req.Filter.Page)
 
 	//fixme
-	url := ""
-	filter, err := json.Marshal(req.Filter)
-	if err != nil {
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err{
 		return nil, err
+	}
+	midUrl := "/search"
+	url := s.client.GetCoreUrl(midUrl, tm)
+	log.Debug("get url :", url)
+
+	filter, err1 := json.Marshal(req.Filter)
+	if err1 != nil {
+		return nil, err1
 	}
 	res, err2 := s.client.Post(url, filter)
 	if nil != err2{
-		log.Error("error list data from core")
 		return nil, err2
 	}
-	return &pb.CommonResponse{Result: string(res)}, nil
+	er := new(pb.ListEntityResponse)
+	if err3 := json.Unmarshal(res, er); nil!=err3{
+		return nil, err3
+	}
+	value, err4 := go_struct.NewValue(er)
+	if nil != err4{
+		return nil, err4
+	}
+	return &pb.ListDeviceResponse{Result: value}, nil
 }
 
-func (s *DeviceService) EnableDevice(ctx context.Context, req *pb.EnableDeviceRequest) (*pb.CommonResponse, error) {
+func (s *DeviceService) EnableDevice(ctx context.Context, req *pb.EnableDeviceRequest) (*pb.EnableDeviceResponse, error) {
 	log.Debug("EnableDevice")
 	log.Debug("req:", req)
-	//fixme
-	ext := map[string]interface{}{
-		"enable": req.Enable,
-		//device id
-		"id": req.Id,
-	}
-	data, err := json.Marshal(ext)
-	if err != nil {
-		return &pb.CommonResponse{Result: "failed"}, err
-	}
-	_, err2 := s.client.Put("url xxxx", data)
-	if nil != err2{
-		log.Error("error put data to core")
-		return &pb.CommonResponse{Result: "failed"}, err2
-	}
-	return &pb.CommonResponse{Result: "ok"}, nil
+
+	//todo, maybe add this in future
+	//tm, err := s.client.GetTokenMap(ctx)
+	//if nil != err{
+	//	return nil, err
+	//}
+	//midUrl := "/" + req.GetId()
+	//url := s.client.GetCoreUrl(midUrl, tm)
+	//log.Debug("get url :", url)
+	//
+	//enable := map[string]interface{}{
+	//	"_enable": req.Enable.Enable,
+	//}
+	//data, err := json.Marshal(enable)
+	//if err != nil {
+	//	return &pb.EnableDeviceResponse{Result: ResFailed}, err
+	//}
+	//_, err2 := s.client.Put(url, data)
+	//if nil != err2{
+	//	return &pb.EnableDeviceResponse{Result: ResFailed}, err2
+	//}
+	return &pb.EnableDeviceResponse{Result: ResOK}, nil
 }
-func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRequest) (*pb.CommonResponse, error) {
+
+func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRequest) (*pb.AddDeviceExtResponse, error) {
 	log.Debug("AddDeviceExt")
 	log.Debug("req:", req)
-	//fixme
-	return &pb.CommonResponse{}, nil
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err{
+		return nil, err
+	}
+	midUrl := "/" + req.GetId()
+	url := s.client.GetCoreUrl(midUrl, tm)
+	log.Debug("get url :", url)
+
+	var exts []interface{}
+	switch kv := req.Ext.AsInterface().(type) {
+	case map[string]interface{}:
+		for k, v := range kv {
+			e := map[string]interface{}{
+				"path": "dev.ext",
+				"operator": "add",
+				"value": map[string]interface{}{
+					k: v,
+				},
+			}
+			exts = append(exts, e)
+		}
+	default:
+		return nil, errors.New("error Invalid payload")
+	}
+
+	log.Debug("ext body: ", exts)
+	data, err1 := json.Marshal(exts)
+	if err1 != nil {
+		return &pb.AddDeviceExtResponse{Result: ResFailed}, err1
+	}
+	_, err2 := s.client.Patch(url, data)
+	if nil != err2{
+		return &pb.AddDeviceExtResponse{Result: ResFailed}, err2
+	}
+
+	return &pb.AddDeviceExtResponse{Result: ResOK}, nil
 }
-func (s *DeviceService) DeleteDeviceExt(ctx context.Context, req *pb.DeleteDeviceExtRequest) (*pb.CommonResponse, error) {
+
+func (s *DeviceService) DeleteDeviceExt(ctx context.Context, req *pb.DeleteDeviceExtRequest) (*pb.DeleteDeviceExtResponse, error) {
 	log.Debug("DeleteDeviceExt")
 	log.Debug("req:", req)
-	//fixme
-	return &pb.CommonResponse{}, nil
+	//todo when core support
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err{
+		return nil, err
+	}
+	midUrl := "/" + req.GetId()
+	url := s.client.GetCoreUrl(midUrl, tm)
+
+	var exts []interface{}
+	keys := req.Keys.Keys
+	for _, k := range keys {
+		e := map[string]interface{}{
+			"path": fmt.Sprintf("dev.ext.%s", k),
+			"operator": "remove",
+			"value": "",
+			//"path": "dev.ext",
+			//"operator": "remove",
+			//"value": k,
+		}
+		exts = append(exts, e)
+	}
+
+	log.Debug("ext body: ", exts)
+	data, err1 := json.Marshal(exts)
+	if err1 != nil {
+		return &pb.DeleteDeviceExtResponse{Result: ResFailed}, err1
+	}
+	_, err2 := s.client.Patch(url, data)
+	if nil != err2{
+		return &pb.DeleteDeviceExtResponse{Result: ResFailed}, err2
+	}
+	return &pb.DeleteDeviceExtResponse{Result: ResOK}, nil
 }
-func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDeviceExtRequest) (*pb.CommonResponse, error) {
+
+func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDeviceExtRequest) (*pb.UpdateDeviceExtResponse, error) {
 	log.Debug("UpdateDeviceExt")
 	log.Debug("req:", req)
-	//fixme
-	return &pb.CommonResponse{}, nil
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err{
+		return nil, err
+	}
+	midUrl := "/" + req.GetId()
+	url := s.client.GetCoreUrl(midUrl, tm)
+	log.Debug("get url :", url)
+
+	var exts [1]interface{}
+	exts[0]= map[string]interface{}{
+		"path": fmt.Sprintf("dev.ext.%s", req.Ext.GetKey()),
+		"operator": "replace",
+		"value": req.Ext.GetValue(),
+	}
+	log.Debug("ext body: ", exts)
+	data, err1 := json.Marshal(exts)
+	if err1 != nil {
+		return &pb.UpdateDeviceExtResponse{Result: ResFailed}, err1
+	}
+	_, err2 := s.client.Patch(url, data)
+	if nil != err2{
+		return &pb.UpdateDeviceExtResponse{Result: ResFailed}, err2
+	}
+	return &pb.UpdateDeviceExtResponse{Result: ResOK}, nil
 }

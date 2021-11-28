@@ -19,15 +19,15 @@ import transportHTTP "github.com/tkeel-io/kit/transport/http"
 // import package.context.http.go_restful.json.errors.
 
 type DeviceHTTPServer interface {
-	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*CommonResponse, error)
+	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*AddDeviceExtResponse, error)
 	CreateDevice(context.Context, *CreateDeviceRequest) (*CreateDeviceResponse, error)
-	DeleteDevice(context.Context, *DeleteDeviceRequest) (*CommonResponse, error)
-	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*CommonResponse, error)
-	EnableDevice(context.Context, *EnableDeviceRequest) (*CommonResponse, error)
-	GetDevice(context.Context, *GetDeviceRequest) (*CommonResponse, error)
-	ListDevice(context.Context, *ListDeviceRequest) (*CommonResponse, error)
-	UpdateDevice(context.Context, *UpdateDeviceRequest) (*CommonResponse, error)
-	UpdateDeviceExt(context.Context, *UpdateDeviceExtRequest) (*CommonResponse, error)
+	DeleteDevice(context.Context, *DeleteDeviceRequest) (*DeleteDeviceResponse, error)
+	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*DeleteDeviceExtResponse, error)
+	EnableDevice(context.Context, *EnableDeviceRequest) (*EnableDeviceResponse, error)
+	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)
+	ListDevice(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
+	UpdateDevice(context.Context, *UpdateDeviceRequest) (*UpdateDeviceResponse, error)
+	UpdateDeviceExt(context.Context, *UpdateDeviceExtRequest) (*UpdateDeviceExtResponse, error)
 }
 
 type DeviceHTTPHandler struct {

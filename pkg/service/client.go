@@ -15,8 +15,8 @@ import (
 	"time"
 )
 
-//"http://192.168.123.5:30707/v0.1.0/core/plugins/device/entities"
-const coreUrl string = "http://192.168.123.9:32246/v1/plugins/device/entities"
+const coreUrl string = "http://192.168.123.5:30226/v1/plugins/device/entities"
+//const coreUrl string = "http://192.168.123.9:32246/v1/plugins/device/entities"
 const authUrl string = "http://192.168.123.5:30707" // /invoke/keel/method
 const tokenKey string = "Authentication"
 
@@ -35,7 +35,7 @@ func NewCoreClient() *CoreClient {
 
 // get core url
 func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string) string {
-	url :=  fmt.Sprintf(coreUrl + midUrl + "?" +  "id=%s&type=%s&owner=%s&source=%s", mapUrl["id"], mapUrl["entityType"], mapUrl["owner"], mapUrl["source"])
+	url :=  fmt.Sprintf(coreUrl + midUrl + "?" +  "type=%s&owner=%s&source=%s", mapUrl["entityType"], mapUrl["owner"], mapUrl["source"])
 	return url
 }
 
@@ -115,6 +115,15 @@ func (c *CoreClient) Put(url string, data []byte) ([]byte, error) {
 	return c.ParseResp(resp, err)
 }
 
+func (c *CoreClient) Patch(url string, data []byte) ([]byte, error) {
+	payload := strings.NewReader(string(data))
+	req, _ := http.NewRequest("PATCH", url, payload)
+	req.Header.Add("Content-Type", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	return c.ParseResp(resp, err)
+}
+
 func (c *CoreClient) Delete(url string) ([]byte, error) {
 	req, _ := http.NewRequest("DELETE", url, nil)
 	//req.Header.Add("Authorization", "xxxx")
@@ -125,7 +134,7 @@ func (c *CoreClient) Delete(url string) ([]byte, error) {
 
 func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 	if err != nil {
-		log.Error("error get", err)
+		log.Error("error ", err)
 		return nil, err
 	}
 
