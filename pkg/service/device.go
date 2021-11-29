@@ -225,8 +225,9 @@ func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceReques
 	if nil != err2{
 		return nil, err2
 	}
-	er := new(pb.ListEntityResponse)
-	if err3 := json.Unmarshal(res, er); nil!=err3{
+	var er interface{}
+	if err3 := json.Unmarshal(res, &er); nil!=err3{
+		log.Error("error Unmarshal", err3)
 		return nil, err3
 	}
 	value, err4 := go_struct.NewValue(er)
@@ -280,11 +281,9 @@ func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRe
 	case map[string]interface{}:
 		for k, v := range kv {
 			e := map[string]interface{}{
-				"path": "dev.ext",
-				"operator": "add",
-				"value": map[string]interface{}{
-					k: v,
-				},
+				"path": fmt.Sprintf("dev.ext.%s", k),
+				"operator": "replace",
+				"value": v,
 			}
 			exts = append(exts, e)
 		}
@@ -316,18 +315,16 @@ func (s *DeviceService) DeleteDeviceExt(ctx context.Context, req *pb.DeleteDevic
 	midUrl := "/" + req.GetId()
 	url := s.client.GetCoreUrl(midUrl, tm)
 
-	var exts []interface{}
+	//var exts []interface{}
 	keys := req.Keys.Keys
-	for _, k := range keys {
+	exts := make([]interface{}, len(keys))
+	for i, k := range keys {
 		e := map[string]interface{}{
 			"path": fmt.Sprintf("dev.ext.%s", k),
 			"operator": "remove",
 			"value": "",
-			//"path": "dev.ext",
-			//"operator": "remove",
-			//"value": k,
 		}
-		exts = append(exts, e)
+		exts[i] = e
 	}
 
 	log.Debug("ext body: ", exts)
