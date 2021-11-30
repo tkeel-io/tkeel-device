@@ -9,16 +9,14 @@ import (
 	json "encoding/json"
 	go_restful "github.com/emicklei/go-restful"
 	errors "github.com/tkeel-io/kit/errors"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	http "net/http"
-	reflect "reflect"
 )
 
 import transportHTTP "github.com/tkeel-io/kit/transport/http"
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the tkeel package it is being compiled against.
-// import package.context.http.reflect.go_restful.json.errors.emptypb.
+// import package.context.http.go_restful.json.errors.
 
 type MeasureHTTPServer interface {
 	CreateMeasure(context.Context, *CreateMeasureRequest) (*CommonResponse, error)
@@ -56,10 +54,7 @@ func (h *MeasureHTTPHandler) CreateMeasure(req *go_restful.Request, resp *go_res
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
+
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -92,10 +87,7 @@ func (h *MeasureHTTPHandler) DeleteMeasure(req *go_restful.Request, resp *go_res
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
+
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -128,10 +120,7 @@ func (h *MeasureHTTPHandler) GetMeasure(req *go_restful.Request, resp *go_restfu
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
+
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -160,10 +149,7 @@ func (h *MeasureHTTPHandler) ListMeasure(req *go_restful.Request, resp *go_restf
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
+
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -200,10 +186,7 @@ func (h *MeasureHTTPHandler) UpdateMeasure(req *go_restful.Request, resp *go_res
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
+
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
