@@ -32,15 +32,9 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	log.Debug("req:", req)
 
 	//1. verify Authentication in header and get user token map
-	//tm, err := s.client.GetTokenMap(ctx)
-	//if nil != err{
-	//	return nil, err
-	//}
-	tm := map[string]string{
-		//"id": "uuid",
-		"entityType": "device",
-		"owner":      "abc",
-		"source":     "device",
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err{
+		return nil, err
 	}
 
 	// 2. get url
@@ -60,11 +54,11 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	coreInfo.SysField.XStatus = false
 
 	//4. create device token
-	//token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId, tm["owner"])
-	//if nil != err2{
-	//	return nil, err2
-	//}
-	token := "token"
+	token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId, tm["owner"])
+	if nil != err2{
+		return nil, err2
+	}
+	//token := "token"
 	coreInfo.SysField.XToken = token
 
 	// 4. add internal values and marshal Dev
@@ -74,6 +68,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	}
 
 	// 5. core request
+	log.Info("data: ", string(dev))
 	res, err4 := s.client.Post(url, dev)
 	if nil != err4 {
 		log.Error("error post data to core", string(dev))
@@ -102,15 +97,9 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	log.Debug("UpdateDevice")
 	log.Debug("req:", req)
 
-	//tm, err := s.client.GetTokenMap(ctx)
-	//if nil != err{
-	//	return nil, err
-	//}
-	tm := map[string]string{
-		//"id": "uuid",
-		"entityType": "device",
-		"owner":      "abc",
-		"source":     "device",
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err{
+		return nil, err
 	}
 	midUrl := "/" + req.Id
 	url := s.client.GetCoreUrl(midUrl, tm)
@@ -212,7 +201,6 @@ func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceReques
 	req.Filter.Page.Offset = req.Filter.Page.GetOffset()
 	log.Debug("req:", req, req.Filter.Page)
 
-	// fixme
 	tm, err := s.client.GetTokenMap(ctx)
 	if nil != err {
 		return nil, err
