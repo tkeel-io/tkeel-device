@@ -4,6 +4,7 @@ package v1
 
 import (
 	context "context"
+	v1 "github.com/tkeel-io/tkeel-interface/openapi/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,15 +21,15 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OpenapiClient interface {
 	// Query identify.
-	Identify(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IdentifyResponse, error)
+	Identify(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*v1.IdentifyResponse, error)
 	// Post addons identify.
-	AddonsIdentify(ctx context.Context, in *AddonsIdentifyRequest, opts ...grpc.CallOption) (*AddonsIdentifyResponse, error)
+	AddonsIdentify(ctx context.Context, in *v1.AddonsIdentifyRequest, opts ...grpc.CallOption) (*v1.AddonsIdentifyResponse, error)
 	// Post tenant bind.
-	TenantBind(ctx context.Context, in *TenantBindRequst, opts ...grpc.CallOption) (*TenantBindResponse, error)
+	TenantBind(ctx context.Context, in *v1.TenantBindRequst, opts ...grpc.CallOption) (*v1.TenantBindResponse, error)
 	// Post tenant bind.
-	TenantUnbind(ctx context.Context, in *TenantUnbindRequst, opts ...grpc.CallOption) (*TenantUnbindResponse, error)
+	TenantUnbind(ctx context.Context, in *v1.TenantUnbindRequst, opts ...grpc.CallOption) (*v1.TenantUnbindResponse, error)
 	// Query status.
-	Tatus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StatusResponse, error)
+	Status(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*v1.StatusResponse, error)
 }
 
 type openapiClient struct {
@@ -39,8 +40,8 @@ func NewOpenapiClient(cc grpc.ClientConnInterface) OpenapiClient {
 	return &openapiClient{cc}
 }
 
-func (c *openapiClient) Identify(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IdentifyResponse, error) {
-	out := new(IdentifyResponse)
+func (c *openapiClient) Identify(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*v1.IdentifyResponse, error) {
+	out := new(v1.IdentifyResponse)
 	err := c.cc.Invoke(ctx, "/openapi.v1.Openapi/Identify", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -48,8 +49,8 @@ func (c *openapiClient) Identify(ctx context.Context, in *emptypb.Empty, opts ..
 	return out, nil
 }
 
-func (c *openapiClient) AddonsIdentify(ctx context.Context, in *AddonsIdentifyRequest, opts ...grpc.CallOption) (*AddonsIdentifyResponse, error) {
-	out := new(AddonsIdentifyResponse)
+func (c *openapiClient) AddonsIdentify(ctx context.Context, in *v1.AddonsIdentifyRequest, opts ...grpc.CallOption) (*v1.AddonsIdentifyResponse, error) {
+	out := new(v1.AddonsIdentifyResponse)
 	err := c.cc.Invoke(ctx, "/openapi.v1.Openapi/AddonsIdentify", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -57,8 +58,8 @@ func (c *openapiClient) AddonsIdentify(ctx context.Context, in *AddonsIdentifyRe
 	return out, nil
 }
 
-func (c *openapiClient) TenantBind(ctx context.Context, in *TenantBindRequst, opts ...grpc.CallOption) (*TenantBindResponse, error) {
-	out := new(TenantBindResponse)
+func (c *openapiClient) TenantBind(ctx context.Context, in *v1.TenantBindRequst, opts ...grpc.CallOption) (*v1.TenantBindResponse, error) {
+	out := new(v1.TenantBindResponse)
 	err := c.cc.Invoke(ctx, "/openapi.v1.Openapi/TenantBind", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -66,8 +67,8 @@ func (c *openapiClient) TenantBind(ctx context.Context, in *TenantBindRequst, op
 	return out, nil
 }
 
-func (c *openapiClient) TenantUnbind(ctx context.Context, in *TenantUnbindRequst, opts ...grpc.CallOption) (*TenantUnbindResponse, error) {
-	out := new(TenantUnbindResponse)
+func (c *openapiClient) TenantUnbind(ctx context.Context, in *v1.TenantUnbindRequst, opts ...grpc.CallOption) (*v1.TenantUnbindResponse, error) {
+	out := new(v1.TenantUnbindResponse)
 	err := c.cc.Invoke(ctx, "/openapi.v1.Openapi/TenantUnbind", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -75,9 +76,9 @@ func (c *openapiClient) TenantUnbind(ctx context.Context, in *TenantUnbindRequst
 	return out, nil
 }
 
-func (c *openapiClient) Tatus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StatusResponse, error) {
-	out := new(StatusResponse)
-	err := c.cc.Invoke(ctx, "/openapi.v1.Openapi/tatus", in, out, opts...)
+func (c *openapiClient) Status(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*v1.StatusResponse, error) {
+	out := new(v1.StatusResponse)
+	err := c.cc.Invoke(ctx, "/openapi.v1.Openapi/Status", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -89,15 +90,15 @@ func (c *openapiClient) Tatus(ctx context.Context, in *emptypb.Empty, opts ...gr
 // for forward compatibility
 type OpenapiServer interface {
 	// Query identify.
-	Identify(context.Context, *emptypb.Empty) (*IdentifyResponse, error)
+	Identify(context.Context, *emptypb.Empty) (*v1.IdentifyResponse, error)
 	// Post addons identify.
-	AddonsIdentify(context.Context, *AddonsIdentifyRequest) (*AddonsIdentifyResponse, error)
+	AddonsIdentify(context.Context, *v1.AddonsIdentifyRequest) (*v1.AddonsIdentifyResponse, error)
 	// Post tenant bind.
-	TenantBind(context.Context, *TenantBindRequst) (*TenantBindResponse, error)
+	TenantBind(context.Context, *v1.TenantBindRequst) (*v1.TenantBindResponse, error)
 	// Post tenant bind.
-	TenantUnbind(context.Context, *TenantUnbindRequst) (*TenantUnbindResponse, error)
+	TenantUnbind(context.Context, *v1.TenantUnbindRequst) (*v1.TenantUnbindResponse, error)
 	// Query status.
-	Tatus(context.Context, *emptypb.Empty) (*StatusResponse, error)
+	Status(context.Context, *emptypb.Empty) (*v1.StatusResponse, error)
 	mustEmbedUnimplementedOpenapiServer()
 }
 
@@ -105,20 +106,20 @@ type OpenapiServer interface {
 type UnimplementedOpenapiServer struct {
 }
 
-func (UnimplementedOpenapiServer) Identify(context.Context, *emptypb.Empty) (*IdentifyResponse, error) {
+func (UnimplementedOpenapiServer) Identify(context.Context, *emptypb.Empty) (*v1.IdentifyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Identify not implemented")
 }
-func (UnimplementedOpenapiServer) AddonsIdentify(context.Context, *AddonsIdentifyRequest) (*AddonsIdentifyResponse, error) {
+func (UnimplementedOpenapiServer) AddonsIdentify(context.Context, *v1.AddonsIdentifyRequest) (*v1.AddonsIdentifyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddonsIdentify not implemented")
 }
-func (UnimplementedOpenapiServer) TenantBind(context.Context, *TenantBindRequst) (*TenantBindResponse, error) {
+func (UnimplementedOpenapiServer) TenantBind(context.Context, *v1.TenantBindRequst) (*v1.TenantBindResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TenantBind not implemented")
 }
-func (UnimplementedOpenapiServer) TenantUnbind(context.Context, *TenantUnbindRequst) (*TenantUnbindResponse, error) {
+func (UnimplementedOpenapiServer) TenantUnbind(context.Context, *v1.TenantUnbindRequst) (*v1.TenantUnbindResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TenantUnbind not implemented")
 }
-func (UnimplementedOpenapiServer) Tatus(context.Context, *emptypb.Empty) (*StatusResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Tatus not implemented")
+func (UnimplementedOpenapiServer) Status(context.Context, *emptypb.Empty) (*v1.StatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Status not implemented")
 }
 func (UnimplementedOpenapiServer) mustEmbedUnimplementedOpenapiServer() {}
 
@@ -152,7 +153,7 @@ func _Openapi_Identify_Handler(srv interface{}, ctx context.Context, dec func(in
 }
 
 func _Openapi_AddonsIdentify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddonsIdentifyRequest)
+	in := new(v1.AddonsIdentifyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -164,13 +165,13 @@ func _Openapi_AddonsIdentify_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/openapi.v1.Openapi/AddonsIdentify",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).AddonsIdentify(ctx, req.(*AddonsIdentifyRequest))
+		return srv.(OpenapiServer).AddonsIdentify(ctx, req.(*v1.AddonsIdentifyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Openapi_TenantBind_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TenantBindRequst)
+	in := new(v1.TenantBindRequst)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -182,13 +183,13 @@ func _Openapi_TenantBind_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: "/openapi.v1.Openapi/TenantBind",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).TenantBind(ctx, req.(*TenantBindRequst))
+		return srv.(OpenapiServer).TenantBind(ctx, req.(*v1.TenantBindRequst))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Openapi_TenantUnbind_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TenantUnbindRequst)
+	in := new(v1.TenantUnbindRequst)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -200,25 +201,25 @@ func _Openapi_TenantUnbind_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/openapi.v1.Openapi/TenantUnbind",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).TenantUnbind(ctx, req.(*TenantUnbindRequst))
+		return srv.(OpenapiServer).TenantUnbind(ctx, req.(*v1.TenantUnbindRequst))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Openapi_Tatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Openapi_Status_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OpenapiServer).Tatus(ctx, in)
+		return srv.(OpenapiServer).Status(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/openapi.v1.Openapi/tatus",
+		FullMethod: "/openapi.v1.Openapi/Status",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).Tatus(ctx, req.(*emptypb.Empty))
+		return srv.(OpenapiServer).Status(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -247,8 +248,8 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Openapi_TenantUnbind_Handler,
 		},
 		{
-			MethodName: "tatus",
-			Handler:    _Openapi_Tatus_Handler,
+			MethodName: "Status",
+			Handler:    _Openapi_Status_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -10,16 +10,16 @@ import (
 	"github.com/tkeel-io/kit/app"
 	"github.com/tkeel-io/kit/log"
 	"github.com/tkeel-io/kit/transport"
-	"device/pkg/server"
-	"device/pkg/service"
+	"github.com/tkeel-io/tkeel-device/pkg/server"
+	"github.com/tkeel-io/tkeel-device/pkg/service"
 )
 
 import (//User import
-	helloworld "device/api/helloworld/v1"
-	openapi "device/api/openapi/v1"
-	Device_v1 "device/api/device/v1"
-	Group_v1 "device/api/group/v1"
-	Measure_v1 "device/api/measure/v1"
+	helloworld "github.com/tkeel-io/tkeel-device/api/helloworld/v1"
+	openapi "github.com/tkeel-io/tkeel-device/api/openapi/v1"
+	Device_v1 "github.com/tkeel-io/tkeel-device/api/device/v1"
+	Group_v1 "github.com/tkeel-io/tkeel-device/api/group/v1"
+	Measure_v1 "github.com/tkeel-io/tkeel-device/api/measure/v1"
 )
 
 var (

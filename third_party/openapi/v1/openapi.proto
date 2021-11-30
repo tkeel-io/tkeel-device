@@ -1,0 +1,145 @@
+/**
+ * Openapi related messages.
+ **/
+
+syntax = "proto3";
+
+package openapi.v1;
+
+option go_package = "github.com/tkeel-io/tkeel-interface/openapi/v1;v1";
+
+/**
+ * error code enum.
+ **/
+enum Retcode {
+  OK = 0;
+  BAD_REQEUST = 400;
+  INTERNAL_ERROR = 500;
+}
+
+/**
+ * plugin state enum.
+ **/
+enum PluginStatus {
+  ERROR = 0;
+  STARTING = 1;
+  RUNING = 2;
+  STOPPING = 3;
+  STOPPED = 4;
+}
+
+/**
+ * message result.
+ **/
+message Result {
+  Retcode ret = 1; // response retcode.
+  string msg = 2;  // response ret msg.
+}
+
+/**
+ * message brief plugin information.
+ **/
+message BriefPluginInfo {
+  string id = 1;      // plugin id.
+  string version = 2; // plugin verison.
+}
+
+/**
+ * message plugin declares extension point.
+ **/
+message AddonsPoint {
+  string name = 1; // addons point name.
+  string desc = 2; // addons point description.
+}
+
+/**
+ * message plugin declares implemented other plugin extension point.
+ **/
+message ImplementedAddons {
+  string addons_point = 1; //
+  string implemented_endpoint = 2;
+}
+
+/**
+ * message plugin implemented other plugin.
+ **/
+message ImplementedPlugin {
+  BriefPluginInfo plugin = 1;            // implemented plugin information.
+  repeated ImplementedAddons addons = 2; // implemented addons point list.
+}
+
+/**
+ * The response value of the GET /v1/identify,
+ * used when the plugin registered.
+ **/
+message IdentifyResponse {
+  Result res = 1;           // detail result.
+  string plugin_id = 2;     // register plugin id.
+  string version = 3;       // register plugin version
+  string tkeel_version = 4; // register plugin depend tkeel version.
+  repeated AddonsPoint addons_point = 5; // register plugin declares addons.
+  repeated ImplementedPlugin implemented_plugin =
+      6; // register plugin implemented plugin list.
+}
+
+/**
+ * The request value of the POST /v1/addons/identify,
+ * used when the plugin in the registration process implements
+ * the extension point of the registered plugin.
+ **/
+message AddonsIdentifyRequest {
+  BriefPluginInfo plugin = 1; // implemented plugin information.
+  repeated ImplementedAddons implemented_addons = 2; // implemented addons.
+}
+
+/**
+ * The response value of the POST /v1/addons/identify,
+ * used when the plugin in the registration process implements
+ * the extension point of the registered plugin.
+ **/
+message AddonsIdentifyResponse {
+  Result res = 1; // detail result.
+}
+
+/**
+ * The request value of the POST /v1/tenant/bind,
+ * used when the tenant administrator enables the plugin.
+ **/
+message TenantBindRequst {
+  string tenant_id = 1; // unique tenant id.
+  bytes extra = 2;      // extra data
+}
+
+/**
+ * The response value of the POST /v1/tenant/bind,
+ * used when the tenant administrator enables the plugin.
+ **/
+message TenantBindResponse {
+  Result res = 1; // detail result
+}
+
+/**
+ * The request value of the POST /v1/tenant/unbind,
+ * used when the tenant administrator disables the plugin.
+ **/
+message TenantUnbindRequst {
+  string tenant_id = 1; // unique tenant id.
+  bytes extra = 2;      // extra data
+}
+
+/**
+ * The response value of the POST /v1/tenant/unbind,
+ * used when the tenant administrator disables the plugin.
+ **/
+message TenantUnbindResponse {
+  Result res = 1; // detail result
+}
+
+/**
+ * The request value of the GET /v1/Status.
+ * used when the tkeel checks the status of plugins regularly.
+ **/
+message StatusResponse {
+  Result res = 1;          // detail result
+  PluginStatus status = 2; // plugin status.
+}

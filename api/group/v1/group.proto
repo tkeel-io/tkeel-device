@@ -4,76 +4,71 @@ syntax = "proto3";
 package api.group.v1;
 import "google/api/annotations.proto";
 
-option go_package = "device/api/group/v1;v1";
+option go_package = "github.com/tkeel-io/tkeel-device/api/group/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.group.v1";
 
 service Group {
-	rpc CreateGroup (CreateGroupRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			post : "/group"
-			body : "group"
-		};
-	};
-	rpc UpdateGroup (UpdateGroupRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			put : "/group/{id}"
-			body : "group"
-		};
-	};
-	rpc DeleteGroup (DeleteGroupRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			delete : "/group/{id}"
-		};
-	};
-	rpc GetGroup (GetGroupRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			get : "/group/{id}"
-		};
-	};
-	rpc ListGroup (ListGroupRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			get : "/group"
-		};
-	};
+  rpc CreateGroup(CreateGroupRequest) returns (CommonResponse) {
+    option (google.api.http) = {
+      post : "/group"
+      body : "group"
+    };
+  };
+  rpc UpdateGroup(UpdateGroupRequest) returns (CommonResponse) {
+    option (google.api.http) = {
+      put : "/group/{id}"
+      body : "group"
+    };
+  };
+  rpc DeleteGroup(DeleteGroupRequest) returns (CommonResponse) {
+    option (google.api.http) = {
+      delete : "/group/{id}"
+    };
+  };
+  rpc GetGroup(GetGroupRequest) returns (CommonResponse) {
+    option (google.api.http) = {
+      get : "/group/{id}"
+    };
+  };
+  rpc ListGroup(ListGroupRequest) returns (CommonResponse) {
+    option (google.api.http) = {
+      get : "/group"
+    };
+  };
 }
 
-message CreateGroupRequest {
-	GroupEntity      group = 1;
-}
+message CreateGroupRequest { GroupEntity group = 1; }
 
 message UpdateGroupRequest {
-	string              id = 1;
-	GroupEntity      group = 2;
+  string id = 1;
+  GroupEntity group = 2;
 }
 
 message DeleteGroupRequest { string id = 1; }
 
-message GetGroupRequest { string id = 1;}
+message GetGroupRequest { string id = 1; }
 
 message ListGroupRequest {}
-
 
 //------------------------------------------------------------------------------
 // Basic data types
 //------------------------------------------------------------------------------
 message GroupEntity {
 
-	string name 							 = 1;
+  string name = 1;
 
-	string desc 							 = 2;
+  string desc = 2;
 
-	string parent      				 = 3;
+  string parent = 3;
 
-	map<string, string> ext    = 4;
+  map<string, string> ext = 4;
 
-	string _id        				 = 5;
+  string _id = 5;
 
-	uint64 _createdAt 				 = 6;
+  uint64 _createdAt = 6;
 
-	uint64 _updatedAt 				 = 7;
+  uint64 _updatedAt = 7;
 }
 
-message CommonResponse {
-	string result = 1;
-}
+message CommonResponse { string result = 1; }

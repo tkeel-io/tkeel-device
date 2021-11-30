@@ -9,6 +9,7 @@ import (
 	json "encoding/json"
 	go_restful "github.com/emicklei/go-restful"
 	errors "github.com/tkeel-io/kit/errors"
+	v1 "github.com/tkeel-io/tkeel-interface/openapi/v1"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	http "net/http"
 )
@@ -20,11 +21,11 @@ import transportHTTP "github.com/tkeel-io/kit/transport/http"
 // import package.context.http.go_restful.json.errors.
 
 type OpenapiHTTPServer interface {
-	AddonsIdentify(context.Context, *AddonsIdentifyRequest) (*AddonsIdentifyResponse, error)
-	Identify(context.Context, *emptypb.Empty) (*IdentifyResponse, error)
-	Tatus(context.Context, *emptypb.Empty) (*StatusResponse, error)
-	TenantBind(context.Context, *TenantBindRequst) (*TenantBindResponse, error)
-	TenantUnbind(context.Context, *TenantUnbindRequst) (*TenantUnbindResponse, error)
+	AddonsIdentify(context.Context, *v1.AddonsIdentifyRequest) (*v1.AddonsIdentifyResponse, error)
+	Identify(context.Context, *emptypb.Empty) (*v1.IdentifyResponse, error)
+	Status(context.Context, *emptypb.Empty) (*v1.StatusResponse, error)
+	TenantBind(context.Context, *v1.TenantBindRequst) (*v1.TenantBindResponse, error)
+	TenantUnbind(context.Context, *v1.TenantUnbindRequst) (*v1.TenantUnbindResponse, error)
 }
 
 type OpenapiHTTPHandler struct {
@@ -36,7 +37,7 @@ func newOpenapiHTTPHandler(s OpenapiHTTPServer) *OpenapiHTTPHandler {
 }
 
 func (h *OpenapiHTTPHandler) AddonsIdentify(req *go_restful.Request, resp *go_restful.Response) {
-	in := AddonsIdentifyRequest{}
+	in := v1.AddonsIdentifyRequest{}
 	if err := transportHTTP.GetBody(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
@@ -93,7 +94,7 @@ func (h *OpenapiHTTPHandler) Identify(req *go_restful.Request, resp *go_restful.
 	}
 }
 
-func (h *OpenapiHTTPHandler) Tatus(req *go_restful.Request, resp *go_restful.Response) {
+func (h *OpenapiHTTPHandler) Status(req *go_restful.Request, resp *go_restful.Response) {
 	in := emptypb.Empty{}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
@@ -102,7 +103,7 @@ func (h *OpenapiHTTPHandler) Tatus(req *go_restful.Request, resp *go_restful.Res
 
 	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
 
-	out, err := h.srv.Tatus(ctx, &in)
+	out, err := h.srv.Status(ctx, &in)
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
@@ -123,7 +124,7 @@ func (h *OpenapiHTTPHandler) Tatus(req *go_restful.Request, resp *go_restful.Res
 }
 
 func (h *OpenapiHTTPHandler) TenantBind(req *go_restful.Request, resp *go_restful.Response) {
-	in := TenantBindRequst{}
+	in := v1.TenantBindRequst{}
 	if err := transportHTTP.GetBody(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
@@ -152,7 +153,7 @@ func (h *OpenapiHTTPHandler) TenantBind(req *go_restful.Request, resp *go_restfu
 }
 
 func (h *OpenapiHTTPHandler) TenantUnbind(req *go_restful.Request, resp *go_restful.Response) {
-	in := TenantUnbindRequst{}
+	in := v1.TenantUnbindRequst{}
 	if err := transportHTTP.GetBody(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
@@ -205,5 +206,5 @@ func RegisterOpenapiHTTPServer(container *go_restful.Container, srv OpenapiHTTPS
 	ws.Route(ws.POST("/tenant/unbind").
 		To(handler.TenantUnbind))
 	ws.Route(ws.GET("/status").
-		To(handler.Tatus))
+		To(handler.Status))
 }

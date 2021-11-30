@@ -5,200 +5,197 @@ package api.device.v1;
 
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
-import "tkeel-io/core/api/v1/entity.proto";
+// import "google/protobuf/wrappers.proto";
+import public "tkeel-io/core/api/v1/entity.proto";
 
-option go_package = "device/api/device/v1;v1";
+option go_package = "github.com/tkeel-io/tkeel-device/api/device/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.device.v1";
 
 service Device {
-	rpc CreateDevice (CreateDeviceRequest) returns (CreateDeviceResponse) {
-		option (google.api.http) = {
-			post : "/devices"
-			body : "dev"
-		};
-	};
-	rpc UpdateDevice (UpdateDeviceRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			put : "/devices/{id}"
-			body : "dev"
-		};
-	};
-	rpc DeleteDevice (DeleteDeviceRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			post : "/devices/delete"
-			body: "ids"
-		};
-	};
-	rpc GetDevice (GetDeviceRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			get : "/devices/{id}"
-		};
-	};
-	rpc ListDevice (ListDeviceRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			post : "/devices/search"
-			body: "filter"
-		};
-	};
-	rpc EnableDevice (EnableDeviceRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			put : "/devices/{id}/enable"
-			body: "enable"
-		};
-	};
-	rpc AddDeviceExt (AddDeviceExtRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			post : "/devices/{id}/ext"
-			body: "ext"
-		};
-	};
-	rpc DeleteDeviceExt (DeleteDeviceExtRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			post : "/devices/{id}/ext/delete"
-			body: "keys"
-		};
-	};
-	rpc UpdateDeviceExt (UpdateDeviceExtRequest) returns (CommonResponse) {
-		option (google.api.http) = {
-			put : "/devices/{id}/ext"
-			body: "ext"
-		};
-	};
+  rpc CreateDevice(CreateDeviceRequest) returns (CreateDeviceResponse) {
+    option (google.api.http) = {
+      post : "/devices"
+      body : "dev"
+    };
+  };
+  rpc UpdateDevice(UpdateDeviceRequest) returns (UpdateDeviceResponse) {
+    option (google.api.http) = {
+      put : "/devices/{id}"
+      body : "dev"
+    };
+  };
+  rpc DeleteDevice(DeleteDeviceRequest) returns (DeleteDeviceResponse) {
+    option (google.api.http) = {
+      post : "/devices/delete"
+      body : "ids"
+    };
+  };
+  rpc GetDevice(GetDeviceRequest) returns (GetDeviceResponse) {
+    option (google.api.http) = {
+      get : "/devices/{id}"
+    };
+  };
+  rpc ListDevice(ListDeviceRequest) returns (ListDeviceResponse) {
+    option (google.api.http) = {
+      post : "/devices/search"
+      body : "filter"
+    };
+  };
+  rpc EnableDevice(EnableDeviceRequest) returns (EnableDeviceResponse) {
+    option (google.api.http) = {
+      put : "/devices/{id}/enable"
+      body : "enable"
+    };
+  };
+  rpc AddDeviceExt(AddDeviceExtRequest) returns (AddDeviceExtResponse) {
+    option (google.api.http) = {
+      post : "/devices/{id}/ext"
+      body : "ext"
+    };
+  };
+  rpc DeleteDeviceExt(DeleteDeviceExtRequest)
+      returns (DeleteDeviceExtResponse) {
+    option (google.api.http) = {
+      post : "/devices/{id}/ext/delete"
+      body : "keys"
+    };
+  };
+  rpc UpdateDeviceExt(UpdateDeviceExtRequest)
+      returns (UpdateDeviceExtResponse) {
+    option (google.api.http) = {
+      put : "/devices/{id}/ext"
+      body : "ext"
+    };
+  };
 }
 
-message DeviceObject {
-	string id = 1;
-}
+message DeviceObject { string id = 1; }
 
-//user to device
-message CreateDeviceRequest {
-	DeviceEntity     dev   = 1;
+// user to device
+message CreateDeviceRequest { DeviceEntity dev = 1; }
+message CreateDeviceResponse {
+  DeviceEntity dev = 1;
+  DeviceEntitySysField sysField = 2;
 }
 
 message UpdateDeviceRequest {
-	string            id   = 1;
-	DeviceEntity     dev   = 2;
+  string id = 1;
+  DeviceEntity dev = 2;
+}
+message UpdateDeviceResponse {
+  DeviceEntity dev = 1;
+  DeviceEntitySysField sysField = 2;
 }
 
-message DeleteDeviceRequest {
-	Ids ids = 1;
+message DeleteDeviceRequest { Ids ids = 1; }
+message DeleteDeviceResponse { string result = 1; }
+
+message GetDeviceRequest { string id = 1; }
+message GetDeviceResponse {
+  DeviceEntity dev = 1;
+  DeviceEntitySysField sysField = 2;
 }
 
-message GetDeviceRequest { string id = 1;}
-
-message ListDeviceRequest {
-	Filter filter = 1;
-}
+message ListDeviceRequest { Filter filter = 1; }
+message ListDeviceResponse { google.protobuf.Value result = 1; }
 
 message EnableDeviceRequest {
-	Enable enable = 1;
-	string id   = 2;
+  Enable enable = 1;
+  string id = 2;
 }
+message EnableDeviceResponse { string result = 1; }
 
 message AddDeviceExtRequest {
-	string                id 	 = 1;
-	google.protobuf.Value	ext  = 2;
+  string id = 1;
+  google.protobuf.Value ext = 2;
 }
+message AddDeviceExtResponse { string result = 1; }
 
 message DeleteDeviceExtRequest {
-	Keys keys = 1;
-	string id = 2;
+  Keys keys = 1;
+  string id = 2;
 }
+message DeleteDeviceExtResponse { string result = 1; }
 
 message UpdateDeviceExtRequest {
-	string    id   = 1;
-	Ext     ext  = 2;
+  string id = 1;
+  Ext ext = 2;
 }
+message UpdateDeviceExtResponse { string result = 1; }
 
 // device to core
 message DeviceEntityCoreInfo {
-	DeviceEntity     			dev = 1;
-	DeviceEntitySysField	sysField = 2;
+  DeviceEntity dev = 1;
+  DeviceEntitySysField sysField = 2;
 }
-
-message CreateDeviceResponse {
-	string result = 1;
-	DeviceEntitySysField sysField = 2;
-}
-
-
-
 
 //------------------------------------------------------------------------------
 // Basic data types
 //------------------------------------------------------------------------------
 message DeviceEntity {
-	string name 							 = 1;
+  string name = 1;
 
-	string desc 							 = 2;
+  string desc = 2;
 
-	string group      				 = 3;
+  string group = 3;
 
-	google.protobuf.Value ext  = 4;
+  google.protobuf.Value ext = 4;
 }
 
 // system fields
 message DeviceEntitySysField {
-	string _id        				 = 5;
+  string _id = 5;
 
-	int64 _createdAt 				 = 6;
+  int64 _createdAt = 6;
 
-	int64 _updatedAt 				 = 7;
+  int64 _updatedAt = 7;
 
-	bool _status      				 = 8;
+  bool _status = 8;
 
-	bool _enable      				 = 9;
+  bool _enable = 9;
 
-	string _token              = 10;
+  string _token = 10;
 
-	string _clientid           = 11;
+  string _clientid = 11;
 
-	string _username           = 12;
+  string _username = 12;
 
-	string _peerhost           = 14;
+  string _peerhost = 14;
 
-	int32 _sockport            = 15;
+  int32 _sockport = 15;
 
-	string _protocol           = 16;
+  string _protocol = 16;
 }
 
-message CommonResponse {
-	string result = 1;
-}
+message CommonResponse { google.protobuf.Value result = 1; }
 
 message Filter {
-	Page page      = 1;
+  Page page = 1;
 
-	repeated Condition condition = 2;
+  repeated Condition condition = 2;
 }
 
 message Page {
-	uint32 offset = 1;
-	uint32 limit  = 2;
-	string sort   = 3;
-	bool reverse  = 4;
+  uint32 offset = 1;
+  uint32 limit = 2;
+  string sort = 3;
+  bool reverse = 4;
 }
 
 message Condition {
-	string field 		= 1;
-	string value  	= 2;
-	string operator = 3;
+  string field = 1;
+  string value = 2;
+  string operator = 3;
 }
 
-message Ids {
-	repeated string ids = 1;
-}
+message Ids { repeated string ids = 1; }
 
-message Keys {
-	repeated string keys = 1;
-}
+message Keys { repeated string keys = 1; }
 
 message Ext {
-	string key   = 1;
-	string value = 2;
+  string key = 1;
+  string value = 2;
 }
 
-message Enable {
-	bool enable = 1;
-}
+message Enable { bool enable = 1; }

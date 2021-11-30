@@ -1,0 +1,1375 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/openapi/v1/server.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Openapi"
+    },
+    {
+      "name": "Greeter"
+    },
+    {
+      "name": "Device"
+    },
+    {
+      "name": "Measure"
+    },
+    {
+      "name": "Group"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/addons/identify": {
+      "post": {
+        "summary": "Post addons identify.",
+        "operationId": "Openapi_AddonsIdentify",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddonsIdentifyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddonsIdentifyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Openapi"
+        ]
+      }
+    },
+    "/devices": {
+      "post": {
+        "operationId": "Device_CreateDevice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateDeviceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeviceEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Device"
+        ]
+      }
+    },
+    "/devices/delete": {
+      "post": {
+        "operationId": "Device_DeleteDevice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteDeviceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1Ids"
+            }
+          }
+        ],
+        "tags": [
+          "Device"
+        ]
+      }
+    },
+    "/devices/search": {
+      "post": {
+        "operationId": "Device_ListDevice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListDeviceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1Filter"
+            }
+          }
+        ],
+        "tags": [
+          "Device"
+        ]
+      }
+    },
+    "/devices/{id}": {
+      "get": {
+        "operationId": "Device_GetDevice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetDeviceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Device"
+        ]
+      },
+      "put": {
+        "operationId": "Device_UpdateDevice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateDeviceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeviceEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Device"
+        ]
+      }
+    },
+    "/devices/{id}/enable": {
+      "put": {
+        "operationId": "Device_EnableDevice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1EnableDeviceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1Enable"
+            }
+          }
+        ],
+        "tags": [
+          "Device"
+        ]
+      }
+    },
+    "/devices/{id}/ext": {
+      "post": {
+        "operationId": "Device_AddDeviceExt",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddDeviceExtResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "tags": [
+          "Device"
+        ]
+      },
+      "put": {
+        "operationId": "Device_UpdateDeviceExt",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateDeviceExtResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1Ext"
+            }
+          }
+        ],
+        "tags": [
+          "Device"
+        ]
+      }
+    },
+    "/devices/{id}/ext/delete": {
+      "post": {
+        "operationId": "Device_DeleteDeviceExt",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteDeviceExtResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1Keys"
+            }
+          }
+        ],
+        "tags": [
+          "Device"
+        ]
+      }
+    },
+    "/group": {
+      "get": {
+        "operationId": "Group_ListGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apigroupv1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Group"
+        ]
+      },
+      "post": {
+        "operationId": "Group_CreateGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apigroupv1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GroupEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Group"
+        ]
+      }
+    },
+    "/group/{id}": {
+      "get": {
+        "operationId": "Group_GetGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apigroupv1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Group"
+        ]
+      },
+      "delete": {
+        "operationId": "Group_DeleteGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apigroupv1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Group"
+        ]
+      },
+      "put": {
+        "operationId": "Group_UpdateGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apigroupv1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GroupEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Group"
+        ]
+      }
+    },
+    "/helloworld/{name}": {
+      "get": {
+        "summary": "Sends a greeting",
+        "operationId": "Greeter_SayHello",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1HelloResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Greeter"
+        ]
+      }
+    },
+    "/identify": {
+      "get": {
+        "summary": "Query identify.",
+        "operationId": "Openapi_Identify",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IdentifyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Openapi"
+        ]
+      }
+    },
+    "/measure": {
+      "get": {
+        "operationId": "Measure_ListMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Measure"
+        ]
+      },
+      "post": {
+        "operationId": "Measure_CreateMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1MeasureEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      }
+    },
+    "/measure/{id}": {
+      "get": {
+        "operationId": "Measure_GetMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      },
+      "delete": {
+        "operationId": "Measure_DeleteMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      },
+      "put": {
+        "operationId": "Measure_UpdateMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1MeasureEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      }
+    },
+    "/status": {
+      "get": {
+        "summary": "Query status.",
+        "operationId": "Openapi_Status",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Openapi"
+        ]
+      }
+    },
+    "/tenant/bind": {
+      "post": {
+        "summary": "Post tenant bind.",
+        "operationId": "Openapi_TenantBind",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1TenantBindResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1TenantBindRequst"
+            }
+          }
+        ],
+        "tags": [
+          "Openapi"
+        ]
+      }
+    },
+    "/tenant/unbind": {
+      "post": {
+        "summary": "Post tenant bind.",
+        "operationId": "Openapi_TenantUnbind",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1TenantUnbindResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1TenantUnbindRequst"
+            }
+          }
+        ],
+        "tags": [
+          "Openapi"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "apigroupv1CommonResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        }
+      }
+    },
+    "apimeasurev1CommonResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "protobufNullValue": {
+      "type": "string",
+      "enum": [
+        "NULL_VALUE"
+      ],
+      "default": "NULL_VALUE",
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\r\n`Value` type union.\r\n\r\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1AddDeviceExtResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        }
+      }
+    },
+    "v1AddonsIdentifyRequest": {
+      "type": "object",
+      "properties": {
+        "plugin": {
+          "$ref": "#/definitions/v1BriefPluginInfo"
+        },
+        "implemented_addons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ImplementedAddons"
+          }
+        }
+      },
+      "description": "*\r\nThe request value of the POST /v1/addons/identify,\r\nused when the plugin in the registration process implements\r\nthe extension point of the registered plugin."
+    },
+    "v1AddonsIdentifyResponse": {
+      "type": "object",
+      "properties": {
+        "res": {
+          "$ref": "#/definitions/v1Result"
+        }
+      },
+      "description": "*\r\nThe response value of the POST /v1/addons/identify,\r\nused when the plugin in the registration process implements\r\nthe extension point of the registered plugin."
+    },
+    "v1AddonsPoint": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        }
+      },
+      "description": "*\r\nmessage plugin declares extension point."
+    },
+    "v1BriefPluginInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "description": "*\r\nmessage brief plugin information."
+    },
+    "v1Condition": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateDeviceResponse": {
+      "type": "object",
+      "properties": {
+        "dev": {
+          "$ref": "#/definitions/v1DeviceEntity"
+        },
+        "sysField": {
+          "$ref": "#/definitions/v1DeviceEntitySysField"
+        }
+      }
+    },
+    "v1DeleteDeviceExtResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DeleteDeviceResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DeviceEntity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "group": {
+          "type": "string"
+        },
+        "ext": {
+          "type": "object"
+        }
+      },
+      "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
+    },
+    "v1DeviceEntitySysField": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "_createdAt": {
+          "type": "string",
+          "format": "int64"
+        },
+        "_updatedAt": {
+          "type": "string",
+          "format": "int64"
+        },
+        "_status": {
+          "type": "boolean"
+        },
+        "_enable": {
+          "type": "boolean"
+        },
+        "_token": {
+          "type": "string"
+        },
+        "_clientid": {
+          "type": "string"
+        },
+        "_username": {
+          "type": "string"
+        },
+        "_peerhost": {
+          "type": "string"
+        },
+        "_sockport": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "_protocol": {
+          "type": "string"
+        }
+      },
+      "title": "system fields"
+    },
+    "v1Enable": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1EnableDeviceResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        }
+      }
+    },
+    "v1Ext": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "v1Filter": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/v1Page"
+        },
+        "condition": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Condition"
+          }
+        }
+      }
+    },
+    "v1GetDeviceResponse": {
+      "type": "object",
+      "properties": {
+        "dev": {
+          "$ref": "#/definitions/v1DeviceEntity"
+        },
+        "sysField": {
+          "$ref": "#/definitions/v1DeviceEntitySysField"
+        }
+      }
+    },
+    "v1GroupEntity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "string"
+        },
+        "ext": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "_id": {
+          "type": "string"
+        },
+        "_createdAt": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "_updatedAt": {
+          "type": "string",
+          "format": "uint64"
+        }
+      },
+      "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
+    },
+    "v1HelloResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "title": "The response message containing the greetings"
+    },
+    "v1IdentifyResponse": {
+      "type": "object",
+      "properties": {
+        "res": {
+          "$ref": "#/definitions/v1Result"
+        },
+        "plugin_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "tkeel_version": {
+          "type": "string"
+        },
+        "addons_point": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1AddonsPoint"
+          }
+        },
+        "implemented_plugin": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ImplementedPlugin"
+          }
+        }
+      },
+      "description": "*\r\nThe response value of the GET /v1/identify,\r\nused when the plugin registered."
+    },
+    "v1Ids": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1ImplementedAddons": {
+      "type": "object",
+      "properties": {
+        "addons_point": {
+          "type": "string"
+        },
+        "implemented_endpoint": {
+          "type": "string"
+        }
+      },
+      "description": "*\r\nmessage plugin declares implemented other plugin extension point."
+    },
+    "v1ImplementedPlugin": {
+      "type": "object",
+      "properties": {
+        "plugin": {
+          "$ref": "#/definitions/v1BriefPluginInfo"
+        },
+        "addons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ImplementedAddons"
+          }
+        }
+      },
+      "description": "*\r\nmessage plugin implemented other plugin."
+    },
+    "v1Keys": {
+      "type": "object",
+      "properties": {
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1ListDeviceResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "object"
+        }
+      }
+    },
+    "v1MeasureEntity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "device": {
+          "type": "string"
+        },
+        "data_type": {
+          "type": "string"
+        },
+        "precision": {
+          "type": "number",
+          "format": "float"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "measure_type": {
+          "type": "string"
+        },
+        "ext": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "_id": {
+          "type": "string"
+        },
+        "_createdAt": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "_updatedAt": {
+          "type": "string",
+          "format": "uint64"
+        }
+      },
+      "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
+    },
+    "v1Page": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sort": {
+          "type": "string"
+        },
+        "reverse": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1PluginStatus": {
+      "type": "string",
+      "enum": [
+        "ERROR",
+        "STARTING",
+        "RUNING",
+        "STOPPING",
+        "STOPPED"
+      ],
+      "default": "ERROR",
+      "description": "*\r\nplugin state enum."
+    },
+    "v1Result": {
+      "type": "object",
+      "properties": {
+        "ret": {
+          "$ref": "#/definitions/v1Retcode"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "description": "*\r\nmessage result."
+    },
+    "v1Retcode": {
+      "type": "string",
+      "enum": [
+        "OK",
+        "BAD_REQEUST",
+        "INTERNAL_ERROR"
+      ],
+      "default": "OK",
+      "description": "*\r\nerror code enum."
+    },
+    "v1StatusResponse": {
+      "type": "object",
+      "properties": {
+        "res": {
+          "$ref": "#/definitions/v1Result"
+        },
+        "status": {
+          "$ref": "#/definitions/v1PluginStatus"
+        }
+      },
+      "description": "*\r\nThe request value of the GET /v1/Status.\r\nused when the tkeel checks the status of plugins regularly."
+    },
+    "v1TenantBindRequst": {
+      "type": "object",
+      "properties": {
+        "tenant_id": {
+          "type": "string"
+        },
+        "extra": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "description": "*\r\nThe request value of the POST /v1/tenant/bind,\r\nused when the tenant administrator enables the plugin."
+    },
+    "v1TenantBindResponse": {
+      "type": "object",
+      "properties": {
+        "res": {
+          "$ref": "#/definitions/v1Result"
+        }
+      },
+      "description": "*\r\nThe response value of the POST /v1/tenant/bind,\r\nused when the tenant administrator enables the plugin."
+    },
+    "v1TenantUnbindRequst": {
+      "type": "object",
+      "properties": {
+        "tenant_id": {
+          "type": "string"
+        },
+        "extra": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "description": "*\r\nThe request value of the POST /v1/tenant/unbind,\r\nused when the tenant administrator disables the plugin."
+    },
+    "v1TenantUnbindResponse": {
+      "type": "object",
+      "properties": {
+        "res": {
+          "$ref": "#/definitions/v1Result"
+        }
+      },
+      "description": "*\r\nThe response value of the POST /v1/tenant/unbind,\r\nused when the tenant administrator disables the plugin."
+    },
+    "v1UpdateDeviceExtResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        }
+      }
+    },
+    "v1UpdateDeviceResponse": {
+      "type": "object",
+      "properties": {
+        "dev": {
+          "$ref": "#/definitions/v1DeviceEntity"
+        },
+        "sysField": {
+          "$ref": "#/definitions/v1DeviceEntitySysField"
+        }
+      }
+    }
+  }
+}
