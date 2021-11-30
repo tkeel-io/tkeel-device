@@ -2,15 +2,19 @@ package service
 
 import (
 	"context"
-	pb "device/api/device/v1"
 	json "encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/tkeel-io/kit/log"
+	pb "github.com/tkeel-io/tkeel-device/api/device/v1"
 	go_struct "google.golang.org/protobuf/types/known/structpb"
 )
-const ResOK string = "ok"
-const ResFailed string = "failed"
+
+const (
+	ResOK     string = "ok"
+	ResFailed string = "failed"
+)
 
 type DeviceService struct {
 	pb.UnimplementedDeviceServer
@@ -35,16 +39,16 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	tm := map[string]string{
 		//"id": "uuid",
 		"entityType": "device",
-		"owner": "abc",
-		"source": "device",
+		"owner":      "abc",
+		"source":     "device",
 	}
 
-	//2. get url
+	// 2. get url
 	devId := GetUUID()
 	url := s.client.GetCoreUrl("", tm) + "&id=" + devId
 	log.Debug("get url: ", url)
 
-	//3. build coreInfo and add system value
+	// 3. build coreInfo and add system value
 	coreInfo := new(pb.DeviceEntityCoreInfo)
 	coreInfo.Dev = new(pb.DeviceEntity)
 	coreInfo.Dev = req.Dev
@@ -56,38 +60,38 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	coreInfo.SysField.XStatus = false
 
 	//4. create device token
-	//token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId)
+	//token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId, tm["owner"])
 	//if nil != err2{
 	//	return nil, err2
 	//}
 	token := "token"
 	coreInfo.SysField.XToken = token
 
-	//4. add internal values and marshal Dev
+	// 4. add internal values and marshal Dev
 	dev, err3 := json.Marshal(coreInfo)
 	if nil != err3 {
 		return nil, err3
 	}
 
-	//5. core request
+	// 5. core request
 	res, err4 := s.client.Post(url, dev)
 	if nil != err4 {
 		log.Error("error post data to core", string(dev))
 		return nil, err4
 	}
 	er := new(pb.EntityResponse)
-	if err5 := json.Unmarshal(res, er); nil!=err5{
+	if err5 := json.Unmarshal(res, er); nil != err5 {
 		return nil, err5
 	}
 
 	kv := er.Properties.GetStructValue().Fields
 	devRes := new(pb.CreateDeviceResponse)
 	fieldV, err6 := json.Marshal(kv)
-	if nil != err6{
+	if nil != err6 {
 		return nil, err6
 	}
 	err7 := json.Unmarshal(fieldV, devRes)
-	if nil != err7{
+	if nil != err7 {
 		return nil, err7
 	}
 
@@ -105,8 +109,8 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	tm := map[string]string{
 		//"id": "uuid",
 		"entityType": "device",
-		"owner": "abc",
-		"source": "device",
+		"owner":      "abc",
+		"source":     "device",
 	}
 	midUrl := "/" + req.Id
 	url := s.client.GetCoreUrl(midUrl, tm)
@@ -123,22 +127,22 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 		return nil, err
 	}
 	res, err2 := s.client.Put(url, dev)
-	if nil != err2{
+	if nil != err2 {
 		return nil, err2
 	}
 	er := new(pb.EntityResponse)
-	if err3 := json.Unmarshal(res, er); nil!=err3{
+	if err3 := json.Unmarshal(res, er); nil != err3 {
 		return nil, err3
 	}
 
 	kv := er.Properties.GetStructValue().Fields
 	devRes := new(pb.UpdateDeviceResponse)
 	fieldV, err6 := json.Marshal(kv)
-	if nil != err6{
+	if nil != err6 {
 		return nil, err6
 	}
 	err7 := json.Unmarshal(fieldV, devRes)
-	if nil != err7{
+	if nil != err7 {
 		return nil, err7
 	}
 
@@ -150,17 +154,17 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 	log.Debug("req:", req)
 
 	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return nil, err
 	}
 	ids := req.Ids.GetIds()
-	for _, id :=range ids{
+	for _, id := range ids {
 		midUrl := "/" + id
 		url := s.client.GetCoreUrl(midUrl, tm)
 		log.Debug("get url:", url)
 
 		_, err2 := s.client.Delete(url)
-		if nil != err2{
+		if nil != err2 {
 			return &pb.DeleteDeviceResponse{Result: ResFailed}, nil
 		}
 	}
@@ -171,7 +175,7 @@ func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest)
 	log.Debug("GetDevice")
 	log.Debug("req:", req)
 	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return nil, err
 	}
 	midUrl := "/" + req.GetId()
@@ -179,22 +183,22 @@ func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest)
 	log.Debug("get url :", url)
 
 	res, err2 := s.client.Get(url)
-	if nil != err2{
+	if nil != err2 {
 		return nil, err2
 	}
 	er := new(pb.EntityResponse)
-	if err3 := json.Unmarshal(res, er); nil!=err3{
+	if err3 := json.Unmarshal(res, er); nil != err3 {
 		return nil, err3
 	}
 
 	kv := er.Properties.GetStructValue().Fields
 	devRes := new(pb.GetDeviceResponse)
 	fieldV, err6 := json.Marshal(kv)
-	if nil != err6{
+	if nil != err6 {
 		return nil, err6
 	}
 	err7 := json.Unmarshal(fieldV, devRes)
-	if nil != err7{
+	if nil != err7 {
 		return nil, err7
 	}
 
@@ -208,9 +212,9 @@ func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceReques
 	req.Filter.Page.Offset = req.Filter.Page.GetOffset()
 	log.Debug("req:", req, req.Filter.Page)
 
-	//fixme
+	// fixme
 	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return nil, err
 	}
 	midUrl := "/search"
@@ -222,16 +226,16 @@ func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceReques
 		return nil, err1
 	}
 	res, err2 := s.client.Post(url, filter)
-	if nil != err2{
+	if nil != err2 {
 		return nil, err2
 	}
 	var er interface{}
-	if err3 := json.Unmarshal(res, &er); nil!=err3{
+	if err3 := json.Unmarshal(res, &er); nil != err3 {
 		log.Error("error Unmarshal", err3)
 		return nil, err3
 	}
 	value, err4 := go_struct.NewValue(er)
-	if nil != err4{
+	if nil != err4 {
 		return nil, err4
 	}
 	return &pb.ListDeviceResponse{Result: value}, nil
@@ -269,7 +273,7 @@ func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRe
 	log.Debug("req:", req)
 
 	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return nil, err
 	}
 	midUrl := "/" + req.GetId()
@@ -281,9 +285,9 @@ func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRe
 	case map[string]interface{}:
 		for k, v := range kv {
 			e := map[string]interface{}{
-				"path": fmt.Sprintf("dev.ext.%s", k),
+				"path":     fmt.Sprintf("dev.ext.%s", k),
 				"operator": "replace",
-				"value": v,
+				"value":    v,
 			}
 			exts = append(exts, e)
 		}
@@ -297,7 +301,7 @@ func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRe
 		return &pb.AddDeviceExtResponse{Result: ResFailed}, err1
 	}
 	_, err2 := s.client.Patch(url, data)
-	if nil != err2{
+	if nil != err2 {
 		return &pb.AddDeviceExtResponse{Result: ResFailed}, err2
 	}
 
@@ -307,22 +311,22 @@ func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRe
 func (s *DeviceService) DeleteDeviceExt(ctx context.Context, req *pb.DeleteDeviceExtRequest) (*pb.DeleteDeviceExtResponse, error) {
 	log.Debug("DeleteDeviceExt")
 	log.Debug("req:", req)
-	//todo when core support
+	// todo when core support
 	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return nil, err
 	}
 	midUrl := "/" + req.GetId()
 	url := s.client.GetCoreUrl(midUrl, tm)
 
-	//var exts []interface{}
+	// var exts []interface{}
 	keys := req.Keys.Keys
 	exts := make([]interface{}, len(keys))
 	for i, k := range keys {
 		e := map[string]interface{}{
-			"path": fmt.Sprintf("dev.ext.%s", k),
+			"path":     fmt.Sprintf("dev.ext.%s", k),
 			"operator": "remove",
-			"value": "",
+			"value":    "",
 		}
 		exts[i] = e
 	}
@@ -333,7 +337,7 @@ func (s *DeviceService) DeleteDeviceExt(ctx context.Context, req *pb.DeleteDevic
 		return &pb.DeleteDeviceExtResponse{Result: ResFailed}, err1
 	}
 	_, err2 := s.client.Patch(url, data)
-	if nil != err2{
+	if nil != err2 {
 		return &pb.DeleteDeviceExtResponse{Result: ResFailed}, err2
 	}
 	return &pb.DeleteDeviceExtResponse{Result: ResOK}, nil
@@ -344,7 +348,7 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 	log.Debug("req:", req)
 
 	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return nil, err
 	}
 	midUrl := "/" + req.GetId()
@@ -352,10 +356,10 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 	log.Debug("get url :", url)
 
 	var exts [1]interface{}
-	exts[0]= map[string]interface{}{
-		"path": fmt.Sprintf("dev.ext.%s", req.Ext.GetKey()),
+	exts[0] = map[string]interface{}{
+		"path":     fmt.Sprintf("dev.ext.%s", req.Ext.GetKey()),
 		"operator": "replace",
-		"value": req.Ext.GetValue(),
+		"value":    req.Ext.GetValue(),
 	}
 	log.Debug("ext body: ", exts)
 	data, err1 := json.Marshal(exts)
@@ -363,7 +367,7 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 		return &pb.UpdateDeviceExtResponse{Result: ResFailed}, err1
 	}
 	_, err2 := s.client.Patch(url, data)
-	if nil != err2{
+	if nil != err2 {
 		return &pb.UpdateDeviceExtResponse{Result: ResFailed}, err2
 	}
 	return &pb.UpdateDeviceExtResponse{Result: ResOK}, nil

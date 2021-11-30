@@ -7,11 +7,11 @@
 package v1
 
 import (
-	_struct "github.com/golang/protobuf/ptypes/struct"
 	v1 "github.com/tkeel-io/core/api/core/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -86,7 +86,7 @@ func (x *DeviceObject) GetId() string {
 	return ""
 }
 
-//user to device
+// user to device
 type CreateDeviceRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -547,7 +547,7 @@ type ListDeviceResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result *_struct.Value `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Result *structpb.Value `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
 }
 
 func (x *ListDeviceResponse) Reset() {
@@ -582,7 +582,7 @@ func (*ListDeviceResponse) Descriptor() ([]byte, []int) {
 	return file_api_device_v1_device_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *ListDeviceResponse) GetResult() *_struct.Value {
+func (x *ListDeviceResponse) GetResult() *structpb.Value {
 	if x != nil {
 		return x.Result
 	}
@@ -696,8 +696,8 @@ type AddDeviceExtRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id  string         `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Ext *_struct.Value `protobuf:"bytes,2,opt,name=ext,proto3" json:"ext,omitempty"`
+	Id  string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Ext *structpb.Value `protobuf:"bytes,2,opt,name=ext,proto3" json:"ext,omitempty"`
 }
 
 func (x *AddDeviceExtRequest) Reset() {
@@ -739,7 +739,7 @@ func (x *AddDeviceExtRequest) GetId() string {
 	return ""
 }
 
-func (x *AddDeviceExtRequest) GetExt() *_struct.Value {
+func (x *AddDeviceExtRequest) GetExt() *structpb.Value {
 	if x != nil {
 		return x.Ext
 	}
@@ -1061,10 +1061,10 @@ type DeviceEntity struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name  string         `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Desc  string         `protobuf:"bytes,2,opt,name=desc,proto3" json:"desc,omitempty"`
-	Group string         `protobuf:"bytes,3,opt,name=group,proto3" json:"group,omitempty"`
-	Ext   *_struct.Value `protobuf:"bytes,4,opt,name=ext,proto3" json:"ext,omitempty"`
+	Name  string          `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Desc  string          `protobuf:"bytes,2,opt,name=desc,proto3" json:"desc,omitempty"`
+	Group string          `protobuf:"bytes,3,opt,name=group,proto3" json:"group,omitempty"`
+	Ext   *structpb.Value `protobuf:"bytes,4,opt,name=ext,proto3" json:"ext,omitempty"`
 }
 
 func (x *DeviceEntity) Reset() {
@@ -1120,7 +1120,7 @@ func (x *DeviceEntity) GetGroup() string {
 	return ""
 }
 
-func (x *DeviceEntity) GetExt() *_struct.Value {
+func (x *DeviceEntity) GetExt() *structpb.Value {
 	if x != nil {
 		return x.Ext
 	}
@@ -1260,7 +1260,7 @@ type CommonResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result *_struct.Value `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Result *structpb.Value `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
 }
 
 func (x *CommonResponse) Reset() {
@@ -1295,7 +1295,7 @@ func (*CommonResponse) Descriptor() ([]byte, []int) {
 	return file_api_device_v1_device_proto_rawDescGZIP(), []int{22}
 }
 
-func (x *CommonResponse) GetResult() *_struct.Value {
+func (x *CommonResponse) GetResult() *structpb.Value {
 	if x != nil {
 		return x.Result
 	}
@@ -1922,10 +1922,11 @@ var file_api_device_v1_device_proto_rawDesc = []byte{
 	0x65, 0x76, 0x69, 0x63, 0x65, 0x45, 0x78, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
 	0x22, 0x1e, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x18, 0x1a, 0x11, 0x2f, 0x64, 0x65, 0x76, 0x69, 0x63,
 	0x65, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x2f, 0x65, 0x78, 0x74, 0x3a, 0x03, 0x65, 0x78, 0x74,
-	0x42, 0x2a, 0x0a, 0x0d, 0x61, 0x70, 0x69, 0x2e, 0x64, 0x65, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x76,
-	0x31, 0x50, 0x01, 0x5a, 0x17, 0x64, 0x65, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x64, 0x65, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x50, 0x02, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x42, 0x44, 0x0a, 0x0d, 0x61, 0x70, 0x69, 0x2e, 0x64, 0x65, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x76,
+	0x31, 0x50, 0x01, 0x5a, 0x31, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x74, 0x6b, 0x65, 0x65, 0x6c, 0x2d, 0x69, 0x6f, 0x2f, 0x74, 0x6b, 0x65, 0x65, 0x6c, 0x2d, 0x64,
+	0x65, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x64, 0x65, 0x76, 0x69, 0x63, 0x65,
+	0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x50, 0x02, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1972,7 +1973,7 @@ var file_api_device_v1_device_proto_goTypes = []interface{}{
 	(*Keys)(nil),                    // 27: api.device.v1.Keys
 	(*Ext)(nil),                     // 28: api.device.v1.Ext
 	(*Enable)(nil),                  // 29: api.device.v1.Enable
-	(*_struct.Value)(nil),           // 30: google.protobuf.Value
+	(*structpb.Value)(nil),          // 30: google.protobuf.Value
 }
 var file_api_device_v1_device_proto_depIdxs = []int32{
 	20, // 0: api.device.v1.CreateDeviceRequest.dev:type_name -> api.device.v1.DeviceEntity

@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	v1 "device/api/helloworld/v1"
+	v1 "github.com/tkeel-io/tkeel-device/api/helloworld/v1"
 )
 
 // GreeterService is a greeter service.

@@ -154,8 +154,8 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 	return body, nil
 }
 
-func (c *CoreClient) CreatEntityToken(entityType,id string)(string, error) {
-	url:= authUrl + fmt.Sprintf("/v1/entity/%s/%s/token", entityType, id)
+func (c *CoreClient) CreatEntityToken(entityType,id,owner string)(string, error) {
+	url:= authUrl + fmt.Sprintf("/v1/entity/%s/%s/token?owner=%s", entityType, id, owner)
 	resp, err := http.Get(url)
 
 	body, err2 := c.ParseResp(resp, err)
