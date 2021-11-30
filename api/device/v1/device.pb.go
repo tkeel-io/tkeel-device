@@ -741,9 +741,9 @@ func (x *AddDeviceExtRequest) GetId() string {
 
 func (x *AddDeviceExtRequest) GetExt() *structpb.Value {
 	if x != nil {
-		return x.Ext
+		return x.Id
 	}
-	return nil
+	return ""
 }
 
 type AddDeviceExtResponse struct {
@@ -790,7 +790,7 @@ func (x *AddDeviceExtResponse) GetResult() string {
 	if x != nil {
 		return x.Result
 	}
-	return ""
+	return nil
 }
 
 type DeleteDeviceExtRequest struct {
@@ -1211,6 +1211,48 @@ func (x *DeviceEntitySysField) GetXEnable() bool {
 		return x.XEnable
 	}
 	return false
+}
+
+func (x *DeviceEntitySysField) GetXToken() string {
+	if x != nil {
+		return x.XToken
+	}
+	return ""
+}
+
+func (x *DeviceEntitySysField) GetXClientid() string {
+	if x != nil {
+		return x.XClientid
+	}
+	return ""
+}
+
+func (x *DeviceEntitySysField) GetXUsername() string {
+	if x != nil {
+		return x.XUsername
+	}
+	return ""
+}
+
+func (x *DeviceEntitySysField) GetXPeerhost() string {
+	if x != nil {
+		return x.XPeerhost
+	}
+	return ""
+}
+
+func (x *DeviceEntitySysField) GetXSockport() int32 {
+	if x != nil {
+		return x.XSockport
+	}
+	return 0
+}
+
+func (x *DeviceEntitySysField) GetXProtocol() string {
+	if x != nil {
+		return x.XProtocol
+	}
+	return ""
 }
 
 func (x *DeviceEntitySysField) GetXToken() string {
