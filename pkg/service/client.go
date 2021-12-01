@@ -15,11 +15,8 @@ import (
 	"time"
 )
 
-//const coreUrl string = "http://192.168.123.5:30226/v1/plugins/device/entities"
-//const coreUrl string = "http://192.168.123.9:32246/v1/plugins/device/entities"
-//const authUrl string = "http://192.168.123.5:30707" // /invoke/keel/method
-const coreUrl string = "http://192.168.123.9:32701/v1/plugins/device/entities"
-const authUrl string = "http://192.168.123.12:30707/apis/security"
+const coreUrl string = "http://localhost:3500/v1.0/invoke/core/method/v1/plugins/device/entities"
+const authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
 const tokenKey string = "Authorization"
 
 type CoreClient struct {
