@@ -14,12 +14,12 @@ import (
 	"github.com/tkeel-io/tkeel-device/pkg/service"
 )
 
-import (//User import
-	helloworld "github.com/tkeel-io/tkeel-device/api/helloworld/v1"
-	openapi "github.com/tkeel-io/tkeel-device/api/openapi/v1"
+import ( //User import
 	Device_v1 "github.com/tkeel-io/tkeel-device/api/device/v1"
 	Group_v1 "github.com/tkeel-io/tkeel-device/api/group/v1"
+	helloworld "github.com/tkeel-io/tkeel-device/api/helloworld/v1"
 	Measure_v1 "github.com/tkeel-io/tkeel-device/api/measure/v1"
+	openapi "github.com/tkeel-io/tkeel-device/api/openapi/v1"
 )
 
 var (
@@ -53,8 +53,7 @@ func main() {
 		serverList...,
 	)
 
-
-	{//User service
+	{ //User service
 		GreeterSrv := service.NewGreeterService()
 		helloworld.RegisterGreeterHTTPServer(httpSrv.Container, GreeterSrv)
 		helloworld.RegisterGreeterServer(grpcSrv.GetServe(), GreeterSrv)
@@ -76,7 +75,6 @@ func main() {
 		Measure_v1.RegisterMeasureServer(grpcSrv.GetServe(), MeasureSrv)
 
 	}
-
 
 	if err := app.Run(context.TODO()); err != nil {
 		panic(err)

@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/openapi/v1/server.proto",
+    "title": "api/measure/v1/measure.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "Openapi"
+      "name": "Measure"
     },
     {
       "name": "Greeter"
@@ -15,10 +15,10 @@
       "name": "Device"
     },
     {
-      "name": "Measure"
+      "name": "Group"
     },
     {
-      "name": "Group"
+      "name": "Openapi"
     }
   ],
   "consumes": [
@@ -116,7 +116,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1Ids"
+              "$ref": "#/definitions/apidevicev1Ids"
             }
           }
         ],
@@ -148,7 +148,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1Filter"
+              "$ref": "#/definitions/apidevicev1Filter"
             }
           }
         ],
@@ -364,7 +364,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1Keys"
+              "$ref": "#/definitions/apidevicev1Keys"
             }
           }
         ],
@@ -373,27 +373,7 @@
         ]
       }
     },
-    "/group": {
-      "get": {
-        "operationId": "Group_ListGroup",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apigroupv1CommonResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Group"
-        ]
-      },
+    "/groups": {
       "post": {
         "operationId": "Group_CreateGroup",
         "responses": {
@@ -425,9 +405,9 @@
         ]
       }
     },
-    "/group/{id}": {
-      "get": {
-        "operationId": "Group_GetGroup",
+    "/groups/delete": {
+      "post": {
+        "operationId": "Group_DeleteGroup",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -444,23 +424,59 @@
         },
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/apigroupv1Ids"
+            }
           }
         ],
         "tags": [
           "Group"
         ]
-      },
-      "delete": {
-        "operationId": "Group_DeleteGroup",
+      }
+    },
+    "/groups/search": {
+      "post": {
+        "operationId": "Group_ListGroup",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apigroupv1CommonResponse"
+              "$ref": "#/definitions/v1ListGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apigroupv1Filter"
+            }
+          }
+        ],
+        "tags": [
+          "Group"
+        ]
+      }
+    },
+    "/groups/{id}": {
+      "get": {
+        "operationId": "Group_GetGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetGroupResponse"
             }
           },
           "default": {
@@ -511,6 +527,186 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1GroupEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Group"
+        ]
+      }
+    },
+    "/groups/{id}/ext": {
+      "post": {
+        "operationId": "Group_UpdateGroupExt",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apigroupv1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "tags": [
+          "Group"
+        ]
+      }
+    },
+    "/groups/{id}/ext/delete": {
+      "post": {
+        "operationId": "Group_DelGroupExt",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apigroupv1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apigroupv1Keys"
+            }
+          }
+        ],
+        "tags": [
+          "Group"
+        ]
+      }
+    },
+    "/groups/{id}/items": {
+      "get": {
+        "operationId": "Group_ListGroupItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListGroupItemsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Group"
+        ]
+      },
+      "post": {
+        "operationId": "Group_AddGroupItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apigroupv1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apigroupv1Ids"
+            }
+          }
+        ],
+        "tags": [
+          "Group"
+        ]
+      }
+    },
+    "/groups/{id}/items/delete": {
+      "post": {
+        "operationId": "Group_DelGroupItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apigroupv1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apigroupv1Ids"
             }
           }
         ],
@@ -810,11 +1006,150 @@
     }
   },
   "definitions": {
+    "apidevicev1Condition": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string"
+        }
+      }
+    },
+    "apidevicev1Filter": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/apidevicev1Page"
+        },
+        "condition": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apidevicev1Condition"
+          }
+        }
+      }
+    },
+    "apidevicev1Ids": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "apidevicev1Keys": {
+      "type": "object",
+      "properties": {
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "apidevicev1Page": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sort": {
+          "type": "string"
+        },
+        "reverse": {
+          "type": "boolean"
+        }
+      }
+    },
     "apigroupv1CommonResponse": {
       "type": "object",
       "properties": {
         "result": {
           "type": "string"
+        }
+      },
+      "title": "device to user"
+    },
+    "apigroupv1Condition": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string"
+        }
+      }
+    },
+    "apigroupv1Filter": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/apigroupv1Page"
+        },
+        "condition": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apigroupv1Condition"
+          }
+        }
+      }
+    },
+    "apigroupv1Ids": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "apigroupv1Keys": {
+      "type": "object",
+      "properties": {
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "apigroupv1Page": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sort": {
+          "type": "string"
+        },
+        "reverse": {
+          "type": "boolean"
         }
       }
     },
@@ -916,20 +1251,6 @@
         }
       },
       "description": "*\r\nmessage brief plugin information."
-    },
-    "v1Condition": {
-      "type": "object",
-      "properties": {
-        "field": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        },
-        "operator": {
-          "type": "string"
-        }
-      }
     },
     "v1CreateDeviceResponse": {
       "type": "object",
@@ -1034,6 +1355,38 @@
         }
       }
     },
+    "v1EntityResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "plugin": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "mappers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1MapperDesc"
+          }
+        },
+        "configs": {
+          "type": "object"
+        },
+        "properties": {
+          "type": "object"
+        }
+      }
+    },
     "v1Ext": {
       "type": "object",
       "properties": {
@@ -1045,20 +1398,6 @@
         }
       }
     },
-    "v1Filter": {
-      "type": "object",
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/v1Page"
-        },
-        "condition": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1Condition"
-          }
-        }
-      }
-    },
     "v1GetDeviceResponse": {
       "type": "object",
       "properties": {
@@ -1067,6 +1406,17 @@
         },
         "sysField": {
           "$ref": "#/definitions/v1DeviceEntitySysField"
+        }
+      }
+    },
+    "v1GetGroupResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        },
+        "entityInfo": {
+          "$ref": "#/definitions/v1GroupEntityCoreInfo"
         }
       }
     },
@@ -1083,24 +1433,51 @@
           "type": "string"
         },
         "ext": {
+          "type": "object"
+        }
+      }
+    },
+    "v1GroupEntityCoreInfo": {
+      "type": "object",
+      "properties": {
+        "group": {
+          "$ref": "#/definitions/v1GroupEntity"
+        },
+        "subIds": {
+          "$ref": "#/definitions/v1GroupEntitySubEntityIds"
+        },
+        "sysField": {
+          "$ref": "#/definitions/v1GroupEntitySysField"
+        }
+      },
+      "title": "device to core"
+    },
+    "v1GroupEntitySubEntityIds": {
+      "type": "object",
+      "properties": {
+        "subEntityId": {
           "type": "object",
           "additionalProperties": {
             "type": "string"
           }
-        },
+        }
+      }
+    },
+    "v1GroupEntitySysField": {
+      "type": "object",
+      "properties": {
         "_id": {
           "type": "string"
         },
         "_createdAt": {
           "type": "string",
-          "format": "uint64"
+          "format": "int64"
         },
         "_updatedAt": {
           "type": "string",
-          "format": "uint64"
+          "format": "int64"
         }
-      },
-      "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
+      }
     },
     "v1HelloResponse": {
       "type": "object",
@@ -1141,17 +1518,6 @@
       },
       "description": "*\r\nThe response value of the GET /v1/identify,\r\nused when the plugin registered."
     },
-    "v1Ids": {
-      "type": "object",
-      "properties": {
-        "ids": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "v1ImplementedAddons": {
       "type": "object",
       "properties": {
@@ -1179,22 +1545,72 @@
       },
       "description": "*\r\nmessage plugin implemented other plugin."
     },
-    "v1Keys": {
-      "type": "object",
-      "properties": {
-        "keys": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "v1ListDeviceResponse": {
       "type": "object",
       "properties": {
         "result": {
           "type": "object"
+        }
+      }
+    },
+    "v1ListEntityResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        },
+        "page": {
+          "type": "string",
+          "format": "int64"
+        },
+        "limit": {
+          "type": "string",
+          "format": "int64"
+        },
+        "offset": {
+          "type": "string",
+          "format": "int64"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1EntityResponse"
+          }
+        }
+      }
+    },
+    "v1ListGroupItemsResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        },
+        "subIds": {
+          "$ref": "#/definitions/v1GroupEntitySubEntityIds"
+        }
+      }
+    },
+    "v1ListGroupResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
+        },
+        "listEntityInfo": {
+          "$ref": "#/definitions/v1ListEntityResponse",
+          "title": "repeated GroupEntityCoreInfo  entityInfo= 2;\n   ListInfo                      listInfo = 3;"
+        }
+      }
+    },
+    "v1MapperDesc": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "tql": {
+          "type": "string"
         }
       }
     },
@@ -1242,25 +1658,6 @@
         }
       },
       "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
-    },
-    "v1Page": {
-      "type": "object",
-      "properties": {
-        "offset": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "sort": {
-          "type": "string"
-        },
-        "reverse": {
-          "type": "boolean"
-        }
-      }
     },
     "v1PluginStatus": {
       "type": "string",

@@ -3,72 +3,209 @@ syntax = "proto3";
 
 package api.group.v1;
 import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import public "tkeel-io/core/api/v1/entity.proto";
 
 option go_package = "github.com/tkeel-io/tkeel-device/api/group/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.group.v1";
 
 service Group {
-  rpc CreateGroup(CreateGroupRequest) returns (CommonResponse) {
-    option (google.api.http) = {
-      post : "/group"
-      body : "group"
-    };
-  };
-  rpc UpdateGroup(UpdateGroupRequest) returns (CommonResponse) {
-    option (google.api.http) = {
-      put : "/group/{id}"
-      body : "group"
-    };
-  };
-  rpc DeleteGroup(DeleteGroupRequest) returns (CommonResponse) {
-    option (google.api.http) = {
-      delete : "/group/{id}"
-    };
-  };
-  rpc GetGroup(GetGroupRequest) returns (CommonResponse) {
-    option (google.api.http) = {
-      get : "/group/{id}"
-    };
-  };
-  rpc ListGroup(ListGroupRequest) returns (CommonResponse) {
-    option (google.api.http) = {
-      get : "/group"
-    };
-  };
+	rpc CreateGroup (CreateGroupRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			post : "/groups"
+			body : "group"
+		};
+	};
+	rpc UpdateGroup (UpdateGroupRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			put : "/groups/{id}"
+			body : "group"
+		};
+	};
+	rpc DeleteGroup (DeleteGroupRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			post : "/groups/delete"
+            body : "ids"
+		};
+	};
+	rpc GetGroup (GetGroupRequest) returns (GetGroupResponse) {
+		option (google.api.http) = {
+			get : "/groups/{id}"
+		};
+	};
+	rpc ListGroup (ListGroupRequest) returns (ListGroupResponse) {
+		option (google.api.http) = {
+			post : "/groups/search"
+			body : "filter"
+		};
+	};
+	rpc AddGroupItems (AddGroupItemsRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+			post : "/groups/{id}/items"
+			body : "ids"
+		};
+	};
+	rpc ListGroupItems (ListGroupItemsRequest) returns (ListGroupItemsResponse) {
+		option (google.api.http) = {
+			get : "/groups/{id}/items"
+		};
+	};
+	rpc DelGroupItems (DelGroupItemsRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+		    post : "/groups/{id}/items/delete" 
+			body : "ids"
+		};
+	};
+	rpc AddGroupExt (AddGroupExtRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+		    post : "/groups/{id}/ext" 
+			body : "kvs"
+		};
+	};
+	rpc UpdateGroupExt (UpdateGroupExtRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+		    post : "/groups/{id}/ext" 
+			body : "kvs"
+		};
+	};
+	rpc DelGroupExt (DelGroupExtRequest) returns (CommonResponse) {
+		option (google.api.http) = {
+		    post : "/groups/{id}/ext/delete" 
+			body : "keys"
+		};
+	};
 }
 
-message CreateGroupRequest { GroupEntity group = 1; }
+//user to device
+message CreateGroupRequest {
+	GroupEntity      group = 1;
+}
 
 message UpdateGroupRequest {
   string id = 1;
   GroupEntity group = 2;
 }
 
-message DeleteGroupRequest { string id = 1; }
+message DeleteGroupRequest { 
+	Ids                ids = 1;
+}
 
 message GetGroupRequest { string id = 1; }
 
-message ListGroupRequest {}
-
-//------------------------------------------------------------------------------
-// Basic data types
-//------------------------------------------------------------------------------
-message GroupEntity {
-
-  string name = 1;
-
-  string desc = 2;
-
-  string parent = 3;
-
-  map<string, string> ext = 4;
-
-  string _id = 5;
-
-  uint64 _createdAt = 6;
-
-  uint64 _updatedAt = 7;
+message ListGroupRequest {
+		Filter filter = 1;
 }
 
-message CommonResponse { string result = 1; }
+message AddGroupItemsRequest {
+	Ids                             ids = 1;
+	string                          id = 2;
+}
+
+message ListGroupItemsRequest {
+	string              id = 1;
+}
+
+message DelGroupItemsRequest {
+	Ids                              ids = 1;
+	string                            id = 2;
+}
+
+message AddGroupExtRequest {
+    string              id = 1;
+	google.protobuf.Value  kvs = 2;
+}
+
+message UpdateGroupExtRequest {
+    string              id = 1;
+	google.protobuf.Value  kvs = 2;
+}
+
+message DelGroupExtRequest {
+	Keys                    keys = 1;
+    string                    id = 2;
+}
+
+// device to core 
+message GroupEntityCoreInfo {
+    GroupEntity             group = 1;
+    GroupEntitySubEntityIds subIds = 2;
+    GroupEntitySysField     sysField = 3;
+}
+message UpdateGroupEntityCoreInfo {
+    GroupEntity             group = 1;
+    int64              _updatedAt = 2;
+}
+
+
+// device to user 
+message CommonResponse {
+	string result = 1;
+}
+
+message GetGroupResponse {
+    string result = 1;
+    GroupEntityCoreInfo  entityInfo= 2; 
+}
+
+message ListGroupResponse {
+    string result = 1;
+//    repeated GroupEntityCoreInfo  entityInfo= 2;
+//    ListInfo                      listInfo = 3;
+    api.core.v1.ListEntityResponse listEntityInfo = 2;
+}
+
+message ListGroupItemsResponse {
+    string result = 1;
+    GroupEntitySubEntityIds subIds = 2;
+}
+
+// Basic data types
+
+message GroupEntity {
+	string name 			   = 1;
+	string desc 			   = 2;
+	string parent      		   = 3;
+	google.protobuf.Value  ext = 4;
+}
+message GroupEntitySubEntityIds {
+    map<string,string>  subEntityId  = 1;
+}
+message GroupEntitySysField {
+    string _id                       = 1;    
+	int64 _createdAt 				 = 2;
+    int64 _updatedAt 				 = 3;
+}
+
+message Filter {
+	Page page      = 1;
+
+	repeated Condition condition = 2;
+}
+
+message Page {
+	int32 offset = 1;
+	int32 limit  = 2;
+	string sort   = 3;
+	bool reverse  = 4;
+}
+
+message ListInfo {
+    uint32 total = 1;
+    uint32 page  = 2;
+    uint32 limit = 3;
+    uint32 offset = 4;
+}
+
+message Condition {
+	string field 		= 1;
+	string value  	= 2;
+	string operator = 3;
+}
+
+message Ids {
+	repeated string ids = 1;
+}
+message Keys {
+	repeated string keys = 1;
+}

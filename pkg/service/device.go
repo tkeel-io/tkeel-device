@@ -33,7 +33,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 
 	//1. verify Authentication in header and get user token map
 	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return nil, err
 	}
 
@@ -55,7 +55,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 
 	//4. create device token
 	token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId, tm["owner"])
-	if nil != err2{
+	if nil != err2 {
 		return nil, err2
 	}
 	//token := "token"
@@ -98,7 +98,7 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	log.Debug("req:", req)
 
 	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return nil, err
 	}
 	midUrl := "/" + req.Id

@@ -19,11 +19,17 @@ import transportHTTP "github.com/tkeel-io/kit/transport/http"
 // import package.context.http.go_restful.json.errors.
 
 type GroupHTTPServer interface {
+	AddGroupExt(context.Context, *AddGroupExtRequest) (*CommonResponse, error)
+	AddGroupItems(context.Context, *AddGroupItemsRequest) (*CommonResponse, error)
 	CreateGroup(context.Context, *CreateGroupRequest) (*CommonResponse, error)
+	DelGroupExt(context.Context, *DelGroupExtRequest) (*CommonResponse, error)
+	DelGroupItems(context.Context, *DelGroupItemsRequest) (*CommonResponse, error)
 	DeleteGroup(context.Context, *DeleteGroupRequest) (*CommonResponse, error)
-	GetGroup(context.Context, *GetGroupRequest) (*CommonResponse, error)
-	ListGroup(context.Context, *ListGroupRequest) (*CommonResponse, error)
+	GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error)
+	ListGroup(context.Context, *ListGroupRequest) (*ListGroupResponse, error)
+	ListGroupItems(context.Context, *ListGroupItemsRequest) (*ListGroupItemsResponse, error)
 	UpdateGroup(context.Context, *UpdateGroupRequest) (*CommonResponse, error)
+	UpdateGroupExt(context.Context, *UpdateGroupExtRequest) (*CommonResponse, error)
 }
 
 type GroupHTTPHandler struct {
@@ -32,6 +38,80 @@ type GroupHTTPHandler struct {
 
 func newGroupHTTPHandler(s GroupHTTPServer) *GroupHTTPHandler {
 	return &GroupHTTPHandler{srv: s}
+}
+
+func (h *GroupHTTPHandler) AddGroupExt(req *go_restful.Request, resp *go_restful.Response) {
+	in := AddGroupExtRequest{}
+	if err := transportHTTP.GetBody(req, &in.Kvs); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.AddGroupExt(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
+		return
+	}
+
+	result, err := json.Marshal(out)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+	_, err = resp.Write(result)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+}
+
+func (h *GroupHTTPHandler) AddGroupItems(req *go_restful.Request, resp *go_restful.Response) {
+	in := AddGroupItemsRequest{}
+	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.AddGroupItems(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
+		return
+	}
+
+	result, err := json.Marshal(out)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+	_, err = resp.Write(result)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
 }
 
 func (h *GroupHTTPHandler) CreateGroup(req *go_restful.Request, resp *go_restful.Response) {
@@ -67,13 +147,87 @@ func (h *GroupHTTPHandler) CreateGroup(req *go_restful.Request, resp *go_restful
 	}
 }
 
-func (h *GroupHTTPHandler) DeleteGroup(req *go_restful.Request, resp *go_restful.Response) {
-	in := DeleteGroupRequest{}
+func (h *GroupHTTPHandler) DelGroupExt(req *go_restful.Request, resp *go_restful.Response) {
+	in := DelGroupExtRequest{}
+	if err := transportHTTP.GetBody(req, &in.Keys); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.DelGroupExt(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
+		return
+	}
+
+	result, err := json.Marshal(out)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+	_, err = resp.Write(result)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+}
+
+func (h *GroupHTTPHandler) DelGroupItems(req *go_restful.Request, resp *go_restful.Response) {
+	in := DelGroupItemsRequest{}
+	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.DelGroupItems(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
+		return
+	}
+
+	result, err := json.Marshal(out)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+	_, err = resp.Write(result)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+}
+
+func (h *GroupHTTPHandler) DeleteGroup(req *go_restful.Request, resp *go_restful.Response) {
+	in := DeleteGroupRequest{}
+	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
 	}
@@ -135,6 +289,10 @@ func (h *GroupHTTPHandler) GetGroup(req *go_restful.Request, resp *go_restful.Re
 
 func (h *GroupHTTPHandler) ListGroup(req *go_restful.Request, resp *go_restful.Response) {
 	in := ListGroupRequest{}
+	if err := transportHTTP.GetBody(req, &in.Filter); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteErrorString(http.StatusBadRequest, err.Error())
 		return
@@ -143,6 +301,39 @@ func (h *GroupHTTPHandler) ListGroup(req *go_restful.Request, resp *go_restful.R
 	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
 
 	out, err := h.srv.ListGroup(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
+		return
+	}
+
+	result, err := json.Marshal(out)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+	_, err = resp.Write(result)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+}
+
+func (h *GroupHTTPHandler) ListGroupItems(req *go_restful.Request, resp *go_restful.Response) {
+	in := ListGroupItemsRequest{}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.ListGroupItems(ctx, &in)
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
@@ -199,6 +390,43 @@ func (h *GroupHTTPHandler) UpdateGroup(req *go_restful.Request, resp *go_restful
 	}
 }
 
+func (h *GroupHTTPHandler) UpdateGroupExt(req *go_restful.Request, resp *go_restful.Response) {
+	in := UpdateGroupExtRequest{}
+	if err := transportHTTP.GetBody(req, &in.Kvs); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.UpdateGroupExt(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteErrorString(httpCode, tErr.Message)
+		return
+	}
+
+	result, err := json.Marshal(out)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+	_, err = resp.Write(result)
+	if err != nil {
+		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		return
+	}
+}
+
 func RegisterGroupHTTPServer(container *go_restful.Container, srv GroupHTTPServer) {
 	var ws *go_restful.WebService
 	for _, v := range container.RegisteredWebServices() {
@@ -215,14 +443,26 @@ func RegisterGroupHTTPServer(container *go_restful.Container, srv GroupHTTPServe
 	}
 
 	handler := newGroupHTTPHandler(srv)
-	ws.Route(ws.POST("/group").
+	ws.Route(ws.POST("/groups").
 		To(handler.CreateGroup))
-	ws.Route(ws.PUT("/group/{id}").
+	ws.Route(ws.PUT("/groups/{id}").
 		To(handler.UpdateGroup))
-	ws.Route(ws.DELETE("/group/{id}").
+	ws.Route(ws.POST("/groups/delete").
 		To(handler.DeleteGroup))
-	ws.Route(ws.GET("/group/{id}").
+	ws.Route(ws.GET("/groups/{id}").
 		To(handler.GetGroup))
-	ws.Route(ws.GET("/group").
+	ws.Route(ws.POST("/groups/search").
 		To(handler.ListGroup))
+	ws.Route(ws.POST("/groups/{id}/items").
+		To(handler.AddGroupItems))
+	ws.Route(ws.GET("/groups/{id}/items").
+		To(handler.ListGroupItems))
+	ws.Route(ws.POST("/groups/{id}/items/delete").
+		To(handler.DelGroupItems))
+	ws.Route(ws.POST("/groups/{id}/ext").
+		To(handler.AddGroupExt))
+	ws.Route(ws.POST("/groups/{id}/ext").
+		To(handler.UpdateGroupExt))
+	ws.Route(ws.POST("/groups/{id}/ext/delete").
+		To(handler.DelGroupExt))
 }
