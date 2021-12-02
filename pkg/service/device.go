@@ -55,7 +55,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 
 	//4. create device token
 	token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId, tm["owner"])
-	if nil != err2 {
+	if nil != err2{
 		return nil, err2
 	}
 	//token := "token"

@@ -191,7 +191,7 @@ message UpdateDeviceResponse {
 }
 
 message DeleteDeviceRequest { 
-    Ids ids = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID 数组"}]; 
+    Ids ids = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID 数组"}];
 }
 message DeleteDeviceResponse { string result = 1; }
 
@@ -204,7 +204,7 @@ message GetDeviceResponse {
 }
 
 message ListDeviceRequest { 
-    Filter filter = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "限制"}]; 
+    Filter filter = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "限制"}];
 }
 message ListDeviceResponse { google.protobuf.Value result = 1; }
 
