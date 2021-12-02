@@ -19,14 +19,14 @@ func NewGroupService() *GroupService {
 	}
 }
 
-func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupRequest) (*pb.CommonResponse, error) {
+func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupRequest) (*pb.CreateGroupResponse, error) {
 	log.Debug("CreateGroup")
 	log.Debug("req:", req)
 
 	//get token
 	tm, err := s.httpClient.GetTokenMap(ctx)
 	if nil != err {
-		return &pb.CommonResponse{Result: "failed"}, err
+		return &pb.CreateGroupResponse{Result: "failed"}, err
 	}
 
 	//get core url
@@ -51,18 +51,43 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	log.Debug("entityinfo : ", entityInfo)
 	data, err3 := json.Marshal(entityInfo)
 	if nil != err3 {
-		return &pb.CommonResponse{Result: "failed"}, err3
+		return &pb.CreateGroupResponse{Result: "failed"}, err3
 	}
 
 	// do it
-	_, err4 := s.httpClient.Post(url, data)
+	res, err4 := s.httpClient.Post(url, data)
 	if nil != err4 {
 		log.Error("error post data to core", err4)
-		return &pb.CommonResponse{Result: "failed"}, err4
+		return &pb.CreateGroupResponse{Result: "failed"}, err4
 	}
 
 	//fmt response
-	return &pb.CommonResponse{Result: "OK"}, nil
+	entityTotalInfo := make(map[string]interface{})
+	err5 := json.Unmarshal(res, &entityTotalInfo)
+	if err5 != nil {
+		log.Error("error Unmarshal data from core")
+		return &pb.CreateGroupResponse{Result: "failed"}, err5 
+	}
+	properties, ok := entityTotalInfo["properties"]
+	if !ok {
+		log.Error("error choose data from core")
+		return &pb.CreateGroupResponse{Result: "failed"}, errors.New("error choose data from core")
+	}
+
+	prop, err6 := json.Marshal(properties)
+	if err6 != nil {
+		log.Error("error Marshal prop data from core")
+		return &pb.CreateGroupResponse{Result: "failed"}, err6
+	}
+	out := &pb.CreateGroupResponse{}
+	err7 := json.Unmarshal(prop, &out.EntityInfo)
+	if err7 != nil {
+		log.Error("error convert data from core")
+		out.Result = "failed"
+		return out, err7
+	}
+	out.Result = "ok"
+	return out, nil
 }
 
 func (s *GroupService) UpdateGroup(ctx context.Context, req *pb.UpdateGroupRequest) (*pb.CommonResponse, error) {
@@ -284,6 +309,7 @@ func (s *GroupService) AddGroupItems(ctx context.Context, req *pb.AddGroupItemsR
 	log.Debug("AddGroupItems")
 	log.Debug("req:", req.Ids.Ids)
 	idsMap := make(map[string]interface{})
+	modifyIdsMap := make(map[string]interface{})
 	for _, id := range req.Ids.Ids {
 		//add SubEntityId
 		idsMap[id] = "subEntity"
@@ -293,12 +319,12 @@ func (s *GroupService) AddGroupItems(ctx context.Context, req *pb.AddGroupItemsR
 			return &pb.CommonResponse{Result: "failed"}, err
 		}
 		//modify SubEntity
-		/*idsMap["group"] = req.Id
-		        _, err2 := s.CorePatchMethod(ctx, id, idsMap, "dev.","add")
-		        if err2 != nil {
-				    log.Error("error modify SubEntity parentId")
-				    return &pb.CommonResponse{Result: "failed"}, err2
-		        }*/
+		modifyIdsMap["group"] = req.Id
+		_, err2 := s.CorePatchMethod(ctx, id, modifyIdsMap, "dev.","replace")
+		if err2 != nil {
+			log.Error("error modify SubEntity parentId")
+			return &pb.CommonResponse{Result: "failed"}, err2
+		}
 	}
 	return &pb.CommonResponse{Result: "Ok"}, nil
 }

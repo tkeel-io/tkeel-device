@@ -7,6 +7,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 // import "google/protobuf/wrappers.proto";
 import public "tkeel-io/core/api/v1/entity.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/tkeel-io/tkeel-device/api/device/v1;v1";
 option java_multiple_files = true;
@@ -18,11 +19,33 @@ service Device {
       post : "/devices"
       body : "dev"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "create device entity";
+        operation_id: "createDevice";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
   };
   rpc UpdateDevice(UpdateDeviceRequest) returns (UpdateDeviceResponse) {
     option (google.api.http) = {
       put : "/devices/{id}"
       body : "dev"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "update device entity";
+        operation_id: "UpdateDevice";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
     };
   };
   rpc DeleteDevice(DeleteDeviceRequest) returns (DeleteDeviceResponse) {
@@ -30,10 +53,32 @@ service Device {
       post : "/devices/delete"
       body : "ids"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "delete device entity";
+        operation_id: "deleteDevice";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
   };
   rpc GetDevice(GetDeviceRequest) returns (GetDeviceResponse) {
     option (google.api.http) = {
       get : "/devices/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "get device entity";
+        operation_id: "getDevice";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
     };
   };
   rpc ListDevice(ListDeviceRequest) returns (ListDeviceResponse) {
@@ -41,17 +86,50 @@ service Device {
       post : "/devices/search"
       body : "filter"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "list device entity";
+        operation_id: "listDevice";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
   };
   rpc EnableDevice(EnableDeviceRequest) returns (EnableDeviceResponse) {
     option (google.api.http) = {
       put : "/devices/{id}/enable"
       body : "enable"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "enable device";
+        operation_id: "enableDevice";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
   };
   rpc AddDeviceExt(AddDeviceExtRequest) returns (AddDeviceExtResponse) {
     option (google.api.http) = {
       post : "/devices/{id}/ext"
       body : "ext"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "add device extensions";
+        operation_id: "addDeviceExt";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
     };
   };
   rpc DeleteDeviceExt(DeleteDeviceExtRequest)
@@ -60,6 +138,17 @@ service Device {
       post : "/devices/{id}/ext/delete"
       body : "keys"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "delete device extensions";
+        operation_id: "delDeviceExt";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
   };
   rpc UpdateDeviceExt(UpdateDeviceExtRequest)
       returns (UpdateDeviceExtResponse) {
@@ -67,37 +156,56 @@ service Device {
       put : "/devices/{id}/ext"
       body : "ext"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "update device extensions";
+        operation_id: "updateDeviceExt";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
   };
 }
 
 message DeviceObject { string id = 1; }
 
 // user to device
-message CreateDeviceRequest { DeviceEntity dev = 1; }
+message CreateDeviceRequest { 
+    DeviceEntity dev = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}]; 
+}
 message CreateDeviceResponse {
-  DeviceEntity dev = 1;
-  DeviceEntitySysField sysField = 2;
+  DeviceEntity dev = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}];
+  DeviceEntitySysField sysField = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备系统信息"}];
 }
 
 message UpdateDeviceRequest {
-  string id = 1;
-  DeviceEntity dev = 2;
+  string id = 1  [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
+  DeviceEntity dev = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}];
 }
 message UpdateDeviceResponse {
-  DeviceEntity dev = 1;
-  DeviceEntitySysField sysField = 2;
+  DeviceEntity dev = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}];
+  DeviceEntitySysField sysField = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备系统信息"}];
 }
 
-message DeleteDeviceRequest { Ids ids = 1; }
+message DeleteDeviceRequest { 
+    Ids ids = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID 数组"}]; 
+}
 message DeleteDeviceResponse { string result = 1; }
 
-message GetDeviceRequest { string id = 1; }
+message GetDeviceRequest { 
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
+}
 message GetDeviceResponse {
-  DeviceEntity dev = 1;
-  DeviceEntitySysField sysField = 2;
+  DeviceEntity dev = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}];
+  DeviceEntitySysField sysField = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备系统信息"}];
 }
 
-message ListDeviceRequest { Filter filter = 1; }
+message ListDeviceRequest { 
+    Filter filter = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "限制"}]; 
+}
 message ListDeviceResponse { google.protobuf.Value result = 1; }
 
 message EnableDeviceRequest {
@@ -107,91 +215,91 @@ message EnableDeviceRequest {
 message EnableDeviceResponse { string result = 1; }
 
 message AddDeviceExtRequest {
-  string id = 1;
-  google.protobuf.Value ext = 2;
+  string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
+  google.protobuf.Value ext = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备扩展属性KV"}];
 }
 message AddDeviceExtResponse { string result = 1; }
 
 message DeleteDeviceExtRequest {
-  Keys keys = 1;
-  string id = 2;
+  Keys keys = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备扩展属性Key 数组"}];
+  string id = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
 }
 message DeleteDeviceExtResponse { string result = 1; }
 
 message UpdateDeviceExtRequest {
-  string id = 1;
-  Ext ext = 2;
+  string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
+  Ext ext = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备扩展属性KV"}];
 }
 message UpdateDeviceExtResponse { string result = 1; }
 
 // device to core
 message DeviceEntityCoreInfo {
-  DeviceEntity dev = 1;
-  DeviceEntitySysField sysField = 2;
+  DeviceEntity dev = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}];
+  DeviceEntitySysField sysField = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备系统信息"}];
 }
 
 //------------------------------------------------------------------------------
 // Basic data types
 //------------------------------------------------------------------------------
 message DeviceEntity {
-  string name = 1;
+  string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备名称"}];
 
-  string desc = 2;
+  string desc = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备描述"}];
 
-  string group = 3;
+  string group = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组ID"}];
 
-  google.protobuf.Value ext = 4;
+  google.protobuf.Value ext = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备扩展配置"}];
 }
 
 // system fields
 message DeviceEntitySysField {
-  string _id = 5;
+  string _id = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
 
-  int64 _createdAt = 6;
+  int64 _createdAt = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备创建时间"}];
 
-  int64 _updatedAt = 7;
+  int64 _updatedAt = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备更新时间"}];
 
-  bool _status = 8;
+  bool _status = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备状态"}];
 
-  bool _enable = 9;
+  bool _enable = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "查询输出字段"}];
 
-  string _token = 10;
+  string _token = 10 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备启/停"}];
 
-  string _clientid = 11;
+  string _clientid = 11 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "客户端ID"}];
 
-  string _username = 12;
+  string _username = 12 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "用户名"}];
 
-  string _peerhost = 14;
+  string _peerhost = 14 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "对端主机"}];
 
-  int32 _sockport = 15;
+  int32 _sockport = 15 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "端口"}];
 
-  string _protocol = 16;
+  string _protocol = 16 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "连接协议"}];
 }
 
 message CommonResponse { google.protobuf.Value result = 1; }
 
 message Filter {
-  Page page = 1;
+  Page page = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "分页"}];
 
-  repeated Condition condition = 2;
+  repeated Condition condition = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "组合条件"}];
 }
 
 message Page {
-  uint32 offset = 1;
-  uint32 limit = 2;
-  string sort = 3;
-  bool reverse = 4;
+  uint32 offset = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "记录开始位置"}];
+  uint32 limit = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "每页限制条数"}];
+  string sort = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "排序字段"}];
+  bool reverse = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "是否逆序， false：不逆序，true:逆序"}];
 }
 
 message Condition {
-  string field = 1;
-  string value = 2;
-  string operator = 3;
+  string field = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "查询输出字段"}];
+  string value = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "值"}];
+  string operator = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "操作符, $eq为相等，$neq为不等，$lt为小于，$gt为大于，$lne为小于等于， $gne为大于等于"}];
 }
 
-message Ids { repeated string ids = 1; }
+message Ids { repeated string ids = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "id 字符串数组"}]; }
 
-message Keys { repeated string keys = 1; }
+message Keys { repeated string keys = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "key 字符串数组"}]; }
 
 message Ext {
   string key = 1;

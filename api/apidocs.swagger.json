@@ -1,16 +1,10 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/measure/v1/measure.proto",
+    "title": "api/device/v1/device.proto",
     "version": "version not set"
   },
   "tags": [
-    {
-      "name": "Measure"
-    },
-    {
-      "name": "Greeter"
-    },
     {
       "name": "Device"
     },
@@ -63,10 +57,11 @@
     },
     "/devices": {
       "post": {
-        "operationId": "Device_CreateDevice",
+        "summary": "create device entity",
+        "operationId": "createDevice",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1CreateDeviceResponse"
             }
@@ -81,24 +76,27 @@
         "parameters": [
           {
             "name": "body",
+            "description": "设备信息",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1DeviceEntity"
+              "$ref": "#/definitions/v1DeviceEntity",
+              "description": "设备信息"
             }
           }
         ],
         "tags": [
-          "Device"
+          "device"
         ]
       }
     },
     "/devices/delete": {
       "post": {
-        "operationId": "Device_DeleteDevice",
+        "summary": "delete device entity",
+        "operationId": "deleteDevice",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1DeleteDeviceResponse"
             }
@@ -113,24 +111,27 @@
         "parameters": [
           {
             "name": "body",
+            "description": "设备ID 数组",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apidevicev1Ids"
+              "$ref": "#/definitions/apidevicev1Ids",
+              "description": "设备ID 数组"
             }
           }
         ],
         "tags": [
-          "Device"
+          "device"
         ]
       }
     },
     "/devices/search": {
       "post": {
-        "operationId": "Device_ListDevice",
+        "summary": "list device entity",
+        "operationId": "listDevice",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1ListDeviceResponse"
             }
@@ -145,24 +146,27 @@
         "parameters": [
           {
             "name": "body",
+            "description": "限制",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apidevicev1Filter"
+              "$ref": "#/definitions/apidevicev1Filter",
+              "description": "限制"
             }
           }
         ],
         "tags": [
-          "Device"
+          "device"
         ]
       }
     },
     "/devices/{id}": {
       "get": {
-        "operationId": "Device_GetDevice",
+        "summary": "get device entity",
+        "operationId": "getDevice",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1GetDeviceResponse"
             }
@@ -177,20 +181,22 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备ID",
             "in": "path",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
-          "Device"
+          "device"
         ]
       },
       "put": {
-        "operationId": "Device_UpdateDevice",
+        "summary": "update device entity",
+        "operationId": "UpdateDevice",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1UpdateDeviceResponse"
             }
@@ -205,30 +211,34 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备ID",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "body",
+            "description": "设备信息",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1DeviceEntity"
+              "$ref": "#/definitions/v1DeviceEntity",
+              "description": "设备信息"
             }
           }
         ],
         "tags": [
-          "Device"
+          "device"
         ]
       }
     },
     "/devices/{id}/enable": {
       "put": {
-        "operationId": "Device_EnableDevice",
+        "summary": "enable device",
+        "operationId": "enableDevice",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1EnableDeviceResponse"
             }
@@ -257,16 +267,17 @@
           }
         ],
         "tags": [
-          "Device"
+          "device"
         ]
       }
     },
     "/devices/{id}/ext": {
       "post": {
-        "operationId": "Device_AddDeviceExt",
+        "summary": "add device extensions",
+        "operationId": "addDeviceExt",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1AddDeviceExtResponse"
             }
@@ -281,28 +292,32 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备ID",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "body",
+            "description": "设备扩展属性KV",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object"
+              "type": "object",
+              "description": "设备扩展属性KV"
             }
           }
         ],
         "tags": [
-          "Device"
+          "device"
         ]
       },
       "put": {
-        "operationId": "Device_UpdateDeviceExt",
+        "summary": "update device extensions",
+        "operationId": "updateDeviceExt",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1UpdateDeviceExtResponse"
             }
@@ -317,30 +332,34 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备ID",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "body",
+            "description": "设备扩展属性KV",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1Ext"
+              "$ref": "#/definitions/v1Ext",
+              "description": "设备扩展属性KV"
             }
           }
         ],
         "tags": [
-          "Device"
+          "device"
         ]
       }
     },
     "/devices/{id}/ext/delete": {
       "post": {
-        "operationId": "Device_DeleteDeviceExt",
+        "summary": "delete device extensions",
+        "operationId": "delDeviceExt",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1DeleteDeviceExtResponse"
             }
@@ -355,32 +374,36 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备ID",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "body",
+            "description": "设备扩展属性Key 数组",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apidevicev1Keys"
+              "$ref": "#/definitions/apidevicev1Keys",
+              "description": "设备扩展属性Key 数组"
             }
           }
         ],
         "tags": [
-          "Device"
+          "device"
         ]
       }
     },
     "/groups": {
       "post": {
-        "operationId": "Group_CreateGroup",
+        "summary": "create entity group",
+        "operationId": "createGroup",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
-              "$ref": "#/definitions/apigroupv1CommonResponse"
+              "$ref": "#/definitions/v1CreateGroupResponse"
             }
           },
           "default": {
@@ -393,24 +416,27 @@
         "parameters": [
           {
             "name": "body",
+            "description": "设备组信息",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1GroupEntity"
+              "$ref": "#/definitions/v1GroupEntity",
+              "description": "设备组信息"
             }
           }
         ],
         "tags": [
-          "Group"
+          "group"
         ]
       }
     },
     "/groups/delete": {
       "post": {
-        "operationId": "Group_DeleteGroup",
+        "summary": "delete entity group",
+        "operationId": "deleteGroup",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/apigroupv1CommonResponse"
             }
@@ -425,24 +451,27 @@
         "parameters": [
           {
             "name": "body",
+            "description": "设备组ID 数组",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apigroupv1Ids"
+              "$ref": "#/definitions/apigroupv1Ids",
+              "description": "设备组ID 数组"
             }
           }
         ],
         "tags": [
-          "Group"
+          "group"
         ]
       }
     },
     "/groups/search": {
       "post": {
-        "operationId": "Group_ListGroup",
+        "summary": "list entity group",
+        "operationId": "listGroup",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1ListGroupResponse"
             }
@@ -457,24 +486,27 @@
         "parameters": [
           {
             "name": "body",
+            "description": "限制",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apigroupv1Filter"
+              "$ref": "#/definitions/apigroupv1Filter",
+              "description": "限制"
             }
           }
         ],
         "tags": [
-          "Group"
+          "group"
         ]
       }
     },
     "/groups/{id}": {
       "get": {
-        "operationId": "Group_GetGroup",
+        "summary": "get entity group",
+        "operationId": "getGroup",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1GetGroupResponse"
             }
@@ -489,20 +521,22 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备组ID",
             "in": "path",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
-          "Group"
+          "group"
         ]
       },
       "put": {
-        "operationId": "Group_UpdateGroup",
+        "summary": "update entity group",
+        "operationId": "updateGroup",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/apigroupv1CommonResponse"
             }
@@ -517,30 +551,34 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备组ID",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "body",
+            "description": "更新设备组信息",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1GroupEntity"
+              "$ref": "#/definitions/v1GroupEntity",
+              "description": "更新设备组信息"
             }
           }
         ],
         "tags": [
-          "Group"
+          "group"
         ]
       }
     },
     "/groups/{id}/ext": {
       "post": {
-        "operationId": "Group_UpdateGroupExt",
+        "summary": "update group extensions",
+        "operationId": "updateGroupExt",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/apigroupv1CommonResponse"
             }
@@ -555,30 +593,34 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备组ID",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "body",
+            "description": "扩展配置kv",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object"
+              "type": "object",
+              "description": "扩展配置kv"
             }
           }
         ],
         "tags": [
-          "Group"
+          "group"
         ]
       }
     },
     "/groups/{id}/ext/delete": {
       "post": {
-        "operationId": "Group_DelGroupExt",
+        "summary": "delete group extensions",
+        "operationId": "delGroupExt",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/apigroupv1CommonResponse"
             }
@@ -593,30 +635,34 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备组ID",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "body",
+            "description": "扩展配置key 数组",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apigroupv1Keys"
+              "$ref": "#/definitions/apigroupv1Keys",
+              "description": "扩展配置key 数组"
             }
           }
         ],
         "tags": [
-          "Group"
+          "group"
         ]
       }
     },
     "/groups/{id}/items": {
       "get": {
-        "operationId": "Group_ListGroupItems",
+        "summary": "list group items",
+        "operationId": "listGroupitems",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1ListGroupItemsResponse"
             }
@@ -631,20 +677,22 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备组ID",
             "in": "path",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
-          "Group"
+          "group"
         ]
       },
       "post": {
-        "operationId": "Group_AddGroupItems",
+        "summary": "add group items",
+        "operationId": "addGroupitems",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/apigroupv1CommonResponse"
             }
@@ -659,30 +707,34 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备组ID",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "body",
+            "description": "子设备ID 数组",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apigroupv1Ids"
+              "$ref": "#/definitions/apigroupv1Ids",
+              "description": "子设备ID 数组"
             }
           }
         ],
         "tags": [
-          "Group"
+          "group"
         ]
       }
     },
     "/groups/{id}/items/delete": {
       "post": {
-        "operationId": "Group_DelGroupItems",
+        "summary": "del group items",
+        "operationId": "delGroupitems",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/apigroupv1CommonResponse"
             }
@@ -697,52 +749,24 @@
         "parameters": [
           {
             "name": "id",
+            "description": "设备组ID",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "body",
+            "description": "子设备ID 数组",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apigroupv1Ids"
+              "$ref": "#/definitions/apigroupv1Ids",
+              "description": "子设备ID 数组"
             }
           }
         ],
         "tags": [
-          "Group"
-        ]
-      }
-    },
-    "/helloworld/{name}": {
-      "get": {
-        "summary": "Sends a greeting",
-        "operationId": "Greeter_SayHello",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1HelloResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Greeter"
+          "group"
         ]
       }
     },
@@ -766,152 +790,6 @@
         },
         "tags": [
           "Openapi"
-        ]
-      }
-    },
-    "/measure": {
-      "get": {
-        "operationId": "Measure_ListMeasure",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apimeasurev1CommonResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Measure"
-        ]
-      },
-      "post": {
-        "operationId": "Measure_CreateMeasure",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apimeasurev1CommonResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1MeasureEntity"
-            }
-          }
-        ],
-        "tags": [
-          "Measure"
-        ]
-      }
-    },
-    "/measure/{id}": {
-      "get": {
-        "operationId": "Measure_GetMeasure",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apimeasurev1CommonResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Measure"
-        ]
-      },
-      "delete": {
-        "operationId": "Measure_DeleteMeasure",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apimeasurev1CommonResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Measure"
-        ]
-      },
-      "put": {
-        "operationId": "Measure_UpdateMeasure",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apimeasurev1CommonResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1MeasureEntity"
-            }
-          }
-        ],
-        "tags": [
-          "Measure"
         ]
       }
     },
@@ -1010,13 +888,16 @@
       "type": "object",
       "properties": {
         "field": {
-          "type": "string"
+          "type": "string",
+          "description": "查询输出字段"
         },
         "value": {
-          "type": "string"
+          "type": "string",
+          "description": "值"
         },
         "operator": {
-          "type": "string"
+          "type": "string",
+          "description": "操作符, $eq为相等，$neq为不等，$lt为小于，$gt为大于，$lne为小于等于， $gne为大于等于"
         }
       }
     },
@@ -1024,13 +905,15 @@
       "type": "object",
       "properties": {
         "page": {
-          "$ref": "#/definitions/apidevicev1Page"
+          "$ref": "#/definitions/apidevicev1Page",
+          "description": "分页"
         },
         "condition": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/apidevicev1Condition"
-          }
+          },
+          "description": "组合条件"
         }
       }
     },
@@ -1041,7 +924,8 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "id 字符串数组"
         }
       }
     },
@@ -1052,7 +936,8 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "key 字符串数组"
         }
       }
     },
@@ -1061,17 +946,21 @@
       "properties": {
         "offset": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": "记录开始位置"
         },
         "limit": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": "每页限制条数"
         },
         "sort": {
-          "type": "string"
+          "type": "string",
+          "description": "排序字段"
         },
         "reverse": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "是否逆序， false：不逆序，true:逆序"
         }
       }
     },
@@ -1079,7 +968,8 @@
       "type": "object",
       "properties": {
         "result": {
-          "type": "string"
+          "type": "string",
+          "description": "ok  or failed"
         }
       },
       "title": "device to user"
@@ -1088,13 +978,16 @@
       "type": "object",
       "properties": {
         "field": {
-          "type": "string"
+          "type": "string",
+          "description": "查询输出字段"
         },
         "value": {
-          "type": "string"
+          "type": "string",
+          "description": "值"
         },
         "operator": {
-          "type": "string"
+          "type": "string",
+          "description": "操作符, $eq为相等，$neq为不等，$lt为小于，$gt为大于，$lne为小于等于， $gne为大于等于"
         }
       }
     },
@@ -1102,13 +995,15 @@
       "type": "object",
       "properties": {
         "page": {
-          "$ref": "#/definitions/apigroupv1Page"
+          "$ref": "#/definitions/apigroupv1Page",
+          "description": "分页"
         },
         "condition": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/apigroupv1Condition"
-          }
+          },
+          "description": "组合条件"
         }
       }
     },
@@ -1119,7 +1014,8 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "id 数组"
         }
       }
     },
@@ -1130,7 +1026,8 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "key 数组"
         }
       }
     },
@@ -1139,25 +1036,21 @@
       "properties": {
         "offset": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "记录开始位置"
         },
         "limit": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "每页限制条数"
         },
         "sort": {
-          "type": "string"
+          "type": "string",
+          "description": "排序字段"
         },
         "reverse": {
-          "type": "boolean"
-        }
-      }
-    },
-    "apimeasurev1CommonResponse": {
-      "type": "object",
-      "properties": {
-        "result": {
-          "type": "string"
+          "type": "boolean",
+          "description": "是否逆序， false：不逆序，true:逆序"
         }
       }
     },
@@ -1256,10 +1149,25 @@
       "type": "object",
       "properties": {
         "dev": {
-          "$ref": "#/definitions/v1DeviceEntity"
+          "$ref": "#/definitions/v1DeviceEntity",
+          "description": "设备信息"
         },
         "sysField": {
-          "$ref": "#/definitions/v1DeviceEntitySysField"
+          "$ref": "#/definitions/v1DeviceEntitySysField",
+          "description": "设备系统信息"
+        }
+      }
+    },
+    "v1CreateGroupResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string",
+          "description": "ok  or failed"
+        },
+        "entityInfo": {
+          "$ref": "#/definitions/v1GroupEntityCoreInfo",
+          "description": "设备组信息"
         }
       }
     },
@@ -1283,16 +1191,20 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "设备名称"
         },
         "desc": {
-          "type": "string"
+          "type": "string",
+          "description": "设备描述"
         },
         "group": {
-          "type": "string"
+          "type": "string",
+          "description": "设备组ID"
         },
         "ext": {
-          "type": "object"
+          "type": "object",
+          "description": "设备扩展配置"
         }
       },
       "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
@@ -1301,40 +1213,51 @@
       "type": "object",
       "properties": {
         "_id": {
-          "type": "string"
+          "type": "string",
+          "description": "设备ID"
         },
         "_createdAt": {
           "type": "string",
-          "format": "int64"
+          "format": "int64",
+          "description": "设备创建时间"
         },
         "_updatedAt": {
           "type": "string",
-          "format": "int64"
+          "format": "int64",
+          "description": "设备更新时间"
         },
         "_status": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "设备状态"
         },
         "_enable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "查询输出字段"
         },
         "_token": {
-          "type": "string"
+          "type": "string",
+          "description": "设备启/停"
         },
         "_clientid": {
-          "type": "string"
+          "type": "string",
+          "description": "客户端ID"
         },
         "_username": {
-          "type": "string"
+          "type": "string",
+          "description": "用户名"
         },
         "_peerhost": {
-          "type": "string"
+          "type": "string",
+          "description": "对端主机"
         },
         "_sockport": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "端口"
         },
         "_protocol": {
-          "type": "string"
+          "type": "string",
+          "description": "连接协议"
         }
       },
       "title": "system fields"
@@ -1402,10 +1325,12 @@
       "type": "object",
       "properties": {
         "dev": {
-          "$ref": "#/definitions/v1DeviceEntity"
+          "$ref": "#/definitions/v1DeviceEntity",
+          "description": "设备信息"
         },
         "sysField": {
-          "$ref": "#/definitions/v1DeviceEntitySysField"
+          "$ref": "#/definitions/v1DeviceEntitySysField",
+          "description": "设备系统信息"
         }
       }
     },
@@ -1413,10 +1338,12 @@
       "type": "object",
       "properties": {
         "result": {
-          "type": "string"
+          "type": "string",
+          "description": "ok  or failed"
         },
         "entityInfo": {
-          "$ref": "#/definitions/v1GroupEntityCoreInfo"
+          "$ref": "#/definitions/v1GroupEntityCoreInfo",
+          "description": "设备组信息"
         }
       }
     },
@@ -1424,16 +1351,20 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "设备组名称"
         },
         "desc": {
-          "type": "string"
+          "type": "string",
+          "description": "设备组说明"
         },
         "parent": {
-          "type": "string"
+          "type": "string",
+          "description": "父设备组ID"
         },
         "ext": {
-          "type": "object"
+          "type": "object",
+          "description": "设备组扩展属性"
         }
       }
     },
@@ -1441,13 +1372,16 @@
       "type": "object",
       "properties": {
         "group": {
-          "$ref": "#/definitions/v1GroupEntity"
+          "$ref": "#/definitions/v1GroupEntity",
+          "description": "设备组信息"
         },
         "subIds": {
-          "$ref": "#/definitions/v1GroupEntitySubEntityIds"
+          "$ref": "#/definitions/v1GroupEntitySubEntityIds",
+          "description": "设备组子设备信息"
         },
         "sysField": {
-          "$ref": "#/definitions/v1GroupEntitySysField"
+          "$ref": "#/definitions/v1GroupEntitySysField",
+          "description": "设备组系统信息"
         }
       },
       "title": "device to core"
@@ -1459,7 +1393,8 @@
           "type": "object",
           "additionalProperties": {
             "type": "string"
-          }
+          },
+          "description": "子设备ID列表"
         }
       }
     },
@@ -1467,26 +1402,20 @@
       "type": "object",
       "properties": {
         "_id": {
-          "type": "string"
+          "type": "string",
+          "description": "设备组ID"
         },
         "_createdAt": {
           "type": "string",
-          "format": "int64"
+          "format": "int64",
+          "description": "设备组创建时间"
         },
         "_updatedAt": {
           "type": "string",
-          "format": "int64"
+          "format": "int64",
+          "description": "设备组更新时间"
         }
       }
-    },
-    "v1HelloResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string"
-        }
-      },
-      "title": "The response message containing the greetings"
     },
     "v1IdentifyResponse": {
       "type": "object",
@@ -1584,10 +1513,12 @@
       "type": "object",
       "properties": {
         "result": {
-          "type": "string"
+          "type": "string",
+          "description": "ok  or failed"
         },
         "subIds": {
-          "$ref": "#/definitions/v1GroupEntitySubEntityIds"
+          "$ref": "#/definitions/v1GroupEntitySubEntityIds",
+          "description": "子设备信息"
         }
       }
     },
@@ -1595,10 +1526,12 @@
       "type": "object",
       "properties": {
         "result": {
-          "type": "string"
+          "type": "string",
+          "description": "ok  or failed"
         },
         "listEntityInfo": {
           "$ref": "#/definitions/v1ListEntityResponse",
+          "description": "设备组列表信息",
           "title": "repeated GroupEntityCoreInfo  entityInfo= 2;\n   ListInfo                      listInfo = 3;"
         }
       }
@@ -1613,51 +1546,6 @@
           "type": "string"
         }
       }
-    },
-    "v1MeasureEntity": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "desc": {
-          "type": "string"
-        },
-        "device": {
-          "type": "string"
-        },
-        "data_type": {
-          "type": "string"
-        },
-        "precision": {
-          "type": "number",
-          "format": "float"
-        },
-        "unit": {
-          "type": "string"
-        },
-        "measure_type": {
-          "type": "string"
-        },
-        "ext": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
-        "_id": {
-          "type": "string"
-        },
-        "_createdAt": {
-          "type": "string",
-          "format": "uint64"
-        },
-        "_updatedAt": {
-          "type": "string",
-          "format": "uint64"
-        }
-      },
-      "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
     },
     "v1PluginStatus": {
       "type": "string",
@@ -1761,10 +1649,12 @@
       "type": "object",
       "properties": {
         "dev": {
-          "$ref": "#/definitions/v1DeviceEntity"
+          "$ref": "#/definitions/v1DeviceEntity",
+          "description": "设备信息"
         },
         "sysField": {
-          "$ref": "#/definitions/v1DeviceEntitySysField"
+          "$ref": "#/definitions/v1DeviceEntitySysField",
+          "description": "设备系统信息"
         }
       }
     }

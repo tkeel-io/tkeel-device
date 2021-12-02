@@ -9,19 +9,21 @@ import (
 	json "encoding/json"
 	go_restful "github.com/emicklei/go-restful"
 	errors "github.com/tkeel-io/kit/errors"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	http "net/http"
+	reflect "reflect"
 )
 
 import transportHTTP "github.com/tkeel-io/kit/transport/http"
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the tkeel package it is being compiled against.
-// import package.context.http.go_restful.json.errors.
+// import package.context.http.reflect.go_restful.json.errors.emptypb.
 
 type GroupHTTPServer interface {
 	AddGroupExt(context.Context, *AddGroupExtRequest) (*CommonResponse, error)
 	AddGroupItems(context.Context, *AddGroupItemsRequest) (*CommonResponse, error)
-	CreateGroup(context.Context, *CreateGroupRequest) (*CommonResponse, error)
+	CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error)
 	DelGroupExt(context.Context, *DelGroupExtRequest) (*CommonResponse, error)
 	DelGroupItems(context.Context, *DelGroupItemsRequest) (*CommonResponse, error)
 	DeleteGroup(context.Context, *DeleteGroupRequest) (*CommonResponse, error)
@@ -64,7 +66,10 @@ func (h *GroupHTTPHandler) AddGroupExt(req *go_restful.Request, resp *go_restful
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -101,7 +106,10 @@ func (h *GroupHTTPHandler) AddGroupItems(req *go_restful.Request, resp *go_restf
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -134,7 +142,10 @@ func (h *GroupHTTPHandler) CreateGroup(req *go_restful.Request, resp *go_restful
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -171,7 +182,10 @@ func (h *GroupHTTPHandler) DelGroupExt(req *go_restful.Request, resp *go_restful
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -208,7 +222,10 @@ func (h *GroupHTTPHandler) DelGroupItems(req *go_restful.Request, resp *go_restf
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -241,7 +258,10 @@ func (h *GroupHTTPHandler) DeleteGroup(req *go_restful.Request, resp *go_restful
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -274,7 +294,10 @@ func (h *GroupHTTPHandler) GetGroup(req *go_restful.Request, resp *go_restful.Re
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -307,7 +330,10 @@ func (h *GroupHTTPHandler) ListGroup(req *go_restful.Request, resp *go_restful.R
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -340,7 +366,10 @@ func (h *GroupHTTPHandler) ListGroupItems(req *go_restful.Request, resp *go_rest
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -377,7 +406,10 @@ func (h *GroupHTTPHandler) UpdateGroup(req *go_restful.Request, resp *go_restful
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -414,7 +446,10 @@ func (h *GroupHTTPHandler) UpdateGroupExt(req *go_restful.Request, resp *go_rest
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())

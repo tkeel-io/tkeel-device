@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GroupClient interface {
-	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CommonResponse, error)
+	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CreateGroupResponse, error)
 	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*CommonResponse, error)
 	DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*CommonResponse, error)
 	GetGroup(ctx context.Context, in *GetGroupRequest, opts ...grpc.CallOption) (*GetGroupResponse, error)
@@ -39,8 +39,8 @@ func NewGroupClient(cc grpc.ClientConnInterface) GroupClient {
 	return &groupClient{cc}
 }
 
-func (c *groupClient) CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	out := new(CommonResponse)
+func (c *groupClient) CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CreateGroupResponse, error) {
+	out := new(CreateGroupResponse)
 	err := c.cc.Invoke(ctx, "/api.group.v1.Group/CreateGroup", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -142,7 +142,7 @@ func (c *groupClient) DelGroupExt(ctx context.Context, in *DelGroupExtRequest, o
 // All implementations must embed UnimplementedGroupServer
 // for forward compatibility
 type GroupServer interface {
-	CreateGroup(context.Context, *CreateGroupRequest) (*CommonResponse, error)
+	CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error)
 	UpdateGroup(context.Context, *UpdateGroupRequest) (*CommonResponse, error)
 	DeleteGroup(context.Context, *DeleteGroupRequest) (*CommonResponse, error)
 	GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error)
@@ -160,7 +160,7 @@ type GroupServer interface {
 type UnimplementedGroupServer struct {
 }
 
-func (UnimplementedGroupServer) CreateGroup(context.Context, *CreateGroupRequest) (*CommonResponse, error) {
+func (UnimplementedGroupServer) CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGroup not implemented")
 }
 func (UnimplementedGroupServer) UpdateGroup(context.Context, *UpdateGroupRequest) (*CommonResponse, error) {
