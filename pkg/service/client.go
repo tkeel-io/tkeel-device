@@ -21,11 +21,11 @@ const tokenKey string = "Authorization"
 
 type CoreClient struct {
 	//entity_create = "id={entity_id}&type={entity_type}&owner={user_id}&source={source}".format(**query)
-	url 	   string
-	id  	   string
-	entityType string
-	owner      string
-	source     string
+	//url 	   string
+	//id  	   string
+	//entityType string
+	//owner      string
+	//source     string
 }
 
 func NewCoreClient() *CoreClient {
@@ -80,9 +80,9 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 
 	// save token, map[entity_id:406c79543e0245a994a742e69ce48e71 entity_type:device tenant_id: token_id:de25624a-1d0a-4ab0-b1f1-5b0db5a12c30 user_id:abc]
 	urlMap := map[string]string{
-		"owner": 	  tokenMap["user_id"].(string),
-		"type": 	  "device",
-		"source":     "device",
+		"owner":  tokenMap["user_id"].(string),
+		"type":   "device",
+		"source": "device",
 	}
 	return urlMap, nil
 }
@@ -149,11 +149,11 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 }
 
 func (c *CoreClient) CreatEntityToken(entityType,id,owner string)(string, error) {
-	url:= authUrl + fmt.Sprintf("/v1/entity/%s/%s/token?owner=%s", entityType, id, owner)
+	url := authUrl + fmt.Sprintf("/v1/entity/%s/%s/token?owner=%s", entityType, id, owner)
 	resp, err := http.Get(url)
 
 	body, err2 := c.ParseResp(resp, err)
-	if nil != err2{
+	if nil != err2 {
 		return "", err2
 	}
 	var ar interface{}

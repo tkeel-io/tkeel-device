@@ -12,13 +12,14 @@ import (
 	v1 "github.com/tkeel-io/tkeel-interface/openapi/v1"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	http "net/http"
+	reflect "reflect"
 )
 
 import transportHTTP "github.com/tkeel-io/kit/transport/http"
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the tkeel package it is being compiled against.
-// import package.context.http.go_restful.json.errors.
+// import package.context.http.reflect.go_restful.json.errors.emptypb.
 
 type OpenapiHTTPServer interface {
 	AddonsIdentify(context.Context, *v1.AddonsIdentifyRequest) (*v1.AddonsIdentifyResponse, error)
@@ -52,7 +53,10 @@ func (h *OpenapiHTTPHandler) AddonsIdentify(req *go_restful.Request, resp *go_re
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -81,7 +85,10 @@ func (h *OpenapiHTTPHandler) Identify(req *go_restful.Request, resp *go_restful.
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -110,7 +117,10 @@ func (h *OpenapiHTTPHandler) Status(req *go_restful.Request, resp *go_restful.Re
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -139,7 +149,10 @@ func (h *OpenapiHTTPHandler) TenantBind(req *go_restful.Request, resp *go_restfu
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -168,7 +181,10 @@ func (h *OpenapiHTTPHandler) TenantUnbind(req *go_restful.Request, resp *go_rest
 		resp.WriteErrorString(httpCode, tErr.Message)
 		return
 	}
-
+	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
+		resp.WriteHeader(http.StatusNoContent)
+		return
+	}
 	result, err := json.Marshal(out)
 	if err != nil {
 		resp.WriteErrorString(http.StatusInternalServerError, err.Error())

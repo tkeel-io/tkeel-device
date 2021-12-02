@@ -33,7 +33,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 
 	//1. verify Authentication in header and get user token map
 	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return nil, err
 	}
 
@@ -98,7 +98,7 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	log.Debug("req:", req)
 
 	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return nil, err
 	}
 	midUrl := "/" + req.Id
