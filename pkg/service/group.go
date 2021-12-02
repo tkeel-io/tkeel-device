@@ -43,6 +43,7 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	subIds := &pb.GroupEntitySubEntityIds{
 		SubEntityId: make(map[string]string),
 	}
+	subIds.SubEntityId["default"] = "SubEntity"
 	entityInfo := &pb.GroupEntityCoreInfo{
 		Group:    req.Group,
 		SysField: sysField,
@@ -66,7 +67,7 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	err5 := json.Unmarshal(res, &entityTotalInfo)
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
-		return &pb.CreateGroupResponse{Result: "failed"}, err5 
+		return &pb.CreateGroupResponse{Result: "failed"}, err5
 	}
 	properties, ok := entityTotalInfo["properties"]
 	if !ok {
@@ -320,7 +321,7 @@ func (s *GroupService) AddGroupItems(ctx context.Context, req *pb.AddGroupItemsR
 		}
 		//modify SubEntity
 		modifyIdsMap["group"] = req.Id
-		_, err2 := s.CorePatchMethod(ctx, id, modifyIdsMap, "dev.","replace")
+		_, err2 := s.CorePatchMethod(ctx, id, modifyIdsMap, "dev.", "replace")
 		if err2 != nil {
 			log.Error("error modify SubEntity parentId")
 			return &pb.CommonResponse{Result: "failed"}, err2
@@ -333,6 +334,7 @@ func (s *GroupService) DelGroupItems(ctx context.Context, req *pb.DelGroupItemsR
 	log.Debug("DelGroupItems")
 	log.Debug("req:", req.Ids.Ids)
 	idsMap := make(map[string]interface{})
+	modifyIdsMap := make(map[string]interface{})
 	for _, id := range req.Ids.Ids {
 		//del SubEntityId
 		idsMap[id] = "SubEntity"
@@ -342,12 +344,12 @@ func (s *GroupService) DelGroupItems(ctx context.Context, req *pb.DelGroupItemsR
 			return &pb.CommonResponse{Result: "failed"}, err
 		}
 		//modify SubEntity
-		/*idsMap["group"] = req.Id
-		        _, err2 := s.CorePatchMethod(ctx, id, idsMap, "dev.","replace")
-		        if err2 != nil {
-				    log.Error("error modify SubEntity parentId")
-				    return &pb.CommonResponse{Result: "failed"}, err2
-		        }*/
+		modifyIdsMap["group"] = req.Id
+		_, err2 := s.CorePatchMethod(ctx, id, modifyIdsMap, "dev.", "remove")
+		if err2 != nil {
+			log.Error("error modify SubEntity parentId")
+			return &pb.CommonResponse{Result: "failed"}, err2
+		}
 	}
 	return &pb.CommonResponse{Result: "Ok"}, nil
 }
@@ -399,7 +401,7 @@ func (s *GroupService) CorePatchMethod(ctx context.Context, entityId string, kv 
 
 	//get token
 	tm, err := s.httpClient.GetTokenMap(ctx)
-	if nil != err{
+	if nil != err {
 		return &pb.CommonResponse{Result: "failed"}, err
 	}
 
