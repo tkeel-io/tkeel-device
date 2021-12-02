@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package helloworld.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/tkeel-io/tkeel-device/api/helloworld/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.tkeel.hello.api.helloworld.v1";
+option java_outer_classname = "OpenapiProtoV1";
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello(HelloRequest) returns (HelloResponse) {
+    option (google.api.http) = {
+      get : "/helloworld/{name}"
+    };
+  }
+}
+
+// The request message containing the user's name.
+message HelloRequest { string name = 1; }
+
+// The response message containing the greetings
+message HelloResponse { string message = 1; }

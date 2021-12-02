@@ -1,18 +1,24 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/device/v1/device.proto",
+    "title": "api/openapi/v1/server.proto",
     "version": "version not set"
   },
   "tags": [
     {
+      "name": "Openapi"
+    },
+    {
+      "name": "Greeter"
+    },
+    {
       "name": "Device"
     },
     {
-      "name": "Group"
+      "name": "Measure"
     },
     {
-      "name": "Openapi"
+      "name": "Group"
     }
   ],
   "consumes": [
@@ -770,6 +776,37 @@
         ]
       }
     },
+    "/helloworld/{name}": {
+      "get": {
+        "summary": "Sends a greeting",
+        "operationId": "Greeter_SayHello",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1HelloResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Greeter"
+        ]
+      }
+    },
     "/identify": {
       "get": {
         "summary": "Query identify.",
@@ -790,6 +827,152 @@
         },
         "tags": [
           "Openapi"
+        ]
+      }
+    },
+    "/measure": {
+      "get": {
+        "operationId": "Measure_ListMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Measure"
+        ]
+      },
+      "post": {
+        "operationId": "Measure_CreateMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1MeasureEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      }
+    },
+    "/measure/{id}": {
+      "get": {
+        "operationId": "Measure_GetMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      },
+      "delete": {
+        "operationId": "Measure_DeleteMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Measure"
+        ]
+      },
+      "put": {
+        "operationId": "Measure_UpdateMeasure",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apimeasurev1CommonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1MeasureEntity"
+            }
+          }
+        ],
+        "tags": [
+          "Measure"
         ]
       }
     },
@@ -1051,6 +1234,14 @@
         "reverse": {
           "type": "boolean",
           "description": "是否逆序， false：不逆序，true:逆序"
+        }
+      }
+    },
+    "apimeasurev1CommonResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string"
         }
       }
     },
@@ -1417,6 +1608,15 @@
         }
       }
     },
+    "v1HelloResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "title": "The response message containing the greetings"
+    },
     "v1IdentifyResponse": {
       "type": "object",
       "properties": {
@@ -1546,6 +1746,51 @@
           "type": "string"
         }
       }
+    },
+    "v1MeasureEntity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "device": {
+          "type": "string"
+        },
+        "data_type": {
+          "type": "string"
+        },
+        "precision": {
+          "type": "number",
+          "format": "float"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "measure_type": {
+          "type": "string"
+        },
+        "ext": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "_id": {
+          "type": "string"
+        },
+        "_createdAt": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "_updatedAt": {
+          "type": "string",
+          "format": "uint64"
+        }
+      },
+      "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
     },
     "v1PluginStatus": {
       "type": "string",

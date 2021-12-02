@@ -15,11 +15,8 @@ import (
 	"time"
 )
 
-//const coreUrl string = "http://192.168.123.5:30226/v1/plugins/device/entities"
-//const coreUrl string = "http://192.168.123.9:32246/v1/plugins/device/entities"
-//const authUrl string = "http://192.168.123.5:30707" // /invoke/keel/method
-const coreUrl string = "http://192.168.123.9:32701/v1/plugins/device/entities"
-const authUrl string = "http://192.168.123.12:30707/apis/security"
+const coreUrl string = "http://localhost:3500/v1.0/invoke/core/method/v1/plugins/device/entities"
+const authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
 const tokenKey string = "Authorization"
 
 type CoreClient struct {
@@ -37,7 +34,7 @@ func NewCoreClient() *CoreClient {
 
 // get core url
 func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string) string {
-	url := fmt.Sprintf(coreUrl+midUrl+"?"+"type=%s&owner=%s&source=%s", mapUrl["type"], mapUrl["owner"], mapUrl["source"])
+	url :=  fmt.Sprintf(coreUrl + midUrl + "?" +  "type=%s&owner=%s&source=%s", mapUrl["type"], mapUrl["owner"], mapUrl["source"])
 	return url
 }
 
@@ -151,7 +148,7 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 	return body, nil
 }
 
-func (c *CoreClient) CreatEntityToken(entityType, id, owner string) (string, error) {
+func (c *CoreClient) CreatEntityToken(entityType,id,owner string)(string, error) {
 	url := authUrl + fmt.Sprintf("/v1/entity/%s/%s/token?owner=%s", entityType, id, owner)
 	resp, err := http.Get(url)
 
@@ -174,8 +171,8 @@ func (c *CoreClient) CreatEntityToken(entityType, id, owner string) (string, err
 
 	}
 	tokenMap := res["data"].(map[string]interface{})
-	entityToken, ok2 := tokenMap["token"].(string)
-	if !ok2 {
+	entityToken, ok2 :=  tokenMap["token"].(string)
+	if !ok2{
 		return "error token", errors.New("error token")
 	}
 	return entityToken, nil
