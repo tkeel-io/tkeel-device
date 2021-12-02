@@ -21,7 +21,7 @@ service Device {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "create device entity";
-        operation_id: "createDevice";
+        operation_id: "CreateDevice";
         tags: "device";
         responses: {
             key: "200"
@@ -55,7 +55,7 @@ service Device {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "delete device entity";
-        operation_id: "deleteDevice";
+        operation_id: "DeleteDevice";
         tags: "device";
         responses: {
             key: "200"
@@ -71,7 +71,7 @@ service Device {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "get device entity";
-        operation_id: "getDevice";
+        operation_id: "GetDevice";
         tags: "device";
         responses: {
             key: "200"
@@ -88,7 +88,7 @@ service Device {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "list device entity";
-        operation_id: "listDevice";
+        operation_id: "ListDevice";
         tags: "device";
         responses: {
             key: "200"
@@ -105,7 +105,7 @@ service Device {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "enable device";
-        operation_id: "enableDevice";
+        operation_id: "EnableDevice";
         tags: "device";
         responses: {
             key: "200"
@@ -122,7 +122,7 @@ service Device {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "add device extensions";
-        operation_id: "addDeviceExt";
+        operation_id: "AddDeviceExt";
         tags: "device";
         responses: {
             key: "200"
@@ -140,7 +140,7 @@ service Device {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "delete device extensions";
-        operation_id: "delDeviceExt";
+        operation_id: "DelDeviceExt";
         tags: "device";
         responses: {
             key: "200"
@@ -158,7 +158,7 @@ service Device {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "update device extensions";
-        operation_id: "updateDeviceExt";
+        operation_id: "UpdateDeviceExt";
         tags: "device";
         responses: {
             key: "200"

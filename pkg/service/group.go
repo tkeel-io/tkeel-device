@@ -398,15 +398,10 @@ func (s *GroupService) CorePatchMethod(ctx context.Context, entityId string, kv 
 	log.Debug("operator:", operator)
 
 	//get token
-	/*tm, err := s.httpClient.GetTokenMap(ctx)
+	tm, err := s.httpClient.GetTokenMap(ctx)
 	if nil != err{
 		return &pb.CommonResponse{Result: "failed"}, err
-	}*/
-	tm := make(map[string]string)
-	tm["id"] = entityId
-	tm["entityType"] = "group"
-	tm["owner"] = "tl"
-	tm["source"] = "test"
+	}
 
 	//get core url
 	midUrl := "/" + entityId
