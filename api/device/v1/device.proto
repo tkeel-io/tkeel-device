@@ -274,6 +274,10 @@ message DeviceEntitySysField {
   int32 _sockport = 15 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "端口"}];
 
   string _protocol = 16 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "连接协议"}];
+  
+  string _owner = 17 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: " 所有者"}];
+
+  string _source = 18 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "来源"}];
 }
 
 message CommonResponse { google.protobuf.Value result = 1; }

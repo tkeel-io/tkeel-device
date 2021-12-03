@@ -39,6 +39,8 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 		XId:        entityId,
 		XCreatedAt: GetTime(),
 		XUpdatedAt: GetTime(),
+        XOwner : tm["owner"],
+        XSource : tm["source"],
 	}
 	subIds := &pb.GroupEntitySubEntityIds{
 		SubEntityId: make(map[string]string),
@@ -406,7 +408,7 @@ func (s *GroupService) CorePatchMethod(ctx context.Context, entityId string, kv 
 	}
 
 	//get core url
-	midUrl := "/" + entityId
+	midUrl := "/" + entityId + "/patch"
 	url := s.httpClient.GetCoreUrl(midUrl, tm)
 	log.Debug("patch url :", url)
 
@@ -429,7 +431,7 @@ func (s *GroupService) CorePatchMethod(ctx context.Context, entityId string, kv 
 	}
 
 	// do it
-	_, err4 := s.httpClient.Patch(url, data)
+	_, err4 := s.httpClient.Put(url, data)
 	if nil != err4 {
 		log.Error("error post data to core", data)
 		return &pb.CommonResponse{Result: "failed"}, err4

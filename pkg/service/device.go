@@ -52,6 +52,9 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	coreInfo.SysField.XUpdatedAt = GetTime()
 	coreInfo.SysField.XEnable = true
 	coreInfo.SysField.XStatus = false
+	coreInfo.SysField.XOwner = tm["owner"]
+	coreInfo.SysField.XSource = tm["source"]
+
 
 	//4. create device token
 	token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId, tm["owner"])
@@ -264,7 +267,7 @@ func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRe
 	if nil != err {
 		return nil, err
 	}
-	midUrl := "/" + req.GetId()
+	midUrl := "/" + req.GetId() + "/patch"
 	url := s.client.GetCoreUrl(midUrl, tm)
 	log.Debug("get url :", url)
 
@@ -288,7 +291,7 @@ func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRe
 	if err1 != nil {
 		return &pb.AddDeviceExtResponse{Result: ResFailed}, err1
 	}
-	_, err2 := s.client.Patch(url, data)
+	_, err2 := s.client.Put(url, data)
 	if nil != err2 {
 		return &pb.AddDeviceExtResponse{Result: ResFailed}, err2
 	}
@@ -304,7 +307,7 @@ func (s *DeviceService) DeleteDeviceExt(ctx context.Context, req *pb.DeleteDevic
 	if nil != err {
 		return nil, err
 	}
-	midUrl := "/" + req.GetId()
+	midUrl := "/" + req.GetId() + "/patch"
 	url := s.client.GetCoreUrl(midUrl, tm)
 
 	// var exts []interface{}
@@ -324,7 +327,7 @@ func (s *DeviceService) DeleteDeviceExt(ctx context.Context, req *pb.DeleteDevic
 	if err1 != nil {
 		return &pb.DeleteDeviceExtResponse{Result: ResFailed}, err1
 	}
-	_, err2 := s.client.Patch(url, data)
+	_, err2 := s.client.Put(url, data)
 	if nil != err2 {
 		return &pb.DeleteDeviceExtResponse{Result: ResFailed}, err2
 	}
@@ -339,7 +342,7 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 	if nil != err {
 		return nil, err
 	}
-	midUrl := "/" + req.GetId()
+	midUrl := "/" + req.GetId() + "/patch"
 	url := s.client.GetCoreUrl(midUrl, tm)
 	log.Debug("get url :", url)
 
@@ -354,7 +357,7 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 	if err1 != nil {
 		return &pb.UpdateDeviceExtResponse{Result: ResFailed}, err1
 	}
-	_, err2 := s.client.Patch(url, data)
+	_, err2 := s.client.Put(url, data)
 	if nil != err2 {
 		return &pb.UpdateDeviceExtResponse{Result: ResFailed}, err2
 	}
