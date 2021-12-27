@@ -19,7 +19,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "create entity group";
-            operation_id: "createGroup";
+            operation_id: "CreateGroup";
             tags: "group";
             responses: {
                 key: "200"
@@ -36,7 +36,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "update entity group";
-            operation_id: "updateGroup";
+            operation_id: "UpdateGroup";
             tags: "group";
             responses: {
                 key: "200"
@@ -53,7 +53,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "delete entity group";
-            operation_id: "deleteGroup";
+            operation_id: "DeleteGroup";
             tags: "group";
             responses: {
                 key: "200"
@@ -69,7 +69,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "get entity group";
-            operation_id: "getGroup";
+            operation_id: "GetGroup";
             tags: "group";
             responses: {
                 key: "200"
@@ -86,7 +86,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "list entity group";
-            operation_id: "listGroup";
+            operation_id: "ListGroup";
             tags: "group";
             responses: {
                 key: "200"
@@ -103,7 +103,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "add group items";
-            operation_id: "addGroupitems";
+            operation_id: "AddGroupitems";
             tags: "group";
             responses: {
                 key: "200"
@@ -119,7 +119,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "list group items";
-            operation_id: "listGroupitems";
+            operation_id: "ListGroupitems";
             tags: "group";
             responses: {
                 key: "200"
@@ -136,7 +136,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "del group items";
-            operation_id: "delGroupitems";
+            operation_id: "DelGroupitems";
             tags: "group";
             responses: {
                 key: "200"
@@ -153,7 +153,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "add group extensions";
-            operation_id: "addGroupExt";
+            operation_id: "AddGroupExt";
             tags: "group";
             responses: {
                 key: "200"
@@ -170,7 +170,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "update group extensions";
-            operation_id: "updateGroupExt";
+            operation_id: "UpdateGroupExt";
             tags: "group";
             responses: {
                 key: "200"
@@ -187,7 +187,7 @@ service Group {
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "delete group extensions";
-            operation_id: "delGroupExt";
+            operation_id: "DelGroupExt";
             tags: "group";
             responses: {
                 key: "200"
@@ -304,6 +304,8 @@ message GroupEntitySysField {
     string _id                       = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组ID"}];
 	int64 _createdAt 				 = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组创建时间"}];
     int64 _updatedAt 				 = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组更新时间"}];
+    string _owner = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: " 所有者"}];
+    string _source = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "来源"}];
 }
 
 message Filter {

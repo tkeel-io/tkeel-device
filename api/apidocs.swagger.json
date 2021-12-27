@@ -64,7 +64,7 @@
     "/devices": {
       "post": {
         "summary": "create device entity",
-        "operationId": "createDevice",
+        "operationId": "CreateDevice",
         "responses": {
           "200": {
             "description": "OK",
@@ -99,7 +99,7 @@
     "/devices/delete": {
       "post": {
         "summary": "delete device entity",
-        "operationId": "deleteDevice",
+        "operationId": "DeleteDevice",
         "responses": {
           "200": {
             "description": "OK",
@@ -134,7 +134,7 @@
     "/devices/search": {
       "post": {
         "summary": "list device entity",
-        "operationId": "listDevice",
+        "operationId": "ListDevice",
         "responses": {
           "200": {
             "description": "OK",
@@ -169,7 +169,7 @@
     "/devices/{id}": {
       "get": {
         "summary": "get device entity",
-        "operationId": "getDevice",
+        "operationId": "GetDevice",
         "responses": {
           "200": {
             "description": "OK",
@@ -241,7 +241,7 @@
     "/devices/{id}/enable": {
       "put": {
         "summary": "enable device",
-        "operationId": "enableDevice",
+        "operationId": "EnableDevice",
         "responses": {
           "200": {
             "description": "OK",
@@ -280,7 +280,7 @@
     "/devices/{id}/ext": {
       "post": {
         "summary": "add device extensions",
-        "operationId": "addDeviceExt",
+        "operationId": "AddDeviceExt",
         "responses": {
           "200": {
             "description": "OK",
@@ -320,7 +320,7 @@
       },
       "put": {
         "summary": "update device extensions",
-        "operationId": "updateDeviceExt",
+        "operationId": "UpdateDeviceExt",
         "responses": {
           "200": {
             "description": "OK",
@@ -362,7 +362,7 @@
     "/devices/{id}/ext/delete": {
       "post": {
         "summary": "delete device extensions",
-        "operationId": "delDeviceExt",
+        "operationId": "DelDeviceExt",
         "responses": {
           "200": {
             "description": "OK",
@@ -404,7 +404,7 @@
     "/groups": {
       "post": {
         "summary": "create entity group",
-        "operationId": "createGroup",
+        "operationId": "CreateGroup",
         "responses": {
           "200": {
             "description": "OK",
@@ -439,7 +439,7 @@
     "/groups/delete": {
       "post": {
         "summary": "delete entity group",
-        "operationId": "deleteGroup",
+        "operationId": "DeleteGroup",
         "responses": {
           "200": {
             "description": "OK",
@@ -474,7 +474,7 @@
     "/groups/search": {
       "post": {
         "summary": "list entity group",
-        "operationId": "listGroup",
+        "operationId": "ListGroup",
         "responses": {
           "200": {
             "description": "OK",
@@ -509,7 +509,7 @@
     "/groups/{id}": {
       "get": {
         "summary": "get entity group",
-        "operationId": "getGroup",
+        "operationId": "GetGroup",
         "responses": {
           "200": {
             "description": "OK",
@@ -539,7 +539,7 @@
       },
       "put": {
         "summary": "update entity group",
-        "operationId": "updateGroup",
+        "operationId": "UpdateGroup",
         "responses": {
           "200": {
             "description": "OK",
@@ -581,7 +581,7 @@
     "/groups/{id}/ext": {
       "post": {
         "summary": "update group extensions",
-        "operationId": "updateGroupExt",
+        "operationId": "UpdateGroupExt",
         "responses": {
           "200": {
             "description": "OK",
@@ -623,7 +623,7 @@
     "/groups/{id}/ext/delete": {
       "post": {
         "summary": "delete group extensions",
-        "operationId": "delGroupExt",
+        "operationId": "DelGroupExt",
         "responses": {
           "200": {
             "description": "OK",
@@ -665,7 +665,7 @@
     "/groups/{id}/items": {
       "get": {
         "summary": "list group items",
-        "operationId": "listGroupitems",
+        "operationId": "ListGroupitems",
         "responses": {
           "200": {
             "description": "OK",
@@ -695,7 +695,7 @@
       },
       "post": {
         "summary": "add group items",
-        "operationId": "addGroupitems",
+        "operationId": "AddGroupitems",
         "responses": {
           "200": {
             "description": "OK",
@@ -737,7 +737,7 @@
     "/groups/{id}/items/delete": {
       "post": {
         "summary": "del group items",
-        "operationId": "delGroupitems",
+        "operationId": "DelGroupitems",
         "responses": {
           "200": {
             "description": "OK",
@@ -1449,6 +1449,14 @@
         "_protocol": {
           "type": "string",
           "description": "连接协议"
+        },
+        "_owner": {
+          "type": "string",
+          "description": " 所有者"
+        },
+        "_source": {
+          "type": "string",
+          "description": "来源"
         }
       },
       "title": "system fields"
@@ -1605,6 +1613,14 @@
           "type": "string",
           "format": "int64",
           "description": "设备组更新时间"
+        },
+        "_owner": {
+          "type": "string",
+          "description": " 所有者"
+        },
+        "_source": {
+          "type": "string",
+          "description": "来源"
         }
       }
     },
