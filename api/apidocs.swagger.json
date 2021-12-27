@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/measure/v1/measure.proto",
+    "title": "api/openapi/v1/server.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "Measure"
+      "name": "Openapi"
     },
     {
       "name": "Greeter"
@@ -15,10 +15,10 @@
       "name": "Device"
     },
     {
-      "name": "Group"
+      "name": "Measure"
     },
     {
-      "name": "Openapi"
+      "name": "Group"
     }
   ],
   "consumes": [
