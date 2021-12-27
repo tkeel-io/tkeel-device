@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-const coreUrl string = "http://localhost:3500/v1.0/invoke/core/method/v1/plugins/device/entities"
+const coreUrl string = "http://localhost:3500/v1.0/invoke/core/method/v1/entities"
 const authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
 const tokenKey string = "Authorization"
 
@@ -149,10 +149,22 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 }
 
 func (c *CoreClient) CreatEntityToken(entityType,id,owner string)(string, error) {
-	url := authUrl + fmt.Sprintf("/v1/entity/%s/%s/token?owner=%s", entityType, id, owner)
-	resp, err := http.Get(url)
+	//url := authUrl + fmt.Sprintf("/v1/entity/%s/%s/token?owner=%s", entityType, id, owner)
+	//resp, err := http.Get(url)
+	//body, err2 := c.ParseResp(resp, err)
 
-	body, err2 := c.ParseResp(resp, err)
+	url := authUrl + fmt.Sprintf("/v1/entity/token")
+	tokenReq := map[string]interface{}{
+		"entity_id": id,
+		"entity_type": entityType,
+		"owner": owner,
+	}
+	tr, err := json.Marshal(tokenReq)
+	if nil != err {
+		return "marshal error", err
+	}
+	body, err2 := c.Post(url, tr)
+
 	if nil != err2 {
 		return "", err2
 	}
