@@ -15,8 +15,10 @@ import (
 	"time"
 )
 
-const coreUrl string = "http://localhost:3500/v1.0/invoke/core/method/v1/entities"
-const authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
+//const coreUrl string = "http://localhost:3500/v1.0/invoke/core/method/v1/entities"
+//const authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
+const coreUrl string = "http://192.168.123.9:31438/v1/entities"
+const authUrl string = "http://192.168.123.11:30707/apis/security"
 const tokenKey string = "Authorization"
 
 type CoreClient struct {
@@ -72,7 +74,7 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 	if !ok {
 		return nil, errors.New("auth error")
 	}
-	if res["code"].(float64) != 0 {
+	if res["code"].(float64) != 200 {
 		return nil, errors.New(res["msg"].(string))
 
 	}
@@ -83,6 +85,7 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 		"owner":  tokenMap["user_id"].(string),
 		"type":   "device",
 		"source": "device",
+        "userToken" :token,
 	}
 	return urlMap, nil
 }
@@ -140,7 +143,7 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 		return body, err
 	}
 
-	log.Debug("receive resp, ", string(body))
+	//log.Debug("receive resp, ", string(body))
 	if resp.StatusCode != 200 {
 		log.Error("bad status ", resp.StatusCode)
 		return body, errors.New(resp.Status)
@@ -148,12 +151,11 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 	return body, nil
 }
 
-func (c *CoreClient) CreatEntityToken(entityType,id,owner string)(string, error) {
-	//url := authUrl + fmt.Sprintf("/v1/entity/%s/%s/token?owner=%s", entityType, id, owner)
-	//resp, err := http.Get(url)
-	//body, err2 := c.ParseResp(resp, err)
-
+func (c *CoreClient) CreatEntityToken(entityType,id,owner string, token string)(string, error) {
+    //get url and request body 
+    log.Debug("CreateEntityToken")
 	url := authUrl + fmt.Sprintf("/v1/entity/token")
+    log.Debug("post auth url: ", url)
 	tokenReq := map[string]interface{}{
 		"entity_id": id,
 		"entity_type": entityType,
@@ -163,11 +165,22 @@ func (c *CoreClient) CreatEntityToken(entityType,id,owner string)(string, error)
 	if nil != err {
 		return "marshal error", err
 	}
-	body, err2 := c.Post(url, tr)
 
+    //do it 
+    payload := strings.NewReader(string(tr))
+	req, err1 := http.NewRequest("POST", url, payload)
+	if nil != err1 {
+		return "", err1 
+	}
+	req.Header.Add(tokenKey, token)
+	resp, er := http.DefaultClient.Do(req)
+	body, err2 := c.ParseResp(resp, er)
 	if nil != err2 {
+		log.Error("error get device token, ", err)
 		return "", err2
 	}
+
+    //Parse 
 	var ar interface{}
 	if err3 := json.Unmarshal(body, &ar); nil != err3 {
 		log.Error("resp Unmarshal error", err3)
@@ -178,7 +191,7 @@ func (c *CoreClient) CreatEntityToken(entityType,id,owner string)(string, error)
 	if !ok {
 		return "error resp type", errors.New("error resp type")
 	}
-	if res["code"].(float64) != 0 {
+	if res["code"].(float64) != 200 {
 		return "error code", errors.New(res["msg"].(string))
 
 	}

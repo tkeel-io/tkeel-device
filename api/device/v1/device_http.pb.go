@@ -6,30 +6,37 @@ package v1
 
 import (
 	context "context"
-	json "encoding/json"
 	go_restful "github.com/emicklei/go-restful"
 	errors "github.com/tkeel-io/kit/errors"
+	result "github.com/tkeel-io/kit/result"
+	protojson "google.golang.org/protobuf/encoding/protojson"
+	anypb "google.golang.org/protobuf/types/known/anypb"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	http "net/http"
-	reflect "reflect"
 )
 
 import transportHTTP "github.com/tkeel-io/kit/transport/http"
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the tkeel package it is being compiled against.
-// import package.context.http.reflect.go_restful.json.errors.emptypb.
+// import package.context.http.anypb.result.protojson.go_restful.errors.emptypb.
+
+var (
+	_ = protojson.MarshalOptions{}
+	_ = anypb.Any{}
+	_ = emptypb.Empty{}
+)
 
 type DeviceHTTPServer interface {
-	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*AddDeviceExtResponse, error)
+	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*emptypb.Empty, error)
 	CreateDevice(context.Context, *CreateDeviceRequest) (*CreateDeviceResponse, error)
-	DeleteDevice(context.Context, *DeleteDeviceRequest) (*DeleteDeviceResponse, error)
-	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*DeleteDeviceExtResponse, error)
-	EnableDevice(context.Context, *EnableDeviceRequest) (*EnableDeviceResponse, error)
+	DeleteDevice(context.Context, *DeleteDeviceRequest) (*emptypb.Empty, error)
+	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*emptypb.Empty, error)
+	EnableDevice(context.Context, *EnableDeviceRequest) (*emptypb.Empty, error)
 	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)
 	ListDevice(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
 	UpdateDevice(context.Context, *UpdateDeviceRequest) (*UpdateDeviceResponse, error)
-	UpdateDeviceExt(context.Context, *UpdateDeviceExtRequest) (*UpdateDeviceExtResponse, error)
+	UpdateDeviceExt(context.Context, *UpdateDeviceExtRequest) (*emptypb.Empty, error)
 }
 
 type DeviceHTTPHandler struct {
@@ -42,16 +49,19 @@ func newDeviceHTTPHandler(s DeviceHTTPServer) *DeviceHTTPHandler {
 
 func (h *DeviceHTTPHandler) AddDeviceExt(req *go_restful.Request, resp *go_restful.Response) {
 	in := AddDeviceExtRequest{}
-	if err := transportHTTP.GetBody(req, &in.Ext); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+	if err := transportHTTP.GetBody(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -61,33 +71,54 @@ func (h *DeviceHTTPHandler) AddDeviceExt(req *go_restful.Request, resp *go_restf
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteErrorString(httpCode, tErr.Message)
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(httpCode, tErr.Message, out), "application/json")
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
-	result, err := json.Marshal(out)
+	anyOut, err := anypb.New(out)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
 	}
-	_, err = resp.Write(result)
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames: true,
+	}.Marshal(&result.Http{
+		Code: http.StatusOK,
+		Msg:  "ok",
+		Data: anyOut,
+	})
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
+	}
+	resp.WriteHeader(http.StatusOK)
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
 	}
 }
 
 func (h *DeviceHTTPHandler) CreateDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := CreateDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in.Dev); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+	if err := transportHTTP.GetBody(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -97,33 +128,54 @@ func (h *DeviceHTTPHandler) CreateDevice(req *go_restful.Request, resp *go_restf
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteErrorString(httpCode, tErr.Message)
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(httpCode, tErr.Message, out), "application/json")
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
-	result, err := json.Marshal(out)
+	anyOut, err := anypb.New(out)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
 	}
-	_, err = resp.Write(result)
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames: true,
+	}.Marshal(&result.Http{
+		Code: http.StatusOK,
+		Msg:  "ok",
+		Data: anyOut,
+	})
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
+	}
+	resp.WriteHeader(http.StatusOK)
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
 	}
 }
 
 func (h *DeviceHTTPHandler) DeleteDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := DeleteDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+	if err := transportHTTP.GetBody(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -133,37 +185,59 @@ func (h *DeviceHTTPHandler) DeleteDevice(req *go_restful.Request, resp *go_restf
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteErrorString(httpCode, tErr.Message)
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(httpCode, tErr.Message, out), "application/json")
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
-	result, err := json.Marshal(out)
+	anyOut, err := anypb.New(out)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
 	}
-	_, err = resp.Write(result)
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames: true,
+	}.Marshal(&result.Http{
+		Code: http.StatusOK,
+		Msg:  "ok",
+		Data: anyOut,
+	})
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
+	}
+	resp.WriteHeader(http.StatusOK)
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
 	}
 }
 
 func (h *DeviceHTTPHandler) DeleteDeviceExt(req *go_restful.Request, resp *go_restful.Response) {
 	in := DeleteDeviceExtRequest{}
-	if err := transportHTTP.GetBody(req, &in.Keys); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+	if err := transportHTTP.GetBody(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -173,37 +247,59 @@ func (h *DeviceHTTPHandler) DeleteDeviceExt(req *go_restful.Request, resp *go_re
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteErrorString(httpCode, tErr.Message)
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(httpCode, tErr.Message, out), "application/json")
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
-	result, err := json.Marshal(out)
+	anyOut, err := anypb.New(out)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
 	}
-	_, err = resp.Write(result)
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames: true,
+	}.Marshal(&result.Http{
+		Code: http.StatusOK,
+		Msg:  "ok",
+		Data: anyOut,
+	})
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
+	}
+	resp.WriteHeader(http.StatusOK)
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
 	}
 }
 
 func (h *DeviceHTTPHandler) EnableDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := EnableDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in.Enable); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+	if err := transportHTTP.GetBody(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -213,33 +309,54 @@ func (h *DeviceHTTPHandler) EnableDevice(req *go_restful.Request, resp *go_restf
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteErrorString(httpCode, tErr.Message)
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(httpCode, tErr.Message, out), "application/json")
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
-	result, err := json.Marshal(out)
+	anyOut, err := anypb.New(out)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
 	}
-	_, err = resp.Write(result)
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames: true,
+	}.Marshal(&result.Http{
+		Code: http.StatusOK,
+		Msg:  "ok",
+		Data: anyOut,
+	})
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
+	}
+	resp.WriteHeader(http.StatusOK)
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
 	}
 }
 
 func (h *DeviceHTTPHandler) GetDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := GetDeviceRequest{}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -249,33 +366,54 @@ func (h *DeviceHTTPHandler) GetDevice(req *go_restful.Request, resp *go_restful.
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteErrorString(httpCode, tErr.Message)
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(httpCode, tErr.Message, out), "application/json")
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
-	result, err := json.Marshal(out)
+	anyOut, err := anypb.New(out)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
 	}
-	_, err = resp.Write(result)
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames: true,
+	}.Marshal(&result.Http{
+		Code: http.StatusOK,
+		Msg:  "ok",
+		Data: anyOut,
+	})
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
+	}
+	resp.WriteHeader(http.StatusOK)
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
 	}
 }
 
 func (h *DeviceHTTPHandler) ListDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := ListDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in.Filter); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+	if err := transportHTTP.GetBody(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -285,37 +423,59 @@ func (h *DeviceHTTPHandler) ListDevice(req *go_restful.Request, resp *go_restful
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteErrorString(httpCode, tErr.Message)
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(httpCode, tErr.Message, out), "application/json")
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
-	result, err := json.Marshal(out)
+	anyOut, err := anypb.New(out)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
 	}
-	_, err = resp.Write(result)
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames: true,
+	}.Marshal(&result.Http{
+		Code: http.StatusOK,
+		Msg:  "ok",
+		Data: anyOut,
+	})
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
+	}
+	resp.WriteHeader(http.StatusOK)
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
 	}
 }
 
 func (h *DeviceHTTPHandler) UpdateDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := UpdateDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in.Dev); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+	if err := transportHTTP.GetBody(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -325,37 +485,59 @@ func (h *DeviceHTTPHandler) UpdateDevice(req *go_restful.Request, resp *go_restf
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteErrorString(httpCode, tErr.Message)
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(httpCode, tErr.Message, out), "application/json")
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
-	result, err := json.Marshal(out)
+	anyOut, err := anypb.New(out)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
 	}
-	_, err = resp.Write(result)
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames: true,
+	}.Marshal(&result.Http{
+		Code: http.StatusOK,
+		Msg:  "ok",
+		Data: anyOut,
+	})
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
+	}
+	resp.WriteHeader(http.StatusOK)
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
 	}
 }
 
 func (h *DeviceHTTPHandler) UpdateDeviceExt(req *go_restful.Request, resp *go_restful.Response) {
 	in := UpdateDeviceExtRequest{}
-	if err := transportHTTP.GetBody(req, &in.Ext); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+	if err := transportHTTP.GetBody(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
-		resp.WriteErrorString(http.StatusBadRequest, err.Error())
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -365,22 +547,41 @@ func (h *DeviceHTTPHandler) UpdateDeviceExt(req *go_restful.Request, resp *go_re
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteErrorString(httpCode, tErr.Message)
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(httpCode, tErr.Message, out), "application/json")
 		return
 	}
-	if reflect.ValueOf(out).Elem().Type().AssignableTo(reflect.TypeOf(emptypb.Empty{})) {
-		resp.WriteHeader(http.StatusNoContent)
-		return
-	}
-	result, err := json.Marshal(out)
+	anyOut, err := anypb.New(out)
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
 	}
-	_, err = resp.Write(result)
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames: true,
+	}.Marshal(&result.Http{
+		Code: http.StatusOK,
+		Msg:  "ok",
+		Data: anyOut,
+	})
 	if err != nil {
-		resp.WriteErrorString(http.StatusInternalServerError, err.Error())
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
 		return
+	}
+	resp.WriteHeader(http.StatusOK)
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
 	}
 }
 
