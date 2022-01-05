@@ -49,7 +49,7 @@ func newDeviceHTTPHandler(s DeviceHTTPServer) *DeviceHTTPHandler {
 
 func (h *DeviceHTTPHandler) AddDeviceExt(req *go_restful.Request, resp *go_restful.Response) {
 	in := AddDeviceExtRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Ext); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -111,7 +111,7 @@ func (h *DeviceHTTPHandler) AddDeviceExt(req *go_restful.Request, resp *go_restf
 
 func (h *DeviceHTTPHandler) CreateDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := CreateDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.DevBasicInfo); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -168,7 +168,7 @@ func (h *DeviceHTTPHandler) CreateDevice(req *go_restful.Request, resp *go_restf
 
 func (h *DeviceHTTPHandler) DeleteDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := DeleteDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -225,7 +225,7 @@ func (h *DeviceHTTPHandler) DeleteDevice(req *go_restful.Request, resp *go_restf
 
 func (h *DeviceHTTPHandler) DeleteDeviceExt(req *go_restful.Request, resp *go_restful.Response) {
 	in := DeleteDeviceExtRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Keys); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -287,7 +287,7 @@ func (h *DeviceHTTPHandler) DeleteDeviceExt(req *go_restful.Request, resp *go_re
 
 func (h *DeviceHTTPHandler) EnableDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := EnableDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Enable); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -406,7 +406,7 @@ func (h *DeviceHTTPHandler) GetDevice(req *go_restful.Request, resp *go_restful.
 
 func (h *DeviceHTTPHandler) ListDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := ListDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.ListEntityQuery); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -463,7 +463,7 @@ func (h *DeviceHTTPHandler) ListDevice(req *go_restful.Request, resp *go_restful
 
 func (h *DeviceHTTPHandler) UpdateDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := UpdateDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.DevBasicInfo); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -525,7 +525,7 @@ func (h *DeviceHTTPHandler) UpdateDevice(req *go_restful.Request, resp *go_restf
 
 func (h *DeviceHTTPHandler) UpdateDeviceExt(req *go_restful.Request, resp *go_restful.Response) {
 	in := UpdateDeviceExtRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Ext); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return

@@ -84,7 +84,7 @@ service Device {
   rpc ListDevice(ListDeviceRequest) returns (ListDeviceResponse) {
     option (google.api.http) = {
       post : "/devices/search"
-      body : "filter"
+      body : "listEntityQuery"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "list device entity";
@@ -195,8 +195,8 @@ message GetDeviceRequest {
 message GetDeviceResponse {
     api.core.v1.EntityResponse deviceObject = 1;
 }
-message ListDeviceRequest { 
-    Filter filter = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "限制"}];
+message ListDeviceRequest {
+    ListEntityQuery listEntityQuery = 1;
 }
 message ListDeviceResponse { 
     api.core.v1.ListEntityResponse listDeviceObject = 1;
@@ -281,6 +281,11 @@ message DeviceEntityConnectInfo {
   string _peerhost = 14 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "对端主机"}];
   int32 _sockport = 15 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "端口"}];
   string _protocol = 16 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "连接协议"}];
+}
+
+message ListEntityQuery {
+    string query = 1;
+    Filter filter = 2;
 }
 
 message Filter {

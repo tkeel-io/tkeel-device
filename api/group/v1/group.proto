@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import public "tkeel-io/core/api/v1/entity.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/tkeel-io/tkeel-device/api/group/v1;v1";
 option java_multiple_files = true;
@@ -29,7 +30,7 @@ service Group {
             }
         };
 	};
-	rpc UpdateGroup (UpdateGroupRequest) returns (CommonResponse) {
+	rpc UpdateGroup (UpdateGroupRequest) returns (UpdateGroupResponse) {
 		option (google.api.http) = {
 			put : "/groups/{id}"
 			body : "group"
@@ -46,7 +47,7 @@ service Group {
             }
         };
 	};
-	rpc DeleteGroup (DeleteGroupRequest) returns (CommonResponse) {
+	rpc DeleteGroup (DeleteGroupRequest) returns (google.protobuf.Empty) {
 		option (google.api.http) = {
 			post : "/groups/delete"
             body : "ids"
@@ -82,7 +83,7 @@ service Group {
 	rpc ListGroup (ListGroupRequest) returns (ListGroupResponse) {
 		option (google.api.http) = {
 			post : "/groups/search"
-			body : "filter"
+			body : "listEntityQuery"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "list entity group";
@@ -96,7 +97,7 @@ service Group {
             }
         };
 	};
-	rpc AddGroupItems (AddGroupItemsRequest) returns (CommonResponse) {
+	rpc AddGroupItems (AddGroupItemsRequest) returns (google.protobuf.Empty) {
 		option (google.api.http) = {
 			post : "/groups/{id}/items"
 			body : "ids"
@@ -129,7 +130,7 @@ service Group {
             }
         };
 	};
-	rpc DelGroupItems (DelGroupItemsRequest) returns (CommonResponse) {
+	rpc DelGroupItems (DelGroupItemsRequest) returns (google.protobuf.Empty) {
 		option (google.api.http) = {
 		    post : "/groups/{id}/items/delete" 
 			body : "ids"
@@ -146,7 +147,7 @@ service Group {
             }
         };
 	};
-	rpc AddGroupExt (AddGroupExtRequest) returns (CommonResponse) {
+	rpc AddGroupExt (AddGroupExtRequest) returns (google.protobuf.Empty) {
 		option (google.api.http) = {
 		    post : "/groups/{id}/ext" 
 			body : "kvs"
@@ -163,7 +164,7 @@ service Group {
             }
         };
 	};
-	rpc UpdateGroupExt (UpdateGroupExtRequest) returns (CommonResponse) {
+	rpc UpdateGroupExt (UpdateGroupExtRequest) returns (google.protobuf.Empty) {
 		option (google.api.http) = {
 		    post : "/groups/{id}/ext" 
 			body : "kvs"
@@ -180,7 +181,7 @@ service Group {
             }
         };
 	};
-	rpc DelGroupExt (DelGroupExtRequest) returns (CommonResponse) {
+	rpc DelGroupExt (DelGroupExtRequest) returns (google.protobuf.Empty) {
 		option (google.api.http) = {
 		    post : "/groups/{id}/ext/delete" 
 			body : "keys"
@@ -218,7 +219,7 @@ message GetGroupRequest {
 }
 
 message ListGroupRequest {
-		Filter filter = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "限制"}];
+    ListEntityQuery  listEntityQuery = 1;
 }
 
 message AddGroupItemsRequest {
@@ -256,11 +257,6 @@ message GroupEntityCoreInfo {
     GroupEntitySubEntityIds subIds = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组子设备信息"}];
     GroupEntitySysField     sysField = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组系统信息"}];
 }
-message UpdateGroupEntityCoreInfo {
-    GroupEntity             group = 1;
-    int64              _updatedAt = 2;
-}
-
 
 // device to user 
 message CommonResponse {
@@ -268,24 +264,30 @@ message CommonResponse {
 }
 
 message CreateGroupResponse {
-    string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ok  or failed"}];
-    GroupEntityCoreInfo  entityInfo = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+    //string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ok  or failed"}];
+    //GroupEntityCoreInfo  entityInfo = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+    api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+}
+
+message UpdateGroupResponse {
+    api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
 }
 
 message GetGroupResponse {
-    string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ok  or failed"}];
-    GroupEntityCoreInfo  entityInfo= 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+    //string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ok  or failed"}];
+    //GroupEntityCoreInfo  entityInfo= 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+    api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
 }
 
 message ListGroupResponse {
-    string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ok  or failed"}];
-//    repeated GroupEntityCoreInfo  entityInfo= 2;
-//    ListInfo                      listInfo = 3;
-    api.core.v1.ListEntityResponse listEntityInfo = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组列表信息"}];
+    //string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ok  or failed"}];
+    //repeated GroupEntityCoreInfo  entityInfo= 2;
+    //ListInfo                      listInfo = 3;
+    api.core.v1.ListEntityResponse listEntityInfo = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组列表信息"}];
 }
 
 message ListGroupItemsResponse {
-    string result = 1  [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ok  or failed"}];
+    //string result = 1  [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ok  or failed"}];
     GroupEntitySubEntityIds subIds = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "子设备信息"}];
 }
 
@@ -308,6 +310,10 @@ message GroupEntitySysField {
     string _source = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "来源"}];
 }
 
+message ListEntityQuery {
+    string query = 1;
+    Filter filter = 2;
+}
 message Filter {
 	Page page      = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "分页"}];
 

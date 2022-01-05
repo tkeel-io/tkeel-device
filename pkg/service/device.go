@@ -9,7 +9,7 @@ import (
 	"github.com/tkeel-io/kit/log"
 	pb "github.com/tkeel-io/tkeel-device/api/device/v1"
 	//go_struct "google.golang.org/protobuf/types/known/structpb"
-     "google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type DeviceService struct {
@@ -24,25 +24,25 @@ func NewDeviceService() *DeviceService {
 }
 
 func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRequest) (*pb.CreateDeviceResponse, error) {
-    log.Debug("CreateDevice")
+	log.Debug("CreateDevice")
 	log.Debug("req:", req.DevBasicInfo)
 
 	//1. verify Authentication in header and get user token map
 	tm, err := s.client.GetTokenMap(ctx)
 	if nil != err {
-	    log.Debug("err:", err)
+		log.Debug("err:", err)
 		return nil, err
 	}
 
 	// 2. get url
 	devId := GetUUID()
-	url := s.client.GetCoreUrl("", tm) + "&id=" + devId
+	url := s.client.GetCoreUrl("", tm, "device") + "&id=" + devId
 	log.Debug("get url: ", url)
 
 	// 3. build coreInfo and add system value
 	coreInfo := new(pb.DeviceEntityCoreInfo)
 	coreInfo.BasicInfo = new(pb.DeviceEntityBasicInfo)
-	coreInfo.BasicInfo = req.DevBasicInfo 
+	coreInfo.BasicInfo = req.DevBasicInfo
 	coreInfo.SysField = new(pb.DeviceEntitySysField)
 	coreInfo.SysField.XId = devId
 	coreInfo.SysField.XCreatedAt = GetTime()
@@ -66,7 +66,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 		return nil, err3
 	}
 
-	// 5. core request  and response 
+	// 5. core request  and response
 	log.Info("data: ", string(dev))
 	res, err4 := s.client.Post(url, dev)
 	if nil != err4 {
@@ -74,18 +74,18 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 		return nil, err4
 	}
 
-    // 6. fmt response to user 
-    deviceObject := &pb.EntityResponse{} // core define
+	// 6. fmt response to user
+	deviceObject := &pb.EntityResponse{} // core define
 	err5 := json.Unmarshal(res, deviceObject)
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
 	}
-	out := &pb.CreateDeviceResponse {
+	out := &pb.CreateDeviceResponse{
 		DeviceObject: deviceObject,
 	}
 
-    return out, nil 
+	return out, nil
 }
 
 func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRequest) (*pb.UpdateDeviceResponse, error) {
@@ -97,29 +97,38 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 		return nil, err
 	}
 	midUrl := "/" + req.Id
-	url := s.client.GetCoreUrl(midUrl, tm)
-	log.Debug("get url :", url, req.DevBasicInfo)
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("get url :", url)
 
-	coreInfo := new(pb.DeviceEntityCoreInfo)
-	coreInfo.BasicInfo = new(pb.DeviceEntityBasicInfo)
-	coreInfo.BasicInfo = req.DevBasicInfo 
-	coreInfo.SysField = new(pb.DeviceEntitySysField)
-	coreInfo.SysField.XUpdatedAt = GetTime()
-
-	dev, err := json.Marshal(coreInfo)
-	if err != nil {
-		return nil, err
+	updateBasicInfo := &pb.DeviceEntityBasicInfo{} 
+    updateBasicInfo = req.DevBasicInfo 
+    
+    //do it
+        //update BasicInfo 
+	dev, err1 := json.Marshal(updateBasicInfo)
+	if err1 != nil {
+		return nil, err1 
 	}
 	res, err2 := s.client.Put(url, dev)
 	if nil != err2 {
 		return nil, err2
 	}
-	er := new(pb.EntityResponse)
-	if err3 := json.Unmarshal(res, er); nil != err3 {
-		return nil, err3
+        //update updateAt
+	ma := make(map[string]interface{})
+	ma["_updatedAt"] = GetTime()
+    _, err3 := s.CorePatchMethod(ctx, req.GetId(), ma, "sysField.", "replace")
+	if nil != err3 {
+		log.Error("error patch _updateAt", err3)
+		return nil, err1 
 	}
-	
-    out := &pb.UpdateDeviceResponse{
+
+    //fmt response 
+	er := new(pb.EntityResponse)
+	if err4 := json.Unmarshal(res, er); nil != err4 {
+		return nil, err4 
+	}
+
+	out := &pb.UpdateDeviceResponse{
 		DeviceObject: er,
 	}
 
@@ -137,14 +146,14 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 	ids := req.Ids.GetIds()
 	for _, id := range ids {
 		midUrl := "/" + id
-		url := s.client.GetCoreUrl(midUrl, tm)
+		url := s.client.GetCoreUrl(midUrl, tm, "device")
 		log.Debug("get url:", url)
 
 		_, err2 := s.client.Delete(url)
 		if nil != err2 {
 			return nil, err2
-        }
-    }
+		}
+	}
 	return &emptypb.Empty{}, nil
 }
 
@@ -156,7 +165,7 @@ func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest)
 		return nil, err
 	}
 	midUrl := "/" + req.GetId()
-	url := s.client.GetCoreUrl(midUrl, tm)
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
 	log.Debug("get url :", url)
 
 	res, err2 := s.client.Get(url)
@@ -167,8 +176,8 @@ func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest)
 	if err3 := json.Unmarshal(res, er); nil != err3 {
 		return nil, err3
 	}
-    
-    out := &pb.GetDeviceResponse{
+
+	out := &pb.GetDeviceResponse{
 		DeviceObject: er,
 	}
 
@@ -177,20 +186,21 @@ func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest)
 
 func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceRequest) (*pb.ListDeviceResponse, error) {
 	log.Debug("ListDevice")
-	req.Filter.Page.Reverse = req.Filter.Page.GetReverse()
-	req.Filter.Page.Limit = req.Filter.Page.GetLimit()
-	req.Filter.Page.Offset = req.Filter.Page.GetOffset()
-	log.Debug("req:", req, req.Filter.Page)
+	//req.Filter.Page.Reverse = req.Filter.Page.GetReverse()
+	//req.Filter.Page.Limit = req.Filter.Page.GetLimit()
+	//req.Filter.Page.Offset = req.Filter.Page.GetOffset()
+	//log.Debug("req:", req, req.Filter.Page)
+	log.Debug("req:", req, req.ListEntityQuery)
 
 	tm, err := s.client.GetTokenMap(ctx)
 	if nil != err {
 		return nil, err
 	}
 	midUrl := "/search"
-	url := s.client.GetCoreUrl(midUrl, tm)
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
 	log.Debug("get url :", url)
 
-	filter, err1 := json.Marshal(req.Filter)
+	filter, err1 := json.Marshal(req.ListEntityQuery)
 	if err1 != nil {
 		return nil, err1
 	}
@@ -198,8 +208,8 @@ func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceReques
 	if nil != err2 {
 		return nil, err2
 	}
-	
-    listDeviceObject := &pb.ListEntityResponse{}
+
+	listDeviceObject := &pb.ListEntityResponse{}
 	err3 := json.Unmarshal(res, listDeviceObject)
 	if err3 != nil {
 		log.Error("error Unmarshal data from core")
@@ -212,7 +222,7 @@ func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceReques
 	return out, nil
 }
 
-func (s *DeviceService) EnableDevice(ctx context.Context, req *pb.EnableDeviceRequest) (*emptypb.Empty,error) {
+func (s *DeviceService) EnableDevice(ctx context.Context, req *pb.EnableDeviceRequest) (*emptypb.Empty, error) {
 	log.Debug("EnableDevice")
 	log.Debug("req:", req)
 
@@ -248,7 +258,7 @@ func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRe
 		return nil, err
 	}
 	midUrl := "/" + req.GetId() + "/patch"
-	url := s.client.GetCoreUrl(midUrl, tm)
+	url := s.client.GetCoreUrl(midUrl, tm, "devcie")
 	log.Debug("get url :", url)
 
 	var exts []interface{}
@@ -256,7 +266,7 @@ func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRe
 	case map[string]interface{}:
 		for k, v := range kv {
 			e := map[string]interface{}{
-				"path":     fmt.Sprintf("devBasicInfo.ext.%s", k),
+				"path":     fmt.Sprintf("basicInfo.ext.%s", k),
 				"operator": "replace",
 				"value":    v,
 			}
@@ -273,7 +283,7 @@ func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRe
 	}
 	_, err2 := s.client.Put(url, data)
 	if nil != err2 {
-		return  nil, err2
+		return nil, err2
 	}
 
 	return &emptypb.Empty{}, nil
@@ -288,14 +298,14 @@ func (s *DeviceService) DeleteDeviceExt(ctx context.Context, req *pb.DeleteDevic
 		return nil, err
 	}
 	midUrl := "/" + req.GetId() + "/patch"
-	url := s.client.GetCoreUrl(midUrl, tm)
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
 
 	// var exts []interface{}
 	keys := req.Keys.Keys
 	exts := make([]interface{}, len(keys))
 	for i, k := range keys {
 		e := map[string]interface{}{
-			"path":     fmt.Sprintf("devBasicInfo.ext.%s", k),
+			"path":     fmt.Sprintf("basicInfo.ext.%s", k),
 			"operator": "remove",
 			"value":    "",
 		}
@@ -317,13 +327,13 @@ func (s *DeviceService) DeleteDeviceExt(ctx context.Context, req *pb.DeleteDevic
 func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDeviceExtRequest) (*emptypb.Empty, error) {
 	log.Debug("UpdateDeviceExt")
 	log.Debug("req:", req)
-	
-    tm, err := s.client.GetTokenMap(ctx)
+
+	tm, err := s.client.GetTokenMap(ctx)
 	if nil != err {
 		return nil, err
 	}
 	midUrl := "/" + req.GetId() + "/patch"
-	url := s.client.GetCoreUrl(midUrl, tm)
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
 	log.Debug("get url :", url)
 
 	var exts []interface{}
@@ -331,14 +341,14 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 	case map[string]interface{}:
 		for k, v := range kv {
 			e := map[string]interface{}{
-				"path":     fmt.Sprintf("devBasicInfo.ext.%s", k),
+				"path":     fmt.Sprintf("basicInfo.ext.%s", k),
 				"operator": "replace",
 				"value":    v,
 			}
 			exts = append(exts, e)
 		}
 	default:
-		return nil,errors.New("error Invalid payload")
+		return nil, errors.New("error Invalid payload")
 	}
 
 	log.Debug("ext body: ", exts)
@@ -351,5 +361,50 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 		return nil, err2
 	}
 
+	return &emptypb.Empty{}, nil
+}
+
+func (s *DeviceService) CorePatchMethod(ctx context.Context, entityId string, kv map[string]interface{}, path string, operator string) (*emptypb.Empty, error) {
+	log.Debug("CorePatchMethod")
+	log.Debug("path:", path)
+	log.Debug("operator:", operator)
+
+	//get token
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+
+	//get core url
+	midUrl := "/" + entityId + "/patch"
+	url := s.client.GetCoreUrl(midUrl, tm, "group")
+	log.Debug("patch url :", url)
+
+	//fmt request
+	var patchArray []CorePatch
+
+	for k, v := range kv {
+		ph := CorePatch{
+			Path:     path + k,
+			Operator: operator,
+			Value:    v,
+		}
+		patchArray = append(patchArray, ph)
+	}
+	log.Debug("patch Array :", patchArray)
+
+	data, err3 := json.Marshal(patchArray)
+	if nil != err3 {
+		return nil, err3
+	}
+
+	// do it
+	_, err4 := s.client.Put(url, data)
+	if nil != err4 {
+		log.Error("error post data to core", data)
+		return nil, err4
+	}
+
+	//fmt response
 	return &emptypb.Empty{}, nil
 }

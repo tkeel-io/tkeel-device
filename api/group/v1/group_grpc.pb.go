@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -23,16 +24,16 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GroupClient interface {
 	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CreateGroupResponse, error)
-	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*CommonResponse, error)
-	DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*CommonResponse, error)
+	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error)
+	DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetGroup(ctx context.Context, in *GetGroupRequest, opts ...grpc.CallOption) (*GetGroupResponse, error)
 	ListGroup(ctx context.Context, in *ListGroupRequest, opts ...grpc.CallOption) (*ListGroupResponse, error)
-	AddGroupItems(ctx context.Context, in *AddGroupItemsRequest, opts ...grpc.CallOption) (*CommonResponse, error)
+	AddGroupItems(ctx context.Context, in *AddGroupItemsRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ListGroupItems(ctx context.Context, in *ListGroupItemsRequest, opts ...grpc.CallOption) (*ListGroupItemsResponse, error)
-	DelGroupItems(ctx context.Context, in *DelGroupItemsRequest, opts ...grpc.CallOption) (*CommonResponse, error)
-	AddGroupExt(ctx context.Context, in *AddGroupExtRequest, opts ...grpc.CallOption) (*CommonResponse, error)
-	UpdateGroupExt(ctx context.Context, in *UpdateGroupExtRequest, opts ...grpc.CallOption) (*CommonResponse, error)
-	DelGroupExt(ctx context.Context, in *DelGroupExtRequest, opts ...grpc.CallOption) (*CommonResponse, error)
+	DelGroupItems(ctx context.Context, in *DelGroupItemsRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	AddGroupExt(ctx context.Context, in *AddGroupExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateGroupExt(ctx context.Context, in *UpdateGroupExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DelGroupExt(ctx context.Context, in *DelGroupExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type groupClient struct {
@@ -52,8 +53,8 @@ func (c *groupClient) CreateGroup(ctx context.Context, in *CreateGroupRequest, o
 	return out, nil
 }
 
-func (c *groupClient) UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	out := new(CommonResponse)
+func (c *groupClient) UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error) {
+	out := new(UpdateGroupResponse)
 	err := c.cc.Invoke(ctx, "/api.group.v1.Group/UpdateGroup", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -61,8 +62,8 @@ func (c *groupClient) UpdateGroup(ctx context.Context, in *UpdateGroupRequest, o
 	return out, nil
 }
 
-func (c *groupClient) DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	out := new(CommonResponse)
+func (c *groupClient) DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/api.group.v1.Group/DeleteGroup", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -88,8 +89,8 @@ func (c *groupClient) ListGroup(ctx context.Context, in *ListGroupRequest, opts 
 	return out, nil
 }
 
-func (c *groupClient) AddGroupItems(ctx context.Context, in *AddGroupItemsRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	out := new(CommonResponse)
+func (c *groupClient) AddGroupItems(ctx context.Context, in *AddGroupItemsRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/api.group.v1.Group/AddGroupItems", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -106,8 +107,8 @@ func (c *groupClient) ListGroupItems(ctx context.Context, in *ListGroupItemsRequ
 	return out, nil
 }
 
-func (c *groupClient) DelGroupItems(ctx context.Context, in *DelGroupItemsRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	out := new(CommonResponse)
+func (c *groupClient) DelGroupItems(ctx context.Context, in *DelGroupItemsRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/api.group.v1.Group/DelGroupItems", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -115,8 +116,8 @@ func (c *groupClient) DelGroupItems(ctx context.Context, in *DelGroupItemsReques
 	return out, nil
 }
 
-func (c *groupClient) AddGroupExt(ctx context.Context, in *AddGroupExtRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	out := new(CommonResponse)
+func (c *groupClient) AddGroupExt(ctx context.Context, in *AddGroupExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/api.group.v1.Group/AddGroupExt", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -124,8 +125,8 @@ func (c *groupClient) AddGroupExt(ctx context.Context, in *AddGroupExtRequest, o
 	return out, nil
 }
 
-func (c *groupClient) UpdateGroupExt(ctx context.Context, in *UpdateGroupExtRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	out := new(CommonResponse)
+func (c *groupClient) UpdateGroupExt(ctx context.Context, in *UpdateGroupExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/api.group.v1.Group/UpdateGroupExt", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -133,8 +134,8 @@ func (c *groupClient) UpdateGroupExt(ctx context.Context, in *UpdateGroupExtRequ
 	return out, nil
 }
 
-func (c *groupClient) DelGroupExt(ctx context.Context, in *DelGroupExtRequest, opts ...grpc.CallOption) (*CommonResponse, error) {
-	out := new(CommonResponse)
+func (c *groupClient) DelGroupExt(ctx context.Context, in *DelGroupExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/api.group.v1.Group/DelGroupExt", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -147,16 +148,16 @@ func (c *groupClient) DelGroupExt(ctx context.Context, in *DelGroupExtRequest, o
 // for forward compatibility
 type GroupServer interface {
 	CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error)
-	UpdateGroup(context.Context, *UpdateGroupRequest) (*CommonResponse, error)
-	DeleteGroup(context.Context, *DeleteGroupRequest) (*CommonResponse, error)
+	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
+	DeleteGroup(context.Context, *DeleteGroupRequest) (*emptypb.Empty, error)
 	GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error)
 	ListGroup(context.Context, *ListGroupRequest) (*ListGroupResponse, error)
-	AddGroupItems(context.Context, *AddGroupItemsRequest) (*CommonResponse, error)
+	AddGroupItems(context.Context, *AddGroupItemsRequest) (*emptypb.Empty, error)
 	ListGroupItems(context.Context, *ListGroupItemsRequest) (*ListGroupItemsResponse, error)
-	DelGroupItems(context.Context, *DelGroupItemsRequest) (*CommonResponse, error)
-	AddGroupExt(context.Context, *AddGroupExtRequest) (*CommonResponse, error)
-	UpdateGroupExt(context.Context, *UpdateGroupExtRequest) (*CommonResponse, error)
-	DelGroupExt(context.Context, *DelGroupExtRequest) (*CommonResponse, error)
+	DelGroupItems(context.Context, *DelGroupItemsRequest) (*emptypb.Empty, error)
+	AddGroupExt(context.Context, *AddGroupExtRequest) (*emptypb.Empty, error)
+	UpdateGroupExt(context.Context, *UpdateGroupExtRequest) (*emptypb.Empty, error)
+	DelGroupExt(context.Context, *DelGroupExtRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedGroupServer()
 }
 
@@ -167,10 +168,10 @@ type UnimplementedGroupServer struct {
 func (UnimplementedGroupServer) CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGroup not implemented")
 }
-func (UnimplementedGroupServer) UpdateGroup(context.Context, *UpdateGroupRequest) (*CommonResponse, error) {
+func (UnimplementedGroupServer) UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroup not implemented")
 }
-func (UnimplementedGroupServer) DeleteGroup(context.Context, *DeleteGroupRequest) (*CommonResponse, error) {
+func (UnimplementedGroupServer) DeleteGroup(context.Context, *DeleteGroupRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteGroup not implemented")
 }
 func (UnimplementedGroupServer) GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error) {
@@ -179,22 +180,22 @@ func (UnimplementedGroupServer) GetGroup(context.Context, *GetGroupRequest) (*Ge
 func (UnimplementedGroupServer) ListGroup(context.Context, *ListGroupRequest) (*ListGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListGroup not implemented")
 }
-func (UnimplementedGroupServer) AddGroupItems(context.Context, *AddGroupItemsRequest) (*CommonResponse, error) {
+func (UnimplementedGroupServer) AddGroupItems(context.Context, *AddGroupItemsRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddGroupItems not implemented")
 }
 func (UnimplementedGroupServer) ListGroupItems(context.Context, *ListGroupItemsRequest) (*ListGroupItemsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListGroupItems not implemented")
 }
-func (UnimplementedGroupServer) DelGroupItems(context.Context, *DelGroupItemsRequest) (*CommonResponse, error) {
+func (UnimplementedGroupServer) DelGroupItems(context.Context, *DelGroupItemsRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelGroupItems not implemented")
 }
-func (UnimplementedGroupServer) AddGroupExt(context.Context, *AddGroupExtRequest) (*CommonResponse, error) {
+func (UnimplementedGroupServer) AddGroupExt(context.Context, *AddGroupExtRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddGroupExt not implemented")
 }
-func (UnimplementedGroupServer) UpdateGroupExt(context.Context, *UpdateGroupExtRequest) (*CommonResponse, error) {
+func (UnimplementedGroupServer) UpdateGroupExt(context.Context, *UpdateGroupExtRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroupExt not implemented")
 }
-func (UnimplementedGroupServer) DelGroupExt(context.Context, *DelGroupExtRequest) (*CommonResponse, error) {
+func (UnimplementedGroupServer) DelGroupExt(context.Context, *DelGroupExtRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelGroupExt not implemented")
 }
 func (UnimplementedGroupServer) mustEmbedUnimplementedGroupServer() {}

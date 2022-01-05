@@ -35,8 +35,8 @@ func NewCoreClient() *CoreClient {
 }
 
 // get core url
-func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string) string {
-	url :=  fmt.Sprintf(coreUrl + midUrl + "?" +  "type=%s&owner=%s&source=%s", mapUrl["type"], mapUrl["owner"], mapUrl["source"])
+func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string, entityType string ) string {
+	url := fmt.Sprintf(coreUrl+midUrl+"?"+"type=%s&owner=%s&source=%s", entityType, mapUrl["owner"], mapUrl["source"])
 	return url
 }
 
@@ -82,10 +82,10 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 
 	// save token, map[entity_id:406c79543e0245a994a742e69ce48e71 entity_type:device tenant_id: token_id:de25624a-1d0a-4ab0-b1f1-5b0db5a12c30 user_id:abc]
 	urlMap := map[string]string{
-		"owner":  tokenMap["user_id"].(string),
-		"type":   "device",
-		"source": "device",
-        "userToken" :token,
+		"owner":     tokenMap["user_id"].(string),
+		//"type":      "device",
+		"source":    "device",
+		"userToken": token,
 	}
 	return urlMap, nil
 }
@@ -143,7 +143,7 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 		return body, err
 	}
 
-	//log.Debug("receive resp, ", string(body))
+	log.Debug("receive resp, ", string(body))
 	if resp.StatusCode != 200 {
 		log.Error("bad status ", resp.StatusCode)
 		return body, errors.New(resp.Status)
@@ -151,26 +151,26 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 	return body, nil
 }
 
-func (c *CoreClient) CreatEntityToken(entityType,id,owner string, token string)(string, error) {
-    //get url and request body 
-    log.Debug("CreateEntityToken")
+func (c *CoreClient) CreatEntityToken(entityType, id, owner string, token string) (string, error) {
+	//get url and request body
+	log.Debug("CreateEntityToken")
 	url := authUrl + fmt.Sprintf("/v1/entity/token")
-    log.Debug("post auth url: ", url)
+	log.Debug("post auth url: ", url)
 	tokenReq := map[string]interface{}{
-		"entity_id": id,
+		"entity_id":   id,
 		"entity_type": entityType,
-		"owner": owner,
+		"owner":       owner,
 	}
 	tr, err := json.Marshal(tokenReq)
 	if nil != err {
 		return "marshal error", err
 	}
 
-    //do it 
-    payload := strings.NewReader(string(tr))
+	//do it
+	payload := strings.NewReader(string(tr))
 	req, err1 := http.NewRequest("POST", url, payload)
 	if nil != err1 {
-		return "", err1 
+		return "", err1
 	}
 	req.Header.Add(tokenKey, token)
 	resp, er := http.DefaultClient.Do(req)
@@ -180,7 +180,7 @@ func (c *CoreClient) CreatEntityToken(entityType,id,owner string, token string)(
 		return "", err2
 	}
 
-    //Parse 
+	//Parse
 	var ar interface{}
 	if err3 := json.Unmarshal(body, &ar); nil != err3 {
 		log.Error("resp Unmarshal error", err3)
@@ -196,8 +196,8 @@ func (c *CoreClient) CreatEntityToken(entityType,id,owner string, token string)(
 
 	}
 	tokenMap := res["data"].(map[string]interface{})
-	entityToken, ok2 :=  tokenMap["token"].(string)
-	if !ok2{
+	entityToken, ok2 := tokenMap["token"].(string)
+	if !ok2 {
 		return "error token", errors.New("error token")
 	}
 	return entityToken, nil

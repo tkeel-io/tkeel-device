@@ -146,12 +146,10 @@
         "parameters": [
           {
             "name": "body",
-            "description": "限制",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apidevicev1Filter",
-              "description": "限制"
+              "$ref": "#/definitions/apidevicev1ListEntityQuery"
             }
           }
         ],
@@ -438,7 +436,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1CommonResponse"
+              "properties": {}
             }
           },
           "default": {
@@ -486,12 +484,10 @@
         "parameters": [
           {
             "name": "body",
-            "description": "限制",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apigroupv1Filter",
-              "description": "限制"
+              "$ref": "#/definitions/apigroupv1ListEntityQuery"
             }
           }
         ],
@@ -508,7 +504,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1CommonResponse"
+              "properties": {}
             }
           },
           "default": {
@@ -580,7 +576,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1CommonResponse"
+              "$ref": "#/definitions/v1UpdateGroupResponse"
             }
           },
           "default": {
@@ -622,7 +618,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1CommonResponse"
+              "properties": {}
             }
           },
           "default": {
@@ -664,7 +660,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1CommonResponse"
+              "properties": {}
             }
           },
           "default": {
@@ -736,7 +732,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1CommonResponse"
+              "properties": {}
             }
           },
           "default": {
@@ -778,7 +774,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1CommonResponse"
+              "properties": {}
             }
           },
           "default": {
@@ -983,6 +979,17 @@
         }
       }
     },
+    "apidevicev1ListEntityQuery": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "filter": {
+          "$ref": "#/definitions/apidevicev1Filter"
+        }
+      }
+    },
     "apidevicev1Page": {
       "type": "object",
       "properties": {
@@ -1060,6 +1067,17 @@
             "type": "string"
           },
           "description": "key 数组"
+        }
+      }
+    },
+    "apigroupv1ListEntityQuery": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "filter": {
+          "$ref": "#/definitions/apigroupv1Filter"
         }
       }
     },
@@ -1169,16 +1187,6 @@
       },
       "description": "*\r\nmessage brief plugin information."
     },
-    "v1CommonResponse": {
-      "type": "object",
-      "properties": {
-        "result": {
-          "type": "string",
-          "description": "ok  or failed"
-        }
-      },
-      "title": "device to user"
-    },
     "v1CreateDeviceResponse": {
       "type": "object",
       "properties": {
@@ -1190,13 +1198,10 @@
     "v1CreateGroupResponse": {
       "type": "object",
       "properties": {
-        "result": {
-          "type": "string",
-          "description": "ok  or failed"
-        },
-        "entityInfo": {
-          "$ref": "#/definitions/v1GroupEntityCoreInfo",
-          "description": "设备组信息"
+        "groupObject": {
+          "$ref": "#/definitions/v1EntityResponse",
+          "description": "设备组信息",
+          "title": "string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"ok  or failed\"}];\nGroupEntityCoreInfo  entityInfo = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备组信息\"}];"
         }
       }
     },
@@ -1282,13 +1287,10 @@
     "v1GetGroupResponse": {
       "type": "object",
       "properties": {
-        "result": {
-          "type": "string",
-          "description": "ok  or failed"
-        },
-        "entityInfo": {
-          "$ref": "#/definitions/v1GroupEntityCoreInfo",
-          "description": "设备组信息"
+        "groupObject": {
+          "$ref": "#/definitions/v1EntityResponse",
+          "description": "设备组信息",
+          "title": "string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"ok  or failed\"}];\nGroupEntityCoreInfo  entityInfo= 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备组信息\"}];"
         }
       }
     },
@@ -1313,24 +1315,6 @@
         }
       }
     },
-    "v1GroupEntityCoreInfo": {
-      "type": "object",
-      "properties": {
-        "group": {
-          "$ref": "#/definitions/v1GroupEntity",
-          "description": "设备组信息"
-        },
-        "subIds": {
-          "$ref": "#/definitions/v1GroupEntitySubEntityIds",
-          "description": "设备组子设备信息"
-        },
-        "sysField": {
-          "$ref": "#/definitions/v1GroupEntitySysField",
-          "description": "设备组系统信息"
-        }
-      },
-      "title": "device to core"
-    },
     "v1GroupEntitySubEntityIds": {
       "type": "object",
       "properties": {
@@ -1340,33 +1324,6 @@
             "type": "string"
           },
           "description": "子设备ID列表"
-        }
-      }
-    },
-    "v1GroupEntitySysField": {
-      "type": "object",
-      "properties": {
-        "_id": {
-          "type": "string",
-          "description": "设备组ID"
-        },
-        "_createdAt": {
-          "type": "string",
-          "format": "int64",
-          "description": "设备组创建时间"
-        },
-        "_updatedAt": {
-          "type": "string",
-          "format": "int64",
-          "description": "设备组更新时间"
-        },
-        "_owner": {
-          "type": "string",
-          "description": " 所有者"
-        },
-        "_source": {
-          "type": "string",
-          "description": "来源"
         }
       }
     },
@@ -1465,27 +1422,20 @@
     "v1ListGroupItemsResponse": {
       "type": "object",
       "properties": {
-        "result": {
-          "type": "string",
-          "description": "ok  or failed"
-        },
         "subIds": {
           "$ref": "#/definitions/v1GroupEntitySubEntityIds",
-          "description": "子设备信息"
+          "description": "子设备信息",
+          "title": "string result = 1  [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"ok  or failed\"}];"
         }
       }
     },
     "v1ListGroupResponse": {
       "type": "object",
       "properties": {
-        "result": {
-          "type": "string",
-          "description": "ok  or failed"
-        },
         "listEntityInfo": {
           "$ref": "#/definitions/v1ListEntityResponse",
           "description": "设备组列表信息",
-          "title": "repeated GroupEntityCoreInfo  entityInfo= 2;\n   ListInfo                      listInfo = 3;"
+          "title": "string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"ok  or failed\"}];\nrepeated GroupEntityCoreInfo  entityInfo= 2;\nListInfo                      listInfo = 3;"
         }
       }
     },
@@ -1595,6 +1545,15 @@
       "properties": {
         "deviceObject": {
           "$ref": "#/definitions/v1EntityResponse"
+        }
+      }
+    },
+    "v1UpdateGroupResponse": {
+      "type": "object",
+      "properties": {
+        "groupObject": {
+          "$ref": "#/definitions/v1EntityResponse",
+          "description": "设备组信息"
         }
       }
     }

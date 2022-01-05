@@ -28,17 +28,17 @@ var (
 )
 
 type GroupHTTPServer interface {
-	AddGroupExt(context.Context, *AddGroupExtRequest) (*CommonResponse, error)
-	AddGroupItems(context.Context, *AddGroupItemsRequest) (*CommonResponse, error)
+	AddGroupExt(context.Context, *AddGroupExtRequest) (*emptypb.Empty, error)
+	AddGroupItems(context.Context, *AddGroupItemsRequest) (*emptypb.Empty, error)
 	CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error)
-	DelGroupExt(context.Context, *DelGroupExtRequest) (*CommonResponse, error)
-	DelGroupItems(context.Context, *DelGroupItemsRequest) (*CommonResponse, error)
-	DeleteGroup(context.Context, *DeleteGroupRequest) (*CommonResponse, error)
+	DelGroupExt(context.Context, *DelGroupExtRequest) (*emptypb.Empty, error)
+	DelGroupItems(context.Context, *DelGroupItemsRequest) (*emptypb.Empty, error)
+	DeleteGroup(context.Context, *DeleteGroupRequest) (*emptypb.Empty, error)
 	GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error)
 	ListGroup(context.Context, *ListGroupRequest) (*ListGroupResponse, error)
 	ListGroupItems(context.Context, *ListGroupItemsRequest) (*ListGroupItemsResponse, error)
-	UpdateGroup(context.Context, *UpdateGroupRequest) (*CommonResponse, error)
-	UpdateGroupExt(context.Context, *UpdateGroupExtRequest) (*CommonResponse, error)
+	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
+	UpdateGroupExt(context.Context, *UpdateGroupExtRequest) (*emptypb.Empty, error)
 }
 
 type GroupHTTPHandler struct {
@@ -51,7 +51,7 @@ func newGroupHTTPHandler(s GroupHTTPServer) *GroupHTTPHandler {
 
 func (h *GroupHTTPHandler) AddGroupExt(req *go_restful.Request, resp *go_restful.Response) {
 	in := AddGroupExtRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Kvs); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -113,7 +113,7 @@ func (h *GroupHTTPHandler) AddGroupExt(req *go_restful.Request, resp *go_restful
 
 func (h *GroupHTTPHandler) AddGroupItems(req *go_restful.Request, resp *go_restful.Response) {
 	in := AddGroupItemsRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -175,7 +175,7 @@ func (h *GroupHTTPHandler) AddGroupItems(req *go_restful.Request, resp *go_restf
 
 func (h *GroupHTTPHandler) CreateGroup(req *go_restful.Request, resp *go_restful.Response) {
 	in := CreateGroupRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Group); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -232,7 +232,7 @@ func (h *GroupHTTPHandler) CreateGroup(req *go_restful.Request, resp *go_restful
 
 func (h *GroupHTTPHandler) DelGroupExt(req *go_restful.Request, resp *go_restful.Response) {
 	in := DelGroupExtRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Keys); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -294,7 +294,7 @@ func (h *GroupHTTPHandler) DelGroupExt(req *go_restful.Request, resp *go_restful
 
 func (h *GroupHTTPHandler) DelGroupItems(req *go_restful.Request, resp *go_restful.Response) {
 	in := DelGroupItemsRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -356,7 +356,7 @@ func (h *GroupHTTPHandler) DelGroupItems(req *go_restful.Request, resp *go_restf
 
 func (h *GroupHTTPHandler) DeleteGroup(req *go_restful.Request, resp *go_restful.Response) {
 	in := DeleteGroupRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -470,7 +470,7 @@ func (h *GroupHTTPHandler) GetGroup(req *go_restful.Request, resp *go_restful.Re
 
 func (h *GroupHTTPHandler) ListGroup(req *go_restful.Request, resp *go_restful.Response) {
 	in := ListGroupRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.ListEntityQuery); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -584,7 +584,7 @@ func (h *GroupHTTPHandler) ListGroupItems(req *go_restful.Request, resp *go_rest
 
 func (h *GroupHTTPHandler) UpdateGroup(req *go_restful.Request, resp *go_restful.Response) {
 	in := UpdateGroupRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Group); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -646,7 +646,7 @@ func (h *GroupHTTPHandler) UpdateGroup(req *go_restful.Request, resp *go_restful
 
 func (h *GroupHTTPHandler) UpdateGroupExt(req *go_restful.Request, resp *go_restful.Response) {
 	in := UpdateGroupExtRequest{}
-	if err := transportHTTP.GetBody(req, &in); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Kvs); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
