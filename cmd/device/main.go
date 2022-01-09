@@ -15,6 +15,7 @@ import (
 )
 
 import ( //User import
+	Template_v1 "github.com/tkeel-io/tkeel-device/api/template/v1"
 	Device_v1 "github.com/tkeel-io/tkeel-device/api/device/v1"
 	Group_v1 "github.com/tkeel-io/tkeel-device/api/group/v1"
 	openapi "github.com/tkeel-io/tkeel-device/api/openapi/v1"
@@ -64,6 +65,10 @@ func main() {
 		GroupSrv := service.NewGroupService()
 		Group_v1.RegisterGroupHTTPServer(httpSrv.Container, GroupSrv)
 		Group_v1.RegisterGroupServer(grpcSrv.GetServe(), GroupSrv)
+		
+        TemplateSrv := service.NewTemplateService()
+		Template_v1.RegisterTemplateHTTPServer(httpSrv.Container, TemplateSrv)
+		Template_v1.RegisterTemplateServer(grpcSrv.GetServe(), TemplateSrv)
 	}
 
 	if err := app.Run(context.TODO()); err != nil {

@@ -97,10 +97,8 @@ func (s *GroupService) UpdateGroup(ctx context.Context, req *pb.UpdateGroupReque
 	log.Debug("body :", req.Group)
 
 	//fmt request
-	updateEntityInfo := &pb.GroupEntity{}
-    updateEntityInfo = req.Group
 
-	data, err3 := json.Marshal(updateEntityInfo)
+	data, err3 := json.Marshal(req.Group)
 	if nil != err3 {
 		return nil, err3
 	}

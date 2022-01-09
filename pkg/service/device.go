@@ -36,7 +36,10 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 
 	// 2. get url
 	devId := GetUUID()
-	url := s.client.GetCoreUrl("", tm, "device") + "&id=" + devId
+    url := s.client.GetCoreUrl("", tm, "device") + "&id=" + devId 
+    if(req.DevBasicInfo.TemplateId != "") {
+	    url += "&from=" + req.DevBasicInfo.TemplateId 
+    }
 	log.Debug("get url: ", url)
 
 	// 3. build coreInfo and add system value
