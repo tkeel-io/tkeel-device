@@ -103,20 +103,20 @@ func (s *GroupService) UpdateGroup(ctx context.Context, req *pb.UpdateGroupReque
 		return nil, err3
 	}
 
-	// do it 
-	    //update basicInfo 
-    res, err4 := s.httpClient.Put(url, data)
+	// do it
+	//update basicInfo
+	res, err4 := s.httpClient.Put(url, data)
 	if nil != err4 {
 		log.Error("error post data to core", data)
 		return nil, err4
 	}
-        //update updateAt
+	//update updateAt
 	ma := make(map[string]interface{})
 	ma["_updatedAt"] = GetTime()
-    _, err5 := s.CorePatchMethod(ctx, req.GetId(), ma, "sysField.", "replace")
+	_, err5 := s.CorePatchMethod(ctx, req.GetId(), ma, "sysField.", "replace")
 	if nil != err5 {
 		log.Error("error patch _updateAt", err5)
-		return nil, err5 
+		return nil, err5
 	}
 
 	//fmt response
@@ -261,24 +261,24 @@ func (s *GroupService) ListGroupItems(ctx context.Context, req *pb.ListGroupItem
 	res, err1 := s.httpClient.Get(url)
 	if nil != err1 {
 		log.Error("error post data to core", err1)
-		return nil, err1 
+		return nil, err1
 	}
 
 	//fmt response
-    entityInfo := &pb.EntityResponse{}
+	entityInfo := &pb.EntityResponse{}
 	if err2 := json.Unmarshal(res, entityInfo); nil != err2 {
-		return nil, err2 
+		return nil, err2
 	}
 
 	kv := entityInfo.Properties.GetStructValue().Fields
 	out := &pb.ListGroupItemsResponse{}
 	prop, err3 := json.Marshal(kv)
 	if nil != err3 {
-		return nil, err3 
+		return nil, err3
 	}
 	err4 := json.Unmarshal(prop, out)
 	if nil != err4 {
-		return nil, err4 
+		return nil, err4
 	}
 
 	return out, nil

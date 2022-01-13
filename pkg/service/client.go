@@ -17,6 +17,7 @@ import (
 
 const coreUrl string = "http://localhost:3500/v1.0/invoke/core/method/v1/entities"
 const authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
+
 //const coreUrl string = "http://192.168.123.9:31438/v1/entities"
 //const authUrl string = "http://192.168.123.11:30707/apis/security"
 const tokenKey string = "Authorization"
@@ -35,7 +36,7 @@ func NewCoreClient() *CoreClient {
 }
 
 // get core url
-func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string, entityType string ) string {
+func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string, entityType string) string {
 	url := fmt.Sprintf(coreUrl+midUrl+"?"+"type=%s&owner=%s&source=%s", entityType, mapUrl["owner"], mapUrl["source"])
 	return url
 }
@@ -82,7 +83,7 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 
 	// save token, map[entity_id:406c79543e0245a994a742e69ce48e71 entity_type:device tenant_id: token_id:de25624a-1d0a-4ab0-b1f1-5b0db5a12c30 user_id:abc]
 	urlMap := map[string]string{
-		"owner":     tokenMap["user_id"].(string),
+		"owner": tokenMap["user_id"].(string),
 		//"type":      "device",
 		"source":    "device",
 		"userToken": token,

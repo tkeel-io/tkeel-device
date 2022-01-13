@@ -239,12 +239,12 @@ message UpdateDeviceExtRequest {
 message DeviceEntityCoreInfo {
   DeviceEntityBasicInfo basicInfo = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}];
   DeviceEntitySysField sysField = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备系统信息"}];
-  DeviceEntityConnectInfo connectInfo = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备连接信息"}];
-  google.protobuf.Value rawData = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备原始数据"}];
-  google.protobuf.Value attributes = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备属性数据"}];
-  google.protobuf.Value telemetry = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备遥测数据"}];
-  google.protobuf.Value commands = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备命令"}];
-  google.protobuf.Value relations = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备数据关系"}];
+  //DeviceEntityConnectInfo connectInfo = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备连接信息"}];
+  //google.protobuf.Value rawData = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备原始数据"}];
+  //google.protobuf.Value attributes = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备属性数据"}];
+  //google.protobuf.Value telemetry = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备遥测数据"}];
+  //google.protobuf.Value commands = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备命令"}];
+  //google.protobuf.Value relations = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备数据关系"}];
 }
 
 //------------------------------------------------------------------------------

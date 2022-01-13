@@ -36,10 +36,10 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 
 	// 2. get url
 	devId := GetUUID()
-    url := s.client.GetCoreUrl("", tm, "device") + "&id=" + devId 
-    if(req.DevBasicInfo.TemplateId != "") {
-	    url += "&from=" + req.DevBasicInfo.TemplateId 
-    }
+	url := s.client.GetCoreUrl("", tm, "device") + "&id=" + devId
+	if req.DevBasicInfo.TemplateId != "" {
+		url += "&from=" + req.DevBasicInfo.TemplateId
+	}
 	log.Debug("get url: ", url)
 
 	// 3. build coreInfo and add system value
@@ -103,32 +103,32 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	url := s.client.GetCoreUrl(midUrl, tm, "device")
 	log.Debug("get url :", url)
 
-	updateBasicInfo := &pb.DeviceEntityBasicInfo{} 
-    updateBasicInfo = req.DevBasicInfo 
-    
-    //do it
-        //update BasicInfo 
+	updateBasicInfo := &pb.DeviceEntityBasicInfo{}
+	updateBasicInfo = req.DevBasicInfo
+
+	//do it
+	//update BasicInfo
 	dev, err1 := json.Marshal(updateBasicInfo)
 	if err1 != nil {
-		return nil, err1 
+		return nil, err1
 	}
 	res, err2 := s.client.Put(url, dev)
 	if nil != err2 {
 		return nil, err2
 	}
-        //update updateAt
+	//update updateAt
 	ma := make(map[string]interface{})
 	ma["_updatedAt"] = GetTime()
-    _, err3 := s.CorePatchMethod(ctx, req.GetId(), ma, "sysField.", "replace")
+	_, err3 := s.CorePatchMethod(ctx, req.GetId(), ma, "sysField.", "replace")
 	if nil != err3 {
 		log.Error("error patch _updateAt", err3)
-		return nil, err1 
+		return nil, err1
 	}
 
-    //fmt response 
+	//fmt response
 	er := new(pb.EntityResponse)
 	if err4 := json.Unmarshal(res, er); nil != err4 {
-		return nil, err4 
+		return nil, err4
 	}
 
 	out := &pb.UpdateDeviceResponse{
