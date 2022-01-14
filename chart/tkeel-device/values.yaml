@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: jiazwhub/tkeel-device
+  repository: tkeelio/tkeel-device
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "0.3.0"
