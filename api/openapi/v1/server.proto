@@ -5,6 +5,7 @@ package openapi.v1;
 import "openapi/v1/openapi.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/tkeel-io/tkeel-template-go/api/openapi/v1;v1";
 option java_multiple_files = true;
@@ -12,40 +13,102 @@ option java_package = "dev.tkeel.hello.api.openapi.v1";
 option java_outer_classname = "OpenapiProtoV1";
 
 // The openapi service definition.
+// TKEEL_COMMENT
+// {"response":{"raw_data":true}}
 service Openapi {
   // Query identify.
+  // TKEEL_COMMENT
+  // {"response":{"raw_data":true}}
   rpc Identify(google.protobuf.Empty) returns (IdentifyResponse) {
     option (google.api.http) = {
       get : "/identify"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "openapi identify"
+      operation_id : "Identify"
+      tags : "Openapi"
+      responses : {
+        key : "200"
+        value : {description : "OK"}
+      }
+    };
   }
 
   // Post addons identify.
+  // TKEEL_COMMENT
+  // {
+  //  "response" :
+  //    {
+  //      "raw_data": true
+  //    }
+  // }
   rpc AddonsIdentify(AddonsIdentifyRequest) returns (AddonsIdentifyResponse) {
     option (google.api.http) = {
       post : "/addons/identify"
       body : "*"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "openapi addons identify"
+      operation_id : "Identify"
+      tags : "Openapi"
+      responses : {
+        key : "200"
+        value : {description : "OK"}
+      }
+    };
   }
 
   // Post tenant bind.
+  // TKEEL_COMMENT
+  // {"response":{"raw_data":true}}
   rpc TenantBind(TenantBindRequst) returns (TenantBindResponse) {
     option (google.api.http) = {
       post : "/tenant/bind"
       body : "*"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "openapi tenant bind"
+      operation_id : "TenantBind"
+      tags : "Openapi"
+      responses : {
+        key : "200"
+        value : {description : "OK"}
+      }
+    };
   }
   // Post tenant bind.
+  // TKEEL_COMMENT
+  // {"response":{"raw_data":true}}
   rpc TenantUnbind(TenantUnbindRequst) returns (TenantUnbindResponse) {
     option (google.api.http) = {
       post : "/tenant/unbind"
       body : "*"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "openapi tenant unbind"
+      operation_id : "TenantUnbind"
+      tags : "Openapi"
+      responses : {
+        key : "200"
+        value : {description : "OK"}
+      }
+    };
   }
   // Query status.
+  // TKEEL_COMMENT
+  // {"response":{"raw_data":true}}
   rpc Status(google.protobuf.Empty) returns (StatusResponse) {
     option (google.api.http) = {
       get : "/status"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "openapi status"
+      operation_id : "Status"
+      tags : "Openapi"
+      responses : {
+        key : "200"
+        value : {description : "OK"}
+      }
     };
   }
 }

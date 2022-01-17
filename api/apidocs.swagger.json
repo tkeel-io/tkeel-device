@@ -27,11 +27,11 @@
   "paths": {
     "/addons/identify": {
       "post": {
-        "summary": "Post addons identify.",
-        "operationId": "Openapi_AddonsIdentify",
+        "summary": "openapi addons identify",
+        "operationId": "Identify",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1AddonsIdentifyResponse"
             }
@@ -815,11 +815,11 @@
     },
     "/identify": {
       "get": {
-        "summary": "Query identify.",
-        "operationId": "Openapi_Identify",
+        "summary": "openapi identify",
+        "operationId": "Identify",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1IdentifyResponse"
             }
@@ -838,11 +838,11 @@
     },
     "/status": {
       "get": {
-        "summary": "Query status.",
-        "operationId": "Openapi_Status",
+        "summary": "openapi status",
+        "operationId": "Status",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1StatusResponse"
             }
@@ -1688,11 +1688,11 @@
     },
     "/tenant/bind": {
       "post": {
-        "summary": "Post tenant bind.",
-        "operationId": "Openapi_TenantBind",
+        "summary": "openapi tenant bind",
+        "operationId": "TenantBind",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1TenantBindResponse"
             }
@@ -1721,11 +1721,11 @@
     },
     "/tenant/unbind": {
       "post": {
-        "summary": "Post tenant bind.",
-        "operationId": "Openapi_TenantUnbind",
+        "summary": "openapi tenant unbind",
+        "operationId": "TenantUnbind",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/v1TenantUnbindResponse"
             }

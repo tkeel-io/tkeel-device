@@ -67,7 +67,7 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 	}
 	var ar interface{}
 	if err3 := json.Unmarshal(resp2, &ar); nil != err3 {
-		log.Error("resp Unmarshal error", err3)
+		log.Error("resp Unmarshal error, ", err3)
 		return nil, err3
 	}
 	//log.Debug("Unmarshal res:", ar)

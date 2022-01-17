@@ -25,14 +25,29 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OpenapiClient interface {
 	// Query identify.
+	// TKEEL_COMMENT
+	// {"response":{"raw_data":true}}
 	Identify(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*v1.IdentifyResponse, error)
 	// Post addons identify.
+	// TKEEL_COMMENT
+	// {
+	//  "response" :
+	//    {
+	//      "raw_data": true
+	//    }
+	// }
 	AddonsIdentify(ctx context.Context, in *v1.AddonsIdentifyRequest, opts ...grpc.CallOption) (*v1.AddonsIdentifyResponse, error)
 	// Post tenant bind.
+	// TKEEL_COMMENT
+	// {"response":{"raw_data":true}}
 	TenantBind(ctx context.Context, in *v1.TenantBindRequst, opts ...grpc.CallOption) (*v1.TenantBindResponse, error)
 	// Post tenant bind.
+	// TKEEL_COMMENT
+	// {"response":{"raw_data":true}}
 	TenantUnbind(ctx context.Context, in *v1.TenantUnbindRequst, opts ...grpc.CallOption) (*v1.TenantUnbindResponse, error)
 	// Query status.
+	// TKEEL_COMMENT
+	// {"response":{"raw_data":true}}
 	Status(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*v1.StatusResponse, error)
 }
 
@@ -94,14 +109,29 @@ func (c *openapiClient) Status(ctx context.Context, in *emptypb.Empty, opts ...g
 // for forward compatibility
 type OpenapiServer interface {
 	// Query identify.
+	// TKEEL_COMMENT
+	// {"response":{"raw_data":true}}
 	Identify(context.Context, *emptypb.Empty) (*v1.IdentifyResponse, error)
 	// Post addons identify.
+	// TKEEL_COMMENT
+	// {
+	//  "response" :
+	//    {
+	//      "raw_data": true
+	//    }
+	// }
 	AddonsIdentify(context.Context, *v1.AddonsIdentifyRequest) (*v1.AddonsIdentifyResponse, error)
 	// Post tenant bind.
+	// TKEEL_COMMENT
+	// {"response":{"raw_data":true}}
 	TenantBind(context.Context, *v1.TenantBindRequst) (*v1.TenantBindResponse, error)
 	// Post tenant bind.
+	// TKEEL_COMMENT
+	// {"response":{"raw_data":true}}
 	TenantUnbind(context.Context, *v1.TenantUnbindRequst) (*v1.TenantUnbindResponse, error)
 	// Query status.
+	// TKEEL_COMMENT
+	// {"response":{"raw_data":true}}
 	Status(context.Context, *emptypb.Empty) (*v1.StatusResponse, error)
 	mustEmbedUnimplementedOpenapiServer()
 }
