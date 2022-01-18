@@ -103,8 +103,8 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	url := s.client.GetCoreUrl(midUrl, tm, "device")
 	log.Debug("get url :", url)
 
-	updateBasicInfo := &pb.DeviceEntityBasicInfo{}
-	updateBasicInfo = req.DevBasicInfo
+	updateBasicInfo := &pb.DeviceEntityCoreInfo{}
+	updateBasicInfo.BasicInfo = req.DevBasicInfo
 
 	//do it
 	//update BasicInfo

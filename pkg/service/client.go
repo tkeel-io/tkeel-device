@@ -1,8 +1,9 @@
 package service
 
 import (
-	"bytes"
+	//"bytes"
 	"context"
+	"encoding/base64"
 	json "encoding/json"
 	"errors"
 	"fmt"
@@ -15,12 +16,21 @@ import (
 	"time"
 )
 
-const coreUrl string = "http://localhost:3500/v1.0/invoke/core/method/v1/entities"
-const authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
+const (
+	coreUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/core/v1/entities"
+	authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
 
-//const coreUrl string = "http://192.168.123.9:31438/v1/entities"
-//const authUrl string = "http://192.168.123.11:30707/apis/security"
-const tokenKey string = "Authorization"
+	//  coreUrl string = "http://192.168.123.9:31438/v1/entities"
+	//  authUrl string = "http://192.168.123.11:30707/apis/security"
+
+	tokenKey string = "Authorization"
+
+	// default header key
+	tkeelAuthHeader = `x-tKeel-auth`
+	defaultTenant   = `_tKeel_system`
+	defaultUser     = `_tKeel_admin`
+	defultRole      = `admin`
+)
 
 type CoreClient struct {
 	//entity_create = "id={entity_id}&type={entity_type}&owner={user_id}&source={source}".format(**query)
@@ -92,14 +102,25 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 }
 
 func (c *CoreClient) Post(url string, data []byte) ([]byte, error) {
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(data))
+	//resp, err := http.Post(url, "application/json", bytes.NewBuffer(data))
+	payload := strings.NewReader(string(data))
+	req, _ := http.NewRequest("POST", url, payload)
 
+	req.Header.Add("Content-Type", "application/json")
+	AddDefaultAuthHeader(req)
+
+	resp, err := http.DefaultClient.Do(req)
 	return c.ParseResp(resp, err)
 }
 
 func (c *CoreClient) Get(url string) ([]byte, error) {
-	resp, err := http.Get(url)
+	//resp, err := http.Get(url)
+	req, _ := http.NewRequest("GET", url, nil)
 
+	req.Header.Add("Content-Type", "application/json")
+	AddDefaultAuthHeader(req)
+
+	resp, err := http.DefaultClient.Do(req)
 	return c.ParseResp(resp, err)
 }
 
@@ -108,6 +129,7 @@ func (c *CoreClient) Put(url string, data []byte) ([]byte, error) {
 	req, _ := http.NewRequest("PUT", url, payload)
 
 	req.Header.Add("Content-Type", "application/json")
+	AddDefaultAuthHeader(req)
 
 	resp, err := http.DefaultClient.Do(req)
 	return c.ParseResp(resp, err)
@@ -116,7 +138,9 @@ func (c *CoreClient) Put(url string, data []byte) ([]byte, error) {
 func (c *CoreClient) Patch(url string, data []byte) ([]byte, error) {
 	payload := strings.NewReader(string(data))
 	req, _ := http.NewRequest("PATCH", url, payload)
+
 	req.Header.Add("Content-Type", "application/json")
+	AddDefaultAuthHeader(req)
 
 	resp, err := http.DefaultClient.Do(req)
 	return c.ParseResp(resp, err)
@@ -124,7 +148,9 @@ func (c *CoreClient) Patch(url string, data []byte) ([]byte, error) {
 
 func (c *CoreClient) Delete(url string) ([]byte, error) {
 	req, _ := http.NewRequest("DELETE", url, nil)
-	//req.Header.Add("Authorization", "xxxx")
+
+	req.Header.Add("Content-Type", "application/json")
+	AddDefaultAuthHeader(req)
 
 	resp, err := http.DefaultClient.Do(req)
 	return c.ParseResp(resp, err)
@@ -168,22 +194,15 @@ func (c *CoreClient) CreatEntityToken(entityType, id, owner string, token string
 	}
 
 	//do it
-	payload := strings.NewReader(string(tr))
-	req, err1 := http.NewRequest("POST", url, payload)
-	if nil != err1 {
-		return "", err1
-	}
-	req.Header.Add(tokenKey, token)
-	resp, er := http.DefaultClient.Do(req)
-	body, err2 := c.ParseResp(resp, er)
+	resp, err2 := c.Post(url, tr)
 	if nil != err2 {
-		log.Error("error get device token, ", err)
+		log.Error("error get device token, ", err2)
 		return "", err2
 	}
 
 	//Parse
 	var ar interface{}
-	if err3 := json.Unmarshal(body, &ar); nil != err3 {
+	if err3 := json.Unmarshal(resp, &ar); nil != err3 {
 		log.Error("resp Unmarshal error", err3)
 		return "resp Unmarshal error", err3
 	}
@@ -202,6 +221,11 @@ func (c *CoreClient) CreatEntityToken(entityType, id, owner string, token string
 		return "error token", errors.New("error token")
 	}
 	return entityToken, nil
+}
+
+func AddDefaultAuthHeader(req *http.Request) {
+	authString := fmt.Sprintf("tenant=%s&user=%s&role=%s", defaultTenant, defaultUser, defultRole)
+	req.Header.Add(tkeelAuthHeader, base64.StdEncoding.EncodeToString([]byte(authString)))
 }
 
 // generate uuid
