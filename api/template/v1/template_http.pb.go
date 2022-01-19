@@ -95,7 +95,8 @@ func (h *TemplateHTTPHandler) AddTemplateAttribute(req *go_restful.Request, resp
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -157,7 +158,8 @@ func (h *TemplateHTTPHandler) AddTemplateCommand(req *go_restful.Request, resp *
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -219,7 +221,8 @@ func (h *TemplateHTTPHandler) AddTemplateTelemetry(req *go_restful.Request, resp
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -281,7 +284,8 @@ func (h *TemplateHTTPHandler) AddTemplateTelemetryExt(req *go_restful.Request, r
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -338,7 +342,8 @@ func (h *TemplateHTTPHandler) CreateTemplate(req *go_restful.Request, resp *go_r
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -395,7 +400,8 @@ func (h *TemplateHTTPHandler) DeleteTemplate(req *go_restful.Request, resp *go_r
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -457,7 +463,8 @@ func (h *TemplateHTTPHandler) DeleteTemplateAttribute(req *go_restful.Request, r
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -519,7 +526,8 @@ func (h *TemplateHTTPHandler) DeleteTemplateCommand(req *go_restful.Request, res
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -581,7 +589,8 @@ func (h *TemplateHTTPHandler) DeleteTemplateTelemetry(req *go_restful.Request, r
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -643,7 +652,8 @@ func (h *TemplateHTTPHandler) DeleteTemplateTelemetryExt(req *go_restful.Request
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -700,7 +710,8 @@ func (h *TemplateHTTPHandler) GetTemplate(req *go_restful.Request, resp *go_rest
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -757,7 +768,8 @@ func (h *TemplateHTTPHandler) GetTemplateAttribute(req *go_restful.Request, resp
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -814,7 +826,8 @@ func (h *TemplateHTTPHandler) ListTemplate(req *go_restful.Request, resp *go_res
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -871,7 +884,8 @@ func (h *TemplateHTTPHandler) ListTemplateAttribute(req *go_restful.Request, res
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -928,7 +942,8 @@ func (h *TemplateHTTPHandler) ListTemplateCommand(req *go_restful.Request, resp 
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -985,7 +1000,8 @@ func (h *TemplateHTTPHandler) ListTemplateTelemetry(req *go_restful.Request, res
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -1047,7 +1063,8 @@ func (h *TemplateHTTPHandler) UpdateTemplate(req *go_restful.Request, resp *go_r
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -1109,7 +1126,8 @@ func (h *TemplateHTTPHandler) UpdateTemplateAttribute(req *go_restful.Request, r
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -1171,7 +1189,8 @@ func (h *TemplateHTTPHandler) UpdateTemplateCommand(req *go_restful.Request, res
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -1233,7 +1252,8 @@ func (h *TemplateHTTPHandler) UpdateTemplateTelemetry(req *go_restful.Request, r
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -1295,7 +1315,8 @@ func (h *TemplateHTTPHandler) UpdateTemplateTelemetryExt(req *go_restful.Request
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",

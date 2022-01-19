@@ -598,7 +598,9 @@ message TemplateEntitySysField {
 
 message ListEntityQuery {
     string query = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "es 查询条件"}];
-    Filter filter = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "限制"}];
+    //Filter filter = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "限制"}];
+  Page page = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "分页"}];
+  repeated Condition condition = 3  [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "组合条件"}];
 }
 message Filter {
   Page page = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "分页"}];

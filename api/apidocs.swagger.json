@@ -501,48 +501,6 @@
         ]
       }
     },
-    "/groups/{id_1}/ext": {
-      "post": {
-        "summary": "update group extensions",
-        "operationId": "UpdateGroupExt",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id_1",
-            "description": "设备组ID",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "description": "扩展配置kv",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "description": "扩展配置kv"
-            }
-          }
-        ],
-        "tags": [
-          "group"
-        ]
-      }
-    },
     "/groups/{id}": {
       "get": {
         "summary": "get entity group",
@@ -617,8 +575,8 @@
     },
     "/groups/{id}/ext": {
       "post": {
-        "summary": "add group extensions",
-        "operationId": "AddGroupExt",
+        "summary": "update group extensions",
+        "operationId": "UpdateGroupExt",
         "responses": {
           "200": {
             "description": "OK",
@@ -1771,22 +1729,6 @@
         }
       }
     },
-    "apidevicev1Filter": {
-      "type": "object",
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/apidevicev1Page",
-          "description": "分页"
-        },
-        "condition": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apidevicev1Condition"
-          },
-          "description": "组合条件"
-        }
-      }
-    },
     "apidevicev1Ids": {
       "type": "object",
       "properties": {
@@ -1818,9 +1760,17 @@
           "type": "string",
           "description": "es查询条件"
         },
-        "filter": {
-          "$ref": "#/definitions/apidevicev1Filter",
-          "description": "限制"
+        "page": {
+          "$ref": "#/definitions/apidevicev1Page",
+          "description": "分页",
+          "title": "Filter filter = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"限制\"}];"
+        },
+        "condition": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apidevicev1Condition"
+          },
+          "description": "组合条件"
         }
       }
     },
@@ -1864,22 +1814,6 @@
         }
       }
     },
-    "apigroupv1Filter": {
-      "type": "object",
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/apigroupv1Page",
-          "description": "分页"
-        },
-        "condition": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apigroupv1Condition"
-          },
-          "description": "组合条件"
-        }
-      }
-    },
     "apigroupv1Ids": {
       "type": "object",
       "properties": {
@@ -1911,9 +1845,17 @@
           "type": "string",
           "description": "es查询条件"
         },
-        "filter": {
-          "$ref": "#/definitions/apigroupv1Filter",
-          "description": "限制"
+        "page": {
+          "$ref": "#/definitions/apigroupv1Page",
+          "description": "分页",
+          "title": "Filter filter = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"限制\"}];"
+        },
+        "condition": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apigroupv1Condition"
+          },
+          "description": "组合条件"
         }
       }
     },
@@ -1957,22 +1899,6 @@
         }
       }
     },
-    "apitemplatev1Filter": {
-      "type": "object",
-      "properties": {
-        "page": {
-          "$ref": "#/definitions/apitemplatev1Page",
-          "description": "分页"
-        },
-        "condition": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apitemplatev1Condition"
-          },
-          "description": "组合条件"
-        }
-      }
-    },
     "apitemplatev1Ids": {
       "type": "object",
       "properties": {
@@ -2004,9 +1930,17 @@
           "type": "string",
           "description": "es 查询条件"
         },
-        "filter": {
-          "$ref": "#/definitions/apitemplatev1Filter",
-          "description": "限制"
+        "page": {
+          "$ref": "#/definitions/apitemplatev1Page",
+          "description": "分页",
+          "title": "Filter filter = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"限制\"}];"
+        },
+        "condition": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apitemplatev1Condition"
+          },
+          "description": "组合条件"
         }
       }
     },

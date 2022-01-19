@@ -7,17 +7,21 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/tkeel-io/core v0.2.0
 	github.com/tkeel-io/kit v0.0.0-20211223050802-7dfccfe43fdb
-	github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20211225055149-46c444694dad
-	google.golang.org/genproto v0.0.0-20211223182754-3ac035c7e7cb
+	github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220118090421-c6c3e6601455
+	google.golang.org/genproto v0.0.0-20220114231437-d2e6a121cae0
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
 )
+
+require github.com/ghodss/yaml v1.0.0 // indirect
 
 require (
 	github.com/go-playground/form/v4 v4.2.0 // indirect
 	github.com/golang/glog v1.0.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.0
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
@@ -27,7 +31,4 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
-
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.2
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 )

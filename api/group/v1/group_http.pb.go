@@ -85,7 +85,8 @@ func (h *GroupHTTPHandler) AddGroupExt(req *go_restful.Request, resp *go_restful
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -147,7 +148,8 @@ func (h *GroupHTTPHandler) AddGroupItems(req *go_restful.Request, resp *go_restf
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -204,7 +206,8 @@ func (h *GroupHTTPHandler) CreateGroup(req *go_restful.Request, resp *go_restful
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -266,7 +269,8 @@ func (h *GroupHTTPHandler) DelGroupExt(req *go_restful.Request, resp *go_restful
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -328,7 +332,8 @@ func (h *GroupHTTPHandler) DelGroupItems(req *go_restful.Request, resp *go_restf
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -385,7 +390,8 @@ func (h *GroupHTTPHandler) DeleteGroup(req *go_restful.Request, resp *go_restful
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -442,7 +448,8 @@ func (h *GroupHTTPHandler) GetGroup(req *go_restful.Request, resp *go_restful.Re
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -499,7 +506,8 @@ func (h *GroupHTTPHandler) ListGroup(req *go_restful.Request, resp *go_restful.R
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -556,7 +564,8 @@ func (h *GroupHTTPHandler) ListGroupItems(req *go_restful.Request, resp *go_rest
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -618,7 +627,8 @@ func (h *GroupHTTPHandler) UpdateGroup(req *go_restful.Request, resp *go_restful
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
@@ -680,7 +690,8 @@ func (h *GroupHTTPHandler) UpdateGroupExt(req *go_restful.Request, resp *go_rest
 	}
 
 	outB, err := protojson.MarshalOptions{
-		UseProtoNames: true,
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
 		Code: http.StatusOK,
 		Msg:  "ok",
