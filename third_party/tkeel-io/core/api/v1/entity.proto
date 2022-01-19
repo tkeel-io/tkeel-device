@@ -5,131 +5,29 @@ package api.core.v1;
 
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
+//import "api/core/v1/search.proto";
+//import "api/core/v1/list.proto";
 import "tkeel-io/core/api/v1/search.proto";
 import "tkeel-io/core/api/v1/list.proto";
+
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 
 option go_package = "github.com/tkeel-io/core/api/core/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.core.v1";
 
-service Entity {
-	rpc CreateEntity (CreateEntityRequest) returns (EntityResponse) {
-		option (google.api.http) = {
-			post : "/plugins/{plugin}/entities"
-			body: "properties"
-		};
-	};
-	rpc UpdateEntity (UpdateEntityRequest) returns (EntityResponse) {
-		option (google.api.http) = {
-			put : "/plugins/{plugin}/entities/{id}"
-			body : "properties"
-		};
-	};
-	rpc DeleteEntity (DeleteEntityRequest) returns (DeleteEntityResponse) {
-		option (google.api.http) = {
-			delete : "/plugins/{plugin}/entities/{id}"
-		};
-	};
-	rpc GetEntity (GetEntityRequest) returns (EntityResponse) {
-		option (google.api.http) = {
-			get : "/plugins/{plugin}/entities/{id}"
-		};
-	};
-	rpc ListEntity (ListEntityRequest) returns (ListEntityResponse) {
-		option (google.api.http) = {
-			post : "/plugins/{plugin}/entities/search"
-            body: "*"
-		};
-	};
-	rpc AppendMapper (AppendMapperRequest) returns (EntityResponse) {
-		option (google.api.http) = {
-			post : "/plugins/{plugin}/entities/{id}/mappers"
-			body: "mapper"
-		};
-	};
-    rpc SetEntityConfigs(SetEntityConfigRequest) returns (EntityResponse) {
-        	option (google.api.http) = {
-			put : "/plugins/{plugin}/entities/{id}/configs"
-			body: "configs"
-		};
-    };
-}
-
-message EntityObject {
-	string uid = 1;
-}
-
-message CreateEntityRequest {
-    string id = 1;
-    string plugin = 2;
-    string source = 3;
-    string owner = 4;
-    string type = 5;
-    google.protobuf.Value properties = 6;
- }
-
 
 message EntityResponse {
-    string id = 1;
-    string plugin = 2;
-    string source = 3;
-    string owner = 4;
-    string type = 5;
-    repeated MapperDesc mappers = 6;
-    google.protobuf.Value configs = 7;
-    google.protobuf.Value properties = 8;
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "entity id"}];
+    string source = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "source id"}];
+    string owner = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "owner id"}];
+    string type = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "entity type"}];
+    repeated MapperDesc mappers = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "entity mappers"}];
+    google.protobuf.Value configs = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "entity configs"}];
+    google.protobuf.Value properties = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "entity properties"}];
 }
 
-message UpdateEntityRequest {
-    string id = 1;
-    string plugin = 2;
-    string source = 3;
-    string owner = 4;
-    google.protobuf.Value properties = 5;
-}
-
-
-message DeleteEntityRequest {
-    string id = 1;
-    string plugin = 2;
-    string source = 3;
-    string owner = 4;
-}
-message DeleteEntityResponse {
-    string id = 1;
-    string status = 2;
-}
-
-message GetEntityRequest {
-    string id = 1;
-    string plugin = 2;
-    string source = 3;
-    string owner = 4;
-}
-
-message MapperDesc {
-    string name = 1;
-    string tql = 2;
-}
-
-message AppendMapperRequest {
-    string id = 1;
-    string plugin = 2;
-    string source = 3;
-    string owner = 4;
-    MapperDesc mapper = 5;
-}
-
-
-message ListEntityRequest {
-    string plugin = 1;
-    string source = 2;
-    string owner = 3;
-    string query = 4;
-    Pager page = 5;
-	repeated SearchCondition condition = 6;
-}
 message ListEntityResponse {
     int64 total = 1;
     int64 page = 2;
@@ -138,12 +36,8 @@ message ListEntityResponse {
     repeated EntityResponse items = 5;
 }
 
-message PropertyConfig {}
 
-message SetEntityConfigRequest {
-    string id = 1;
-    string plugin = 2;
-    string source = 3;
-    string owner = 4;
-    google.protobuf.Value configs = 5;
+message MapperDesc {
+    string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "mapper name"}];
+    string tql = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "tql content"}];
 }

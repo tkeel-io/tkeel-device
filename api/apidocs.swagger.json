@@ -2124,31 +2124,35 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
-        },
-        "plugin": {
-          "type": "string"
+          "type": "string",
+          "description": "entity id"
         },
         "source": {
-          "type": "string"
+          "type": "string",
+          "description": "source id"
         },
         "owner": {
-          "type": "string"
+          "type": "string",
+          "description": "owner id"
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "description": "entity type"
         },
         "mappers": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/v1MapperDesc"
-          }
+          },
+          "description": "entity mappers"
         },
         "configs": {
-          "type": "object"
+          "type": "object",
+          "description": "entity configs"
         },
         "properties": {
-          "type": "object"
+          "type": "object",
+          "description": "entity properties"
         }
       }
     },
@@ -2376,10 +2380,12 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "mapper name"
         },
         "tql": {
-          "type": "string"
+          "type": "string",
+          "description": "tql content"
         }
       }
     },

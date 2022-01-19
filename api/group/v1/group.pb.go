@@ -27,19 +27,9 @@ const (
 
 // Symbols defined in public import of tkeel-io/core/api/v1/entity.proto.
 
-type EntityObject = v1.EntityObject
-type CreateEntityRequest = v1.CreateEntityRequest
 type EntityResponse = v1.EntityResponse
-type UpdateEntityRequest = v1.UpdateEntityRequest
-type DeleteEntityRequest = v1.DeleteEntityRequest
-type DeleteEntityResponse = v1.DeleteEntityResponse
-type GetEntityRequest = v1.GetEntityRequest
-type MapperDesc = v1.MapperDesc
-type AppendMapperRequest = v1.AppendMapperRequest
-type ListEntityRequest = v1.ListEntityRequest
 type ListEntityResponse = v1.ListEntityResponse
-type PropertyConfig = v1.PropertyConfig
-type SetEntityConfigRequest = v1.SetEntityConfigRequest
+type MapperDesc = v1.MapperDesc
 
 //user to device
 type CreateGroupRequest struct {
