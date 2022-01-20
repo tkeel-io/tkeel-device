@@ -751,7 +751,7 @@ func RegisterGroupHTTPServer(container *go_restful.Container, srv GroupHTTPServe
 		To(handler.DelGroupItems))
 	ws.Route(ws.POST("/groups/{id}/ext").
 		To(handler.AddGroupExt))
-	ws.Route(ws.POST("/groups/{id}/ext").
+	ws.Route(ws.PUT("/groups/{id}/ext").
 		To(handler.UpdateGroupExt))
 	ws.Route(ws.POST("/groups/{id}/ext/delete").
 		To(handler.DelGroupExt))

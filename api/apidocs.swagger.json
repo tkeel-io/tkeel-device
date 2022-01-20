@@ -575,6 +575,46 @@
     },
     "/groups/{id}/ext": {
       "post": {
+        "summary": "add group extensions",
+        "operationId": "AddGroupExt",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "设备组ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "扩展配置kv",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "description": "扩展配置kv"
+            }
+          }
+        ],
+        "tags": [
+          "group"
+        ]
+      },
+      "put": {
         "summary": "update group extensions",
         "operationId": "UpdateGroupExt",
         "responses": {

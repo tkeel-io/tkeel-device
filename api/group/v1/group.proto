@@ -166,7 +166,7 @@ service Group {
 	};
 	rpc UpdateGroupExt (UpdateGroupExtRequest) returns (google.protobuf.Empty) {
 		option (google.api.http) = {
-		    post : "/groups/{id}/ext" 
+		    put : "/groups/{id}/ext" 
 			body : "kvs"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
