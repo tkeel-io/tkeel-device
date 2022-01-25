@@ -194,15 +194,18 @@ func (c *CoreClient) CreatEntityToken(entityType, id, owner string, token string
 	}
 
 	//do it
-	resp, err2 := c.Post(url, tr)
-	if nil != err2 {
-		log.Error("error get device token, ", err2)
-		return "", err2
+	payload := strings.NewReader(string(tr))
+	req, err1 := http.NewRequest("POST", url, payload)
+	if nil != err1 {
+		return "", err1
 	}
+	req.Header.Add(tokenKey, token)
+	resp, er := http.DefaultClient.Do(req)
+	body, err2 := c.ParseResp(resp, er)
 
 	//Parse
 	var ar interface{}
-	if err3 := json.Unmarshal(resp, &ar); nil != err3 {
+	if err3 := json.Unmarshal(body, &ar); nil != err3 {
 		log.Error("resp Unmarshal error", err3)
 		return "resp Unmarshal error", err3
 	}
