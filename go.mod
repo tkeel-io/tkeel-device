@@ -6,8 +6,8 @@ require (
 	github.com/emicklei/go-restful v2.15.0+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/tkeel-io/core v0.2.0
-	github.com/tkeel-io/kit v0.0.0-20211223050802-7dfccfe43fdb
-	github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220118090421-c6c3e6601455
+	github.com/tkeel-io/kit v0.0.0-20220120160441-cb2a03de1073
+	github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220126015848-44427ba2b864
 	google.golang.org/genproto v0.0.0-20220118154757-00ab72f36ad5
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1

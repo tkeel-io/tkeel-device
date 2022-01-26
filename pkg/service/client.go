@@ -200,11 +200,12 @@ func (c *CoreClient) CreatEntityToken(entityType, id, owner string, token string
 		return "", err1
 	}
 	req.Header.Add(tokenKey, token)
+	AddDefaultAuthHeader(req)
 	resp, er := http.DefaultClient.Do(req)
 	body, err2 := c.ParseResp(resp, er)
 	if nil != err2 {
-		log.Error("error return ",err2)
-		return "", err2 
+		log.Error("error return ", err2)
+		return "", err2
 	}
 
 	//Parse

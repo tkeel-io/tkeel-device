@@ -58,17 +58,17 @@ service Openapi {
     };
   }
 
-  // Post tenant bind.
+  // Post tenant able.
   // TKEEL_COMMENT
   // {"response":{"raw_data":true}}
-  rpc TenantBind(TenantBindRequst) returns (TenantBindResponse) {
+  rpc TenantEnable(TenantEnableRequest) returns (TenantEnableResponse) {
     option (google.api.http) = {
-      post : "/tenant/bind"
+      post : "/tenant/enable"
       body : "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary : "openapi tenant bind"
-      operation_id : "TenantBind"
+      summary : "openapi tenant enable"
+      operation_id : "TenantEnable"
       tags : "Openapi"
       responses : {
         key : "200"
@@ -76,17 +76,17 @@ service Openapi {
       }
     };
   }
-  // Post tenant bind.
+  // Post tenant disable.
   // TKEEL_COMMENT
   // {"response":{"raw_data":true}}
-  rpc TenantUnbind(TenantUnbindRequst) returns (TenantUnbindResponse) {
+  rpc TenantDisable(TenantDisableRequest) returns (TenantDisableResponse) {
     option (google.api.http) = {
-      post : "/tenant/unbind"
+      post : "/tenant/disable"
       body : "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary : "openapi tenant unbind"
-      operation_id : "TenantUnbind"
+      summary : "openapi tenant disable"
+      operation_id : "TenantDisable"
       tags : "Openapi"
       responses : {
         key : "200"

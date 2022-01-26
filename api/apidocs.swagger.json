@@ -1684,15 +1684,15 @@
         ]
       }
     },
-    "/tenant/bind": {
+    "/tenant/disable": {
       "post": {
-        "summary": "openapi tenant bind",
-        "operationId": "TenantBind",
+        "summary": "openapi tenant disable",
+        "operationId": "TenantDisable",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1TenantBindResponse"
+              "$ref": "#/definitions/v1TenantDisableResponse"
             }
           },
           "default": {
@@ -1708,7 +1708,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1TenantBindRequst"
+              "$ref": "#/definitions/v1TenantDisableRequest"
             }
           }
         ],
@@ -1717,15 +1717,15 @@
         ]
       }
     },
-    "/tenant/unbind": {
+    "/tenant/enable": {
       "post": {
-        "summary": "openapi tenant unbind",
-        "operationId": "TenantUnbind",
+        "summary": "openapi tenant enable",
+        "operationId": "TenantEnable",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1TenantUnbindResponse"
+              "$ref": "#/definitions/v1TenantEnableResponse"
             }
           },
           "default": {
@@ -1741,7 +1741,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1TenantUnbindRequst"
+              "$ref": "#/definitions/v1TenantEnableRequest"
             }
           }
         ],
@@ -2055,7 +2055,7 @@
           }
         }
       },
-      "description": "*\r\nThe request value of the POST /v1/addons/identify,\r\nused when the plugin in the registration process implements\r\nthe extension point of the registered plugin."
+      "description": "*\nThe request value of the POST /v1/addons/identify,\nused when the plugin in the registration process implements\nthe extension point of the registered plugin."
     },
     "v1AddonsIdentifyResponse": {
       "type": "object",
@@ -2064,7 +2064,7 @@
           "$ref": "#/definitions/v1Result"
         }
       },
-      "description": "*\r\nThe response value of the POST /v1/addons/identify,\r\nused when the plugin in the registration process implements\r\nthe extension point of the registered plugin."
+      "description": "*\nThe response value of the POST /v1/addons/identify,\nused when the plugin in the registration process implements\nthe extension point of the registered plugin."
     },
     "v1AddonsPoint": {
       "type": "object",
@@ -2076,7 +2076,7 @@
           "type": "string"
         }
       },
-      "description": "*\r\nmessage plugin declares extension point."
+      "description": "*\nmessage plugin declares extension point."
     },
     "v1BriefPluginInfo": {
       "type": "object",
@@ -2088,7 +2088,34 @@
           "type": "string"
         }
       },
-      "description": "*\r\nmessage brief plugin information."
+      "description": "*\nmessage brief plugin information."
+    },
+    "v1ConsoleEntry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "entry": {
+          "type": "string"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ConsoleEntry"
+          }
+        }
+      },
+      "description": "plugin console entry."
     },
     "v1CreateDeviceResponse": {
       "type": "object",
@@ -2292,9 +2319,15 @@
           "items": {
             "$ref": "#/definitions/v1ImplementedPlugin"
           }
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ConsoleEntry"
+          }
         }
       },
-      "description": "*\r\nThe response value of the GET /v1/identify,\r\nused when the plugin registered."
+      "description": "*\nThe response value of the GET /v1/identify,\nused when the plugin registered."
     },
     "v1ImplementedAddons": {
       "type": "object",
@@ -2306,7 +2339,7 @@
           "type": "string"
         }
       },
-      "description": "*\r\nmessage plugin declares implemented other plugin extension point."
+      "description": "*\nmessage plugin declares implemented other plugin extension point."
     },
     "v1ImplementedPlugin": {
       "type": "object",
@@ -2321,7 +2354,7 @@
           }
         }
       },
-      "description": "*\r\nmessage plugin implemented other plugin."
+      "description": "*\nmessage plugin implemented other plugin."
     },
     "v1ListDeviceResponse": {
       "type": "object",
@@ -2432,14 +2465,13 @@
     "v1PluginStatus": {
       "type": "string",
       "enum": [
-        "ERROR",
-        "STARTING",
-        "RUNING",
-        "STOPPING",
-        "STOPPED"
+        "UNKNOWN",
+        "WAIT_RUNNING",
+        "ERR_REGISTER",
+        "RUNNING"
       ],
-      "default": "ERROR",
-      "description": "*\r\nplugin state enum."
+      "default": "UNKNOWN",
+      "description": "*\nplugin state enum."
     },
     "v1PropConfig": {
       "type": "object",
@@ -2476,7 +2508,7 @@
           "type": "string"
         }
       },
-      "description": "*\r\nmessage result."
+      "description": "*\nmessage result."
     },
     "v1Retcode": {
       "type": "string",
@@ -2486,7 +2518,7 @@
         "INTERNAL_ERROR"
       ],
       "default": "OK",
-      "description": "*\r\nerror code enum."
+      "description": "*\nerror code enum."
     },
     "v1StatusResponse": {
       "type": "object",
@@ -2498,7 +2530,7 @@
           "$ref": "#/definitions/v1PluginStatus"
         }
       },
-      "description": "*\r\nThe request value of the GET /v1/Status.\r\nused when the tkeel checks the status of plugins regularly."
+      "description": "*\nThe request value of the GET /v1/Status.\nused when the tkeel checks the status of plugins regularly."
     },
     "v1TemplateBasicInfo": {
       "type": "object",
@@ -2514,7 +2546,7 @@
       },
       "title": "basic"
     },
-    "v1TenantBindRequst": {
+    "v1TenantDisableRequest": {
       "type": "object",
       "properties": {
         "tenant_id": {
@@ -2525,18 +2557,18 @@
           "format": "byte"
         }
       },
-      "description": "*\r\nThe request value of the POST /v1/tenant/bind,\r\nused when the tenant administrator enables the plugin."
+      "description": "*\nThe request value of the POST /v1/tenant/disable,\nused when the tenant administrator disables the plugin."
     },
-    "v1TenantBindResponse": {
+    "v1TenantDisableResponse": {
       "type": "object",
       "properties": {
         "res": {
           "$ref": "#/definitions/v1Result"
         }
       },
-      "description": "*\r\nThe response value of the POST /v1/tenant/bind,\r\nused when the tenant administrator enables the plugin."
+      "description": "*\nThe response value of the POST /v1/tenant/disable,\nused when the tenant administrator disables the plugin."
     },
-    "v1TenantUnbindRequst": {
+    "v1TenantEnableRequest": {
       "type": "object",
       "properties": {
         "tenant_id": {
@@ -2547,16 +2579,16 @@
           "format": "byte"
         }
       },
-      "description": "*\r\nThe request value of the POST /v1/tenant/unbind,\r\nused when the tenant administrator disables the plugin."
+      "description": "*\nThe request value of the POST /v1/tenant/enable,\nused when the tenant administrator enables the plugin."
     },
-    "v1TenantUnbindResponse": {
+    "v1TenantEnableResponse": {
       "type": "object",
       "properties": {
         "res": {
           "$ref": "#/definitions/v1Result"
         }
       },
-      "description": "*\r\nThe response value of the POST /v1/tenant/unbind,\r\nused when the tenant administrator disables the plugin."
+      "description": "*\nThe response value of the POST /v1/tenant/enable,\nused when the tenant administrator enables the plugin."
     },
     "v1UpdateDeviceResponse": {
       "type": "object",

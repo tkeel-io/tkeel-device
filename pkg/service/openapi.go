@@ -46,16 +46,16 @@ func (s *OpenapiService) Status(ctx context.Context, in *emptypb.Empty) (*openap
 	}, nil
 }
 
-// TenantBind implements TenantBind.OpenapiServer.
-func (s *OpenapiService) TenantBind(ctx context.Context, in *openapi_v1.TenantBindRequst) (*openapi_v1.TenantBindResponse, error) {
-	return &openapi_v1.TenantBindResponse{
+// TenantEnable implements TenantEnable.OpenapiServer.
+func (s *OpenapiService) TenantEnable(ctx context.Context, in *openapi_v1.TenantEnableRequest) (*openapi_v1.TenantEnableResponse, error) {
+	return &openapi_v1.TenantEnableResponse{
 		Res: util.GetV1ResultOK(),
 	}, nil
 }
 
-// TenantUnbind implements TenantUnbind.OpenapiServer.
-func (s *OpenapiService) TenantUnbind(ctx context.Context, in *openapi_v1.TenantUnbindRequst) (*openapi_v1.TenantUnbindResponse, error) {
-	return &openapi_v1.TenantUnbindResponse{
+// TenantDisable implements TenantDisable.OpenapiServer.
+func (s *OpenapiService) TenantDisable(ctx context.Context, in *openapi_v1.TenantDisableRequest) (*openapi_v1.TenantDisableResponse, error) {
+	return &openapi_v1.TenantDisableResponse{
 		Res: util.GetV1ResultOK(),
 	}, nil
 }
