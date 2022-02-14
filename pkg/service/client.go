@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/tkeel-io/kit/log"
 	transportHTTP "github.com/tkeel-io/kit/transport/http"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -20,8 +21,8 @@ const (
 	coreUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/core/v1/entities"
 	authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
 
-	//  coreUrl string = "http://192.168.123.9:31438/v1/entities"
-	//  authUrl string = "http://192.168.123.11:30707/apis/security"
+	//coreUrl string = "http://192.168.123.9:31438/v1/entities"
+	//authUrl string = "http://192.168.123.9:30707/apis/security"
 
 	tokenKey string = "Authorization"
 
@@ -188,11 +189,12 @@ func (c *CoreClient) CreatEntityToken(entityType, id, owner string, token string
 		"entity_type": entityType,
 		"owner":       owner,
 	}
+	log.Debug("data= ", tokenReq)
+
 	tr, err := json.Marshal(tokenReq)
 	if nil != err {
 		return "marshal error", err
 	}
-
 	//do it
 	payload := strings.NewReader(string(tr))
 	req, err1 := http.NewRequest("POST", url, payload)
@@ -245,4 +247,82 @@ func GetUUID() string {
 // get time
 func GetTime() int64 {
 	return time.Now().UnixNano()
+}
+func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, parentId string) error {
+
+	log.Debug("setSpacePathMapper")
+	//check ParentId
+	if parentId == "" {
+		return nil
+	}
+
+	//get url
+	midUrl := "/" + Id + "/mappers"
+	url := c.GetCoreUrl(midUrl, tm, "group")
+	log.Debug("mapper url = ", url)
+
+	//fmt request
+	data := make(map[string]string)
+	data["name"] = "mapper_space_path"
+	data["tql"] = "insert into " + Id + " select " + parentId + ".sysField._spacePath + '/" + Id + "'  as " + "sysField._spacePath"
+	log.Debug("data = ", data)
+
+	send, err := json.Marshal(data)
+	if nil != err {
+		return err
+	}
+
+	// do it
+	_, err1 := c.Post(url, send)
+	if nil != err1 {
+		log.Error("error core return")
+		return err1
+	}
+
+	return nil
+}
+
+func (c *CoreClient) CorePatchMethod(ctx context.Context, entityId string, kv map[string]interface{}, path string, operator string, pathClassify string) (*emptypb.Empty, error) {
+	log.Debug("CoreConfigPatchMethod")
+	log.Debug("path:", path)
+	log.Debug("operator:", operator)
+
+	//get token
+	tm, err := c.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+
+	//get core url
+	midUrl := "/" + entityId + pathClassify
+	url := c.GetCoreUrl(midUrl, tm, "template")
+	log.Debug("patch url :", url)
+
+	//fmt request
+	var patchArray []CorePatch
+
+	for k, v := range kv {
+		ph := CorePatch{
+			Path:     path + k,
+			Operator: operator,
+			Value:    v,
+		}
+		patchArray = append(patchArray, ph)
+	}
+	log.Debug("patch Array :", patchArray)
+
+	data, err3 := json.Marshal(patchArray)
+	if nil != err3 {
+		return nil, err3
+	}
+
+	// do it
+	_, err4 := c.Put(url, data)
+	if nil != err4 {
+		log.Error("error post data to core", data)
+		return nil, err4
+	}
+
+	//fmt response
+	return &emptypb.Empty{}, nil
 }

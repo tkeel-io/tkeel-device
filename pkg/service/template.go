@@ -8,6 +8,7 @@ import (
 	"github.com/tkeel-io/kit/log"
 	pb "github.com/tkeel-io/tkeel-device/api/template/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/structpb"
 )
 
 type TemplateService struct {
@@ -107,7 +108,7 @@ func (s *TemplateService) UpdateTemplate(ctx context.Context, req *pb.UpdateTemp
 
 	//fmt request
 
-	data, err3 := json.Marshal(req.BasicInfo)
+	data, err3 := json.Marshal(req)
 	if nil != err3 {
 		return nil, err3
 	}
@@ -122,9 +123,9 @@ func (s *TemplateService) UpdateTemplate(ctx context.Context, req *pb.UpdateTemp
 	//update updateAt
 	ma := make(map[string]interface{})
 	ma["_updatedAt"] = GetTime()
-	_, err5 := s.CoreConfigPatchMethod(ctx, req.GetUid(), ma, "sysField.", "replace")
+	_, err5 := s.httpClient.CorePatchMethod(ctx, req.GetUid(), ma, "sysField.", "replace", "/patch")
 	if nil != err5 {
-		log.Error("error patch _updateAt", err5)
+		log.Error("error patch _updateAt ", err5)
 		return nil, err5
 	}
 
@@ -251,24 +252,14 @@ func (s *TemplateService) AddTemplateAttribute(ctx context.Context, req *pb.AddT
 	log.Debug("AddTemplateAttribute")
 	log.Debug("req:", req)
 
-	//fmt request
-	attrMap := make(map[string]interface{})
-	attrMap[req.Attr.Id] = req.Attr
-
-	//do it
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), attrMap, "attributes.", "add")
-
+	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Attr, "attributes.", "add", "/configs/patch")
 }
+
 func (s *TemplateService) UpdateTemplateAttribute(ctx context.Context, req *pb.UpdateTemplateAttributeRequest) (*emptypb.Empty, error) {
 	log.Debug("UpdateTemplateAttribute")
 	log.Debug("req:", req)
 
-	//fmt request
-	attrMap := make(map[string]interface{})
-	attrMap[req.Attr.Id] = req.Attr
-
-	//do it
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), attrMap, "attributes.", "replace")
+	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Attr, "attributes.", "replace", "/configs/patch")
 }
 
 func (s *TemplateService) DeleteTemplateAttribute(ctx context.Context, req *pb.DeleteTemplateAttributeRequest) (*emptypb.Empty, error) {
@@ -281,20 +272,26 @@ func (s *TemplateService) DeleteTemplateAttribute(ctx context.Context, req *pb.D
 		attrMap[id] = "del"
 	}
 	//do it
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), attrMap, "attributes.", "remove")
+	return s.httpClient.CorePatchMethod(ctx, req.GetUid(), attrMap, "attributes.", "remove", "/configs/patch")
 }
 
 func (s *TemplateService) GetTemplateAttribute(ctx context.Context, req *pb.GetTemplateAttributeRequest) (*pb.GetTemplateAttributeResponse, error) {
 	log.Debug("GetTemplateAttribute")
 	log.Debug("req:", req)
 
-	templateAttrSingleObject, err5 := s.GetTemplatePropConfig(ctx, req.GetUid(), req.GetId(), "attributes")
+	templateAttrSingleObject, err5 := s.GetTemplatePropConfig(ctx, req.GetUid(), "attributes."+req.GetId())
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
 	}
+
+	re, err6 := structpb.NewValue(templateAttrSingleObject)
+	if nil != err6 {
+		log.Error("convert tree failed ", err6)
+		return nil, err6
+	}
 	out := &pb.GetTemplateAttributeResponse{
-		TemplateAttrSingleObject: templateAttrSingleObject,
+		TemplateAttrSingleObject: re,
 	}
 
 	return out, nil
@@ -304,13 +301,18 @@ func (s *TemplateService) ListTemplateAttribute(ctx context.Context, req *pb.Lis
 	log.Debug("ListTemplateAttribute")
 	log.Debug("req:", req)
 
-	templateAttrObject, err5 := s.ListTemplatePropConfig(ctx, req.GetUid(), "attributes")
+	templateAttrObject, err5 := s.GetTemplatePropConfig(ctx, req.GetUid(), "attributes")
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
 	}
+	re, err6 := structpb.NewValue(templateAttrObject)
+	if nil != err6 {
+		log.Error("convert tree failed ", err6)
+		return nil, err6
+	}
 	out := &pb.ListTemplateAttributeResponse{
-		TemplateAttrObject: templateAttrObject,
+		TemplateAttrObject: re,
 	}
 	return out, nil
 }
@@ -319,24 +321,15 @@ func (s *TemplateService) AddTemplateTelemetry(ctx context.Context, req *pb.AddT
 	log.Debug("AddTemplateTelemetry")
 	log.Debug("req:", req)
 
-	//fmt request
-	teleMap := make(map[string]interface{})
-	teleMap[req.Tele.Id] = req.Tele
-
-	//do it
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), teleMap, "telemetry.", "add")
+	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Tele, "telemetry.", "add", "/configs/patch")
 }
 
 func (s *TemplateService) UpdateTemplateTelemetry(ctx context.Context, req *pb.UpdateTemplateTelemetryRequest) (*emptypb.Empty, error) {
 	log.Debug("UpdateTemplateTelemetry")
 	log.Debug("req:", req)
 
-	//fmt request
-	teleMap := make(map[string]interface{})
-	teleMap[req.Tele.Id] = req.Tele
-
 	//do it
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), teleMap, "telemetry.", "replace")
+	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Tele, "telemetry.", "replace", "/configs/patch")
 }
 func (s *TemplateService) DeleteTemplateTelemetry(ctx context.Context, req *pb.DeleteTemplateTelemetryRequest) (*emptypb.Empty, error) {
 	log.Debug("DeleteTemplateTelemetry")
@@ -348,19 +341,25 @@ func (s *TemplateService) DeleteTemplateTelemetry(ctx context.Context, req *pb.D
 		attrMap[id] = "del"
 	}
 	//do it
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), attrMap, "telemetry.", "remove")
+	return s.httpClient.CorePatchMethod(ctx, req.GetUid(), attrMap, "telemetry.", "remove", "/configs/patch")
 }
 func (s *TemplateService) GetTemplateTelemetry(ctx context.Context, req *pb.GetTemplateTelemetryRequest) (*pb.GetTemplateTelemetryResponse, error) {
 	log.Debug("GetTemplateTelemetry")
 	log.Debug("req:", req)
 
-	templateTeleSingleObject, err5 := s.GetTemplatePropConfig(ctx, req.GetUid(), req.GetId(), "telemetry")
+	templateTeleSingleObject, err5 := s.GetTemplatePropConfig(ctx, req.GetUid(), "telemetry."+req.GetId())
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
 	}
+
+	re, err6 := structpb.NewValue(templateTeleSingleObject)
+	if nil != err6 {
+		log.Error("convert tree failed ", err6)
+		return nil, err6
+	}
 	out := &pb.GetTemplateTelemetryResponse{
-		TemplateTeleSingleObject: templateTeleSingleObject,
+		TemplateTeleSingleObject: re,
 	}
 	return out, nil
 }
@@ -369,13 +368,18 @@ func (s *TemplateService) ListTemplateTelemetry(ctx context.Context, req *pb.Lis
 	log.Debug("ListTemplateTelemetry")
 	log.Debug("req:", req)
 
-	templateTeleObject, err5 := s.ListTemplatePropConfig(ctx, req.GetUid(), "telemetry")
+	templateTeleObject, err5 := s.GetTemplatePropConfig(ctx, req.GetUid(), "telemetry")
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
 	}
+	re, err6 := structpb.NewValue(templateTeleObject)
+	if nil != err6 {
+		log.Error("convert tree failed ", err6)
+		return nil, err6
+	}
 	out := &pb.ListTemplateTelemetryResponse{
-		TemplateTeleObject: templateTeleObject,
+		TemplateTeleObject: re,
 	}
 	return out, nil
 }
@@ -385,17 +389,14 @@ func (s *TemplateService) AddTemplateTelemetryExt(ctx context.Context, req *pb.A
 	log.Debug("req:", req)
 
 	//get proConfig define
-	define, err := s.GetTemplateTelemetryDefine(ctx, req.GetUid(), req.GetId())
+	propConfig, err := s.GetTemplatePropConfig(ctx, req.GetUid(), "telemetry."+req.GetId())
 	if err != nil {
 		return nil, err
 	}
-	log.Debug("define :", define)
-
-	ext, ok := define["define"].(map[string]interface{})["ext"].(map[string]interface{})
-	if !ok {
-		return nil, errors.New("error get propConfig ext")
+	ext, err := s.GetSinglePropConfExt(propConfig, "telemetry."+req.GetId())
+	if err != nil {
+		return nil, err
 	}
-	log.Debug("old ext :", ext)
 
 	//midfy
 	switch extKV := req.Kvs.AsInterface().(type) {
@@ -409,10 +410,10 @@ func (s *TemplateService) AddTemplateTelemetryExt(ctx context.Context, req *pb.A
 	log.Debug("new ext :", ext)
 
 	//patch
-	define["define"].(map[string]interface{})["ext"] = ext
+	propConfig["telemetry."+req.GetId()].(map[string]interface{})["define"].(map[string]interface{})["ext"] = ext
 	eMap := make(map[string]interface{})
-	eMap[req.GetId()] = define
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), eMap, "telemetry.", "replace")
+	eMap[req.GetId()] = propConfig["telemetry."+req.GetId()]
+	return s.httpClient.CorePatchMethod(ctx, req.GetUid(), eMap, "telemetry.", "replace", "/configs/patch")
 }
 
 func (s *TemplateService) UpdateTemplateTelemetryExt(ctx context.Context, req *pb.UpdateTemplateTelemetryExtRequest) (*emptypb.Empty, error) {
@@ -420,17 +421,14 @@ func (s *TemplateService) UpdateTemplateTelemetryExt(ctx context.Context, req *p
 	log.Debug("req:", req)
 
 	//get proConfig define
-	define, err := s.GetTemplateTelemetryDefine(ctx, req.GetUid(), req.GetId())
+	propConfig, err := s.GetTemplatePropConfig(ctx, req.GetUid(), "telemetry."+req.GetId())
 	if err != nil {
 		return nil, err
 	}
-	log.Debug("define :", define)
-
-	ext, ok := define["define"].(map[string]interface{})["ext"].(map[string]interface{})
-	if !ok {
-		return nil, errors.New("error get propConfig ext")
+	ext, err := s.GetSinglePropConfExt(propConfig, "telemetry."+req.GetId())
+	if err != nil {
+		return nil, err
 	}
-	log.Debug("old ext :", ext)
 
 	//midfy
 	switch extKV := req.Kvs.AsInterface().(type) {
@@ -444,27 +442,25 @@ func (s *TemplateService) UpdateTemplateTelemetryExt(ctx context.Context, req *p
 	log.Debug("new ext :", ext)
 
 	//patch
-	define["define"].(map[string]interface{})["ext"] = ext
+	propConfig["telemetry."+req.GetId()].(map[string]interface{})["define"].(map[string]interface{})["ext"] = ext
 	eMap := make(map[string]interface{})
-	eMap[req.GetId()] = define
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), eMap, "telemetry.", "replace")
+	eMap[req.GetId()] = propConfig["telemetry."+req.GetId()]
+	return s.httpClient.CorePatchMethod(ctx, req.GetUid(), eMap, "telemetry.", "replace", "/configs/patch")
 }
 func (s *TemplateService) DeleteTemplateTelemetryExt(ctx context.Context, req *pb.DeleteTemplateTelemetryExtRequest) (*emptypb.Empty, error) {
 	log.Debug("DeleteTemplateTelemetryExt")
 	log.Debug("req:", req)
 
 	//get proConfig define
-	define, err := s.GetTemplateTelemetryDefine(ctx, req.GetUid(), req.GetId())
+	propConfig, err := s.GetTemplatePropConfig(ctx, req.GetUid(), "telemetry."+req.GetId())
 	if err != nil {
 		return nil, err
 	}
-	log.Debug("define :", define)
 
-	ext, ok := define["define"].(map[string]interface{})["ext"].(map[string]interface{})
-	if !ok {
-		return nil, errors.New("error get propConfig ext")
+	ext, err := s.GetSinglePropConfExt(propConfig, "telemetry."+req.GetId())
+	if err != nil {
+		return nil, err
 	}
-	log.Debug("old ext :", ext)
 
 	//midfy
 	for _, k := range req.Keys.Keys {
@@ -473,33 +469,25 @@ func (s *TemplateService) DeleteTemplateTelemetryExt(ctx context.Context, req *p
 	log.Debug("new ext :", ext)
 
 	//patch
-	define["define"].(map[string]interface{})["ext"] = ext
+	propConfig["telemetry."+req.GetId()].(map[string]interface{})["define"].(map[string]interface{})["ext"] = ext
 	eMap := make(map[string]interface{})
-	eMap[req.GetId()] = define
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), eMap, "telemetry.", "replace")
+	eMap[req.GetId()] = propConfig["telemetry."+req.GetId()]
+	return s.httpClient.CorePatchMethod(ctx, req.GetUid(), eMap, "telemetry.", "replace", "/configs/patch")
 }
 
 func (s *TemplateService) AddTemplateCommand(ctx context.Context, req *pb.AddTemplateCommandRequest) (*emptypb.Empty, error) {
 	log.Debug("AddTemplateCommand")
 	log.Debug("req:", req)
 
-	//fmt request
-	cmdMap := make(map[string]interface{})
-	cmdMap[req.Cmd.Id] = req.Cmd
-
 	//do it
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), cmdMap, "commands.", "add")
+	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Cmd, "commands.", "add", "/configs/patch")
 }
 func (s *TemplateService) UpdateTemplateCommand(ctx context.Context, req *pb.UpdateTemplateCommandRequest) (*emptypb.Empty, error) {
 	log.Debug("UpdateTemplateCommand")
 	log.Debug("req:", req)
 
-	//fmt request
-	cmdMap := make(map[string]interface{})
-	cmdMap[req.Cmd.Id] = req.Cmd
-
 	//do it
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), cmdMap, "commands.", "replace")
+	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Cmd, "commands.", "replace", "/configs/patch")
 }
 func (s *TemplateService) DeleteTemplateCommand(ctx context.Context, req *pb.DeleteTemplateCommandRequest) (*emptypb.Empty, error) {
 	log.Debug("DeleteTemplateCommand")
@@ -511,20 +499,26 @@ func (s *TemplateService) DeleteTemplateCommand(ctx context.Context, req *pb.Del
 		cmdMap[id] = "del"
 	}
 	//do it
-	return s.CoreConfigPatchMethod(ctx, req.GetUid(), cmdMap, "commands.", "remove")
+	return s.httpClient.CorePatchMethod(ctx, req.GetUid(), cmdMap, "commands.", "remove", "/configs/patch")
 }
 
 func (s *TemplateService) GetTemplateCommand(ctx context.Context, req *pb.GetTemplateCommandRequest) (*pb.GetTemplateCommandResponse, error) {
 	log.Debug("GetTemplateCommand")
 	log.Debug("req:", req)
 
-	templateCmdSingleObject, err5 := s.GetTemplatePropConfig(ctx, req.GetUid(), req.GetId(), "commands")
+	templateCmdSingleObject, err5 := s.GetTemplatePropConfig(ctx, req.GetUid(), "commands."+req.GetId())
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
 	}
+
+	re, err6 := structpb.NewValue(templateCmdSingleObject)
+	if nil != err6 {
+		log.Error("convert tree failed ", err6)
+		return nil, err6
+	}
 	out := &pb.GetTemplateCommandResponse{
-		TemplateCmdSingleObject: templateCmdSingleObject,
+		TemplateCmdSingleObject: re,
 	}
 	return out, nil
 }
@@ -533,20 +527,25 @@ func (s *TemplateService) ListTemplateCommand(ctx context.Context, req *pb.ListT
 	log.Debug("ListTemplateComand")
 	log.Debug("req:", req)
 
-	templateCmdObject, err5 := s.ListTemplatePropConfig(ctx, req.GetUid(), "commands")
+	templateCmdObject, err5 := s.GetTemplatePropConfig(ctx, req.GetUid(), "commands")
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
 	}
+	re, err6 := structpb.NewValue(templateCmdObject)
+	if nil != err6 {
+		log.Error("convert tree failed ", err6)
+		return nil, err6
+	}
 	out := &pb.ListTemplateCommandResponse{
-		TemplateCmdObject: templateCmdObject,
+		TemplateCmdObject: re,
 	}
 	return out, nil
 }
 
 //abstraction
-func (s *TemplateService) CoreConfigPatchMethod(ctx context.Context, entityId string, kv map[string]interface{}, path string, operator string) (*emptypb.Empty, error) {
-	log.Debug("CoreConfigPatchMethod")
+/*func (s *TemplateService) CorePatchMethod(ctx context.Context, entityId string, kv map[string]interface{}, path string, operator string, pathClassify string) (*emptypb.Empty, error) {
+	log.Debug("CorePatchMethod")
 	log.Debug("path:", path)
 	log.Debug("operator:", operator)
 
@@ -557,7 +556,7 @@ func (s *TemplateService) CoreConfigPatchMethod(ctx context.Context, entityId st
 	}
 
 	//get core url
-	midUrl := "/" + entityId + "/configs/patch"
+	midUrl := "/" + entityId + pathClassify
 	url := s.httpClient.GetCoreUrl(midUrl, tm, "template")
 	log.Debug("patch url :", url)
 
@@ -580,7 +579,7 @@ func (s *TemplateService) CoreConfigPatchMethod(ctx context.Context, entityId st
 	}
 
 	// do it
-	_, err4 := s.httpClient.Post(url, data)
+	_, err4 := s.httpClient.Put(url, data)
 	if nil != err4 {
 		log.Error("error post data to core", data)
 		return nil, err4
@@ -588,7 +587,7 @@ func (s *TemplateService) CoreConfigPatchMethod(ctx context.Context, entityId st
 
 	//fmt response
 	return &emptypb.Empty{}, nil
-}
+}*/
 func (s *TemplateService) ListTemplatePropConfig(ctx context.Context, entityId string, classify string) (*pb.EntityResponse, error) {
 
 	//get token
@@ -620,7 +619,8 @@ func (s *TemplateService) ListTemplatePropConfig(ctx context.Context, entityId s
 	}
 	return templatePropConfigObject, nil
 }
-func (s *TemplateService) GetTemplatePropConfig(ctx context.Context, entityId string, propId string, classify string) (*pb.EntityResponse, error) {
+
+func (s *TemplateService) GetTemplatePropConfig(ctx context.Context, entityId string, pid string) (map[string]interface{}, error) {
 
 	//get token
 	tm, err := s.httpClient.GetTokenMap(ctx)
@@ -630,7 +630,7 @@ func (s *TemplateService) GetTemplatePropConfig(ctx context.Context, entityId st
 
 	//get core url
 	midUrl := "/" + entityId + "/configs"
-	url := s.httpClient.GetCoreUrl(midUrl, tm, "template") + fmt.Sprintf("&property_ids=%s", classify+"."+propId)
+	url := s.httpClient.GetCoreUrl(midUrl, tm, "template") + fmt.Sprintf("&property_ids=%s", pid)
 	log.Debug("url :", url)
 
 	//fmt request
@@ -650,17 +650,7 @@ func (s *TemplateService) GetTemplatePropConfig(ctx context.Context, entityId st
 		return nil, err5
 	}
 
-	return templateSinglePropConfigObject, nil
-}
-func (s *TemplateService) GetTemplateTelemetryDefine(ctx context.Context, entityId string, propConfigId string) (map[string]interface{}, error) {
-
-	//get proConfig
-	templateTeleSingleObject, err := s.GetTemplatePropConfig(ctx, entityId, propConfigId, "telemetry")
-	if err != nil {
-		log.Error("error Unmarshal data from core")
-		return nil, err
-	}
-	kv := templateTeleSingleObject.Configs.GetStructValue().Fields
+	kv := templateSinglePropConfigObject.Configs.GetStructValue().Fields
 	propConfig, err3 := json.Marshal(kv)
 	if nil != err3 {
 		return nil, err3
@@ -670,11 +660,54 @@ func (s *TemplateService) GetTemplateTelemetryDefine(ctx context.Context, entity
 	if nil != err4 {
 		return nil, err4
 	}
+	return pr, nil
 
-	define, ok := pr["telemetry."+propConfigId].(map[string]interface{})
+	/*config, ok := pr[pid]
+	    if !ok {
+	        return nil, errors.New("error get pid")
+	    }
+		return config, nil*/
+}
+func (s *TemplateService) GetSinglePropConfExt(propConfig map[string]interface{}, pid string) (map[string]interface{}, error) {
+
+	ext := make(map[string]interface{})
+	v, ok := propConfig[pid]
 	if !ok {
-		return nil, errors.New("error get propConfig")
+		return nil, errors.New("error get propCofig")
+	}
+	v1, ok1 := v.(map[string]interface{})
+	if !ok1 {
+		return nil, errors.New("error trans propCofig")
+	}
+	define, ok2 := v1["define"]
+	if !ok2 {
+		return nil, errors.New("error get define")
+	}
+	define1, ok3 := define.(map[string]interface{})
+	if !ok3 {
+		return nil, errors.New("error trans define")
+	}
+	extOld, ok4 := define1["ext"]
+	if !ok4 {
+		return nil, errors.New("error get ext")
+	}
+	extOld1, ok5 := extOld.(map[string]interface{})
+	if !ok5 {
+		return nil, errors.New("error trans ext")
 	}
 
-	return define, nil
+	ext = extOld1
+	log.Debug("old ext :", ext)
+	return ext, nil
+}
+
+func (s *TemplateService) opTemplatePropConfig(ctx context.Context, templateId string, prop *pb.PropConfig, item string, op string, pathClassify string) (*emptypb.Empty, error) {
+	//fmt request
+	propMap := make(map[string]interface{})
+	/*for _, p := range prop.PropAarry {
+		propMap[p.Id] = p
+	}*/
+	propMap[prop.Id] = prop
+	//do it
+	return s.httpClient.CorePatchMethod(ctx, templateId, propMap, item, op, pathClassify)
 }

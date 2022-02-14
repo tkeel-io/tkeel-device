@@ -23,10 +23,7 @@ type GroupClient interface {
 	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error)
 	DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetGroup(ctx context.Context, in *GetGroupRequest, opts ...grpc.CallOption) (*GetGroupResponse, error)
-	ListGroup(ctx context.Context, in *ListGroupRequest, opts ...grpc.CallOption) (*ListGroupResponse, error)
-	AddGroupItems(ctx context.Context, in *AddGroupItemsRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	ListGroupItems(ctx context.Context, in *ListGroupItemsRequest, opts ...grpc.CallOption) (*ListGroupItemsResponse, error)
-	DelGroupItems(ctx context.Context, in *DelGroupItemsRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetGroupTree(ctx context.Context, in *GetGroupTreeRequest, opts ...grpc.CallOption) (*GetGroupTreeResponse, error)
 	AddGroupExt(ctx context.Context, in *AddGroupExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateGroupExt(ctx context.Context, in *UpdateGroupExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DelGroupExt(ctx context.Context, in *DelGroupExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -76,36 +73,9 @@ func (c *groupClient) GetGroup(ctx context.Context, in *GetGroupRequest, opts ..
 	return out, nil
 }
 
-func (c *groupClient) ListGroup(ctx context.Context, in *ListGroupRequest, opts ...grpc.CallOption) (*ListGroupResponse, error) {
-	out := new(ListGroupResponse)
-	err := c.cc.Invoke(ctx, "/api.group.v1.Group/ListGroup", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *groupClient) AddGroupItems(ctx context.Context, in *AddGroupItemsRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/api.group.v1.Group/AddGroupItems", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *groupClient) ListGroupItems(ctx context.Context, in *ListGroupItemsRequest, opts ...grpc.CallOption) (*ListGroupItemsResponse, error) {
-	out := new(ListGroupItemsResponse)
-	err := c.cc.Invoke(ctx, "/api.group.v1.Group/ListGroupItems", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *groupClient) DelGroupItems(ctx context.Context, in *DelGroupItemsRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/api.group.v1.Group/DelGroupItems", in, out, opts...)
+func (c *groupClient) GetGroupTree(ctx context.Context, in *GetGroupTreeRequest, opts ...grpc.CallOption) (*GetGroupTreeResponse, error) {
+	out := new(GetGroupTreeResponse)
+	err := c.cc.Invoke(ctx, "/api.group.v1.Group/GetGroupTree", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -147,10 +117,7 @@ type GroupServer interface {
 	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
 	DeleteGroup(context.Context, *DeleteGroupRequest) (*emptypb.Empty, error)
 	GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error)
-	ListGroup(context.Context, *ListGroupRequest) (*ListGroupResponse, error)
-	AddGroupItems(context.Context, *AddGroupItemsRequest) (*emptypb.Empty, error)
-	ListGroupItems(context.Context, *ListGroupItemsRequest) (*ListGroupItemsResponse, error)
-	DelGroupItems(context.Context, *DelGroupItemsRequest) (*emptypb.Empty, error)
+	GetGroupTree(context.Context, *GetGroupTreeRequest) (*GetGroupTreeResponse, error)
 	AddGroupExt(context.Context, *AddGroupExtRequest) (*emptypb.Empty, error)
 	UpdateGroupExt(context.Context, *UpdateGroupExtRequest) (*emptypb.Empty, error)
 	DelGroupExt(context.Context, *DelGroupExtRequest) (*emptypb.Empty, error)
@@ -173,17 +140,8 @@ func (UnimplementedGroupServer) DeleteGroup(context.Context, *DeleteGroupRequest
 func (UnimplementedGroupServer) GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGroup not implemented")
 }
-func (UnimplementedGroupServer) ListGroup(context.Context, *ListGroupRequest) (*ListGroupResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListGroup not implemented")
-}
-func (UnimplementedGroupServer) AddGroupItems(context.Context, *AddGroupItemsRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddGroupItems not implemented")
-}
-func (UnimplementedGroupServer) ListGroupItems(context.Context, *ListGroupItemsRequest) (*ListGroupItemsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListGroupItems not implemented")
-}
-func (UnimplementedGroupServer) DelGroupItems(context.Context, *DelGroupItemsRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelGroupItems not implemented")
+func (UnimplementedGroupServer) GetGroupTree(context.Context, *GetGroupTreeRequest) (*GetGroupTreeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGroupTree not implemented")
 }
 func (UnimplementedGroupServer) AddGroupExt(context.Context, *AddGroupExtRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddGroupExt not implemented")
@@ -279,74 +237,20 @@ func _Group_GetGroup_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Group_ListGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListGroupRequest)
+func _Group_GetGroupTree_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGroupTreeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GroupServer).ListGroup(ctx, in)
+		return srv.(GroupServer).GetGroupTree(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.group.v1.Group/ListGroup",
+		FullMethod: "/api.group.v1.Group/GetGroupTree",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServer).ListGroup(ctx, req.(*ListGroupRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Group_AddGroupItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddGroupItemsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GroupServer).AddGroupItems(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.group.v1.Group/AddGroupItems",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServer).AddGroupItems(ctx, req.(*AddGroupItemsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Group_ListGroupItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListGroupItemsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GroupServer).ListGroupItems(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.group.v1.Group/ListGroupItems",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServer).ListGroupItems(ctx, req.(*ListGroupItemsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Group_DelGroupItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelGroupItemsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GroupServer).DelGroupItems(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.group.v1.Group/DelGroupItems",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServer).DelGroupItems(ctx, req.(*DelGroupItemsRequest))
+		return srv.(GroupServer).GetGroupTree(ctx, req.(*GetGroupTreeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -429,20 +333,8 @@ var Group_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Group_GetGroup_Handler,
 		},
 		{
-			MethodName: "ListGroup",
-			Handler:    _Group_ListGroup_Handler,
-		},
-		{
-			MethodName: "AddGroupItems",
-			Handler:    _Group_AddGroupItems_Handler,
-		},
-		{
-			MethodName: "ListGroupItems",
-			Handler:    _Group_ListGroupItems_Handler,
-		},
-		{
-			MethodName: "DelGroupItems",
-			Handler:    _Group_DelGroupItems_Handler,
+			MethodName: "GetGroupTree",
+			Handler:    _Group_GetGroupTree_Handler,
 		},
 		{
 			MethodName: "AddGroupExt",

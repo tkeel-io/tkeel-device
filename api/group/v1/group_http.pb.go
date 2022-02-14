@@ -29,14 +29,11 @@ var (
 
 type GroupHTTPServer interface {
 	AddGroupExt(context.Context, *AddGroupExtRequest) (*emptypb.Empty, error)
-	AddGroupItems(context.Context, *AddGroupItemsRequest) (*emptypb.Empty, error)
 	CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error)
 	DelGroupExt(context.Context, *DelGroupExtRequest) (*emptypb.Empty, error)
-	DelGroupItems(context.Context, *DelGroupItemsRequest) (*emptypb.Empty, error)
 	DeleteGroup(context.Context, *DeleteGroupRequest) (*emptypb.Empty, error)
 	GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error)
-	ListGroup(context.Context, *ListGroupRequest) (*ListGroupResponse, error)
-	ListGroupItems(context.Context, *ListGroupItemsRequest) (*ListGroupItemsResponse, error)
+	GetGroupTree(context.Context, *GetGroupTreeRequest) (*GetGroupTreeResponse, error)
 	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
 	UpdateGroupExt(context.Context, *UpdateGroupExtRequest) (*emptypb.Empty, error)
 }
@@ -70,69 +67,6 @@ func (h *GroupHTTPHandler) AddGroupExt(req *go_restful.Request, resp *go_restful
 	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
 
 	out, err := h.srv.AddGroupExt(ctx, &in)
-	if err != nil {
-		tErr := errors.FromError(err)
-		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
-		return
-	}
-	anyOut, err := anypb.New(out)
-	if err != nil {
-		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
-		return
-	}
-
-	outB, err := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		EmitUnpopulated: true,
-	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
-		Data: anyOut,
-	})
-	if err != nil {
-		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
-		return
-	}
-	resp.WriteHeader(http.StatusOK)
-
-	var remain int
-	for {
-		outB = outB[remain:]
-		remain, err = resp.Write(outB)
-		if err != nil {
-			return
-		}
-		if remain == 0 {
-			break
-		}
-	}
-}
-
-func (h *GroupHTTPHandler) AddGroupItems(req *go_restful.Request, resp *go_restful.Response) {
-	in := AddGroupItemsRequest{}
-	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-	if err := transportHTTP.GetPathValue(req, &in); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-
-	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
-
-	out, err := h.srv.AddGroupItems(ctx, &in)
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
@@ -296,69 +230,6 @@ func (h *GroupHTTPHandler) DelGroupExt(req *go_restful.Request, resp *go_restful
 	}
 }
 
-func (h *GroupHTTPHandler) DelGroupItems(req *go_restful.Request, resp *go_restful.Response) {
-	in := DelGroupItemsRequest{}
-	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-	if err := transportHTTP.GetPathValue(req, &in); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-
-	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
-
-	out, err := h.srv.DelGroupItems(ctx, &in)
-	if err != nil {
-		tErr := errors.FromError(err)
-		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
-		return
-	}
-	anyOut, err := anypb.New(out)
-	if err != nil {
-		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
-		return
-	}
-
-	outB, err := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		EmitUnpopulated: true,
-	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
-		Data: anyOut,
-	})
-	if err != nil {
-		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
-		return
-	}
-	resp.WriteHeader(http.StatusOK)
-
-	var remain int
-	for {
-		outB = outB[remain:]
-		remain, err = resp.Write(outB)
-		if err != nil {
-			return
-		}
-		if remain == 0 {
-			break
-		}
-	}
-}
-
 func (h *GroupHTTPHandler) DeleteGroup(req *go_restful.Request, resp *go_restful.Response) {
 	in := DeleteGroupRequest{}
 	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
@@ -475,8 +346,8 @@ func (h *GroupHTTPHandler) GetGroup(req *go_restful.Request, resp *go_restful.Re
 	}
 }
 
-func (h *GroupHTTPHandler) ListGroup(req *go_restful.Request, resp *go_restful.Response) {
-	in := ListGroupRequest{}
+func (h *GroupHTTPHandler) GetGroupTree(req *go_restful.Request, resp *go_restful.Response) {
+	in := GetGroupTreeRequest{}
 	if err := transportHTTP.GetBody(req, &in.ListEntityQuery); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
@@ -490,65 +361,7 @@ func (h *GroupHTTPHandler) ListGroup(req *go_restful.Request, resp *go_restful.R
 
 	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
 
-	out, err := h.srv.ListGroup(ctx, &in)
-	if err != nil {
-		tErr := errors.FromError(err)
-		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
-		return
-	}
-	anyOut, err := anypb.New(out)
-	if err != nil {
-		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
-		return
-	}
-
-	outB, err := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		EmitUnpopulated: true,
-	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
-		Data: anyOut,
-	})
-	if err != nil {
-		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
-		return
-	}
-	resp.WriteHeader(http.StatusOK)
-
-	var remain int
-	for {
-		outB = outB[remain:]
-		remain, err = resp.Write(outB)
-		if err != nil {
-			return
-		}
-		if remain == 0 {
-			break
-		}
-	}
-}
-
-func (h *GroupHTTPHandler) ListGroupItems(req *go_restful.Request, resp *go_restful.Response) {
-	in := ListGroupItemsRequest{}
-	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-	if err := transportHTTP.GetPathValue(req, &in); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-
-	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
-
-	out, err := h.srv.ListGroupItems(ctx, &in)
+	out, err := h.srv.GetGroupTree(ctx, &in)
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
@@ -741,14 +554,8 @@ func RegisterGroupHTTPServer(container *go_restful.Container, srv GroupHTTPServe
 		To(handler.DeleteGroup))
 	ws.Route(ws.GET("/groups/{id}").
 		To(handler.GetGroup))
-	ws.Route(ws.POST("/groups/search").
-		To(handler.ListGroup))
-	ws.Route(ws.POST("/groups/{id}/items").
-		To(handler.AddGroupItems))
-	ws.Route(ws.GET("/groups/{id}/items").
-		To(handler.ListGroupItems))
-	ws.Route(ws.POST("/groups/{id}/items/delete").
-		To(handler.DelGroupItems))
+	ws.Route(ws.POST("/groups/tree").
+		To(handler.GetGroupTree))
 	ws.Route(ws.POST("/groups/{id}/ext").
 		To(handler.AddGroupExt))
 	ws.Route(ws.PUT("/groups/{id}/ext").

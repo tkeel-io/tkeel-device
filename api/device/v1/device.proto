@@ -83,7 +83,7 @@ service Device {
   };
   rpc ListDevice(ListDeviceRequest) returns (ListDeviceResponse) {
     option (google.api.http) = {
-      post : "/devices/search"
+      post : "/search"
       body : "listEntityQuery"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
@@ -98,7 +98,7 @@ service Device {
         }
     };
   };
-  rpc EnableDevice(EnableDeviceRequest) returns (google.protobuf.Empty) {
+  /*rpc EnableDevice(EnableDeviceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put : "/devices/{id}/enable"
       body : "enable"
@@ -114,7 +114,7 @@ service Device {
             }
         }
     };
-  };
+  };*/
   rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post : "/devices/{id}/ext"
@@ -252,8 +252,8 @@ message DeviceEntityCoreInfo {
 //------------------------------------------------------------------------------
 message DeviceEntityBasicInfo {
   string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备名称"}];
-  string desc = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备描述"}];
-  string group = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组ID"}];
+  string description = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备描述"}];
+  string parentId = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组ID"}];
   
   bool directConnection = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备是否直连"}];
   string templateId = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备模板ID"}];
@@ -267,19 +267,20 @@ message DeviceEntitySysField {
   string _id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
   int64 _createdAt = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备创建时间"}];
   int64 _updatedAt = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备更新时间"}];
-  bool _status = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备状态"}];
+  string _status = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备状态"}];
   bool _enable = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "查询输出字段"}];
   string _token = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备启/停"}];
   string _owner = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: " 所有者"}];
   string _source = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "来源"}];
+  string _spacePath = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "空间树路径"}];
 }
 
 // connectInfo 
 message DeviceEntityConnectInfo {
-  string _clientid = 11 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "客户端ID"}];
-  string _username = 12 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "用户名"}];
-  string _peerhost = 14 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "对端主机"}];
-  int32 _sockport = 15 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "端口"}];
+  string _clientId = 11 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "客户端ID"}];
+  string _userName = 12 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "用户名"}];
+  string _peerHost = 14 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "对端主机"}];
+  int32 _sockPort = 15 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "端口"}];
   string _protocol = 16 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "连接协议"}];
 }
 

@@ -40,7 +40,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	if req.DevBasicInfo.TemplateId != "" {
 		url += "&from=" + req.DevBasicInfo.TemplateId
 	}
-	log.Debug("get url: ", url)
+	log.Debug("core Url: ", url)
 
 	// 3. build coreInfo and add system value
 	coreInfo := new(pb.DeviceEntityCoreInfo)
@@ -51,9 +51,15 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	coreInfo.SysField.XCreatedAt = GetTime()
 	coreInfo.SysField.XUpdatedAt = GetTime()
 	coreInfo.SysField.XEnable = true
-	coreInfo.SysField.XStatus = false
+	coreInfo.SysField.XStatus = "offline"
 	coreInfo.SysField.XOwner = tm["owner"]
 	coreInfo.SysField.XSource = tm["source"]
+	coreInfo.SysField.XSpacePath = devId
+
+	//3.5 logical judgement
+	if coreInfo.BasicInfo.DirectConnection == false && coreInfo.BasicInfo.TemplateId == "" {
+		return nil, errors.New("non-direct connection must have template")
+	}
 
 	//4. create device token
 	token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId, tm["owner"], tm["userToken"])
@@ -84,6 +90,14 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 		log.Error("error Unmarshal data from core")
 		return nil, err5
 	}
+
+	// 7 set mapper
+	err6 := s.client.setSpacePathMapper(tm, devId, req.DevBasicInfo.ParentId)
+	if nil != err6 {
+		log.Error("error addSpacePath mapper", err6)
+		return nil, err6
+	}
+
 	out := &pb.CreateDeviceResponse{
 		DeviceObject: deviceObject,
 	}
@@ -119,7 +133,7 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	//update updateAt
 	ma := make(map[string]interface{})
 	ma["_updatedAt"] = GetTime()
-	_, err3 := s.CorePatchMethod(ctx, req.GetId(), ma, "sysField.", "replace")
+	_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "sysField.", "replace", "/patch")
 	if nil != err3 {
 		log.Error("error patch _updateAt", err3)
 		return nil, err1
@@ -129,6 +143,13 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	er := new(pb.EntityResponse)
 	if err4 := json.Unmarshal(res, er); nil != err4 {
 		return nil, err4
+	}
+
+	// 7 set mapper
+	err6 := s.client.setSpacePathMapper(tm, req.Id, req.DevBasicInfo.ParentId)
+	if nil != err6 {
+		log.Error("error addSpacePath mapper", err6)
+		return nil, err6
 	}
 
 	out := &pb.UpdateDeviceResponse{
@@ -367,7 +388,7 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 	return &emptypb.Empty{}, nil
 }
 
-func (s *DeviceService) CorePatchMethod(ctx context.Context, entityId string, kv map[string]interface{}, path string, operator string) (*emptypb.Empty, error) {
+/*func (s *DeviceService) CorePatchMethod(ctx context.Context, entityId string, kv map[string]interface{}, path string, operator string) (*emptypb.Empty, error) {
 	log.Debug("CorePatchMethod")
 	log.Debug("path:", path)
 	log.Debug("operator:", operator)
@@ -410,4 +431,38 @@ func (s *DeviceService) CorePatchMethod(ctx context.Context, entityId string, kv
 
 	//fmt response
 	return &emptypb.Empty{}, nil
-}
+}*/
+
+/*func (s *DeviceService) setSpacePathMapper(tm map[string]string, Id string, parentId string) error {
+
+	log.Debug("setSpacePathMapper")
+	//check ParentId
+	if parentId == "" {
+		return nil
+	}
+
+	//get url
+	midUrl := "/" + parentId + "/mappers"
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("mapper url = ", url)
+
+	//fmt request
+	data := make(map[string]string)
+	data["name"] = "mapper_space_path"
+	data["tql"] = "insert into " + Id + " select " + parentId + ".sysField._spacePath + '/" + Id + "'  as " + "sysField._spacePath"
+	log.Debug("tql = ", data["tql"])
+
+	send, err := json.Marshal(data)
+	if nil != err {
+		return err
+	}
+
+	// do it
+	_, err1 := s.client.Post(url, send)
+	if nil != err1 {
+		log.Error("error core return")
+		return err1
+	}
+
+	return nil
+}*/

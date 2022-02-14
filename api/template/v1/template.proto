@@ -82,7 +82,7 @@ service Template {
             }
         };
 	};
-	rpc ListTemplate (ListTemplateRequest) returns (ListTemplateResponse) {
+	/*rpc ListTemplate (ListTemplateRequest) returns (ListTemplateResponse) {
 		option (google.api.http) = {
 			post : "/templates/search"
             body : "listEntityQuery"
@@ -98,7 +98,7 @@ service Template {
                 }
             }
         };
-	};
+	};*/
 
     //operation template attribute
 	rpc AddTemplateAttribute (AddTemplateAttributeRequest) returns (google.protobuf.Empty) {
@@ -154,7 +154,7 @@ service Template {
 	};
 	rpc GetTemplateAttribute (GetTemplateAttributeRequest) returns (GetTemplateAttributeResponse) {
 		option (google.api.http) = {
-			get : "/templates/{uid}/attributes/{id}"
+			get : "/templates/{uid}/attribute/{id}"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "get Template attribute";
@@ -170,7 +170,7 @@ service Template {
 	};
 	rpc ListTemplateAttribute (ListTemplateAttributeRequest) returns (ListTemplateAttributeResponse) {
 		option (google.api.http) = {
-			get : "/templates/{uid}/attributes"
+			get : "/templates/{uid}/attribute"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "list Template attribute";
@@ -228,6 +228,22 @@ service Template {
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "delete Template telemetry";
             operation_id: "DeleteTemplateTelemetry";
+            tags: "template";
+            responses: {
+                key: "200"
+                value: {
+                    description: "OK";
+                }
+            }
+        };
+	};
+	rpc GetTemplateTelemetry (GetTemplateTelemetryRequest) returns (GetTemplateTelemetryResponse) {
+		option (google.api.http) = {
+			get : "/templates/{uid}/telemetry/{id}"
+		};
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "get Template telemetry";
+            operation_id: "GetTemplateTelemetry";
             tags: "template";
             responses: {
                 key: "200"
@@ -357,9 +373,25 @@ service Template {
             }
         };
 	};
+	rpc GetTemplateCommand (GetTemplateCommandRequest) returns (GetTemplateCommandResponse) {
+		option (google.api.http) = {
+			get : "/templates/{uid}/command/{id}"
+		};
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "get Template command";
+            operation_id: "GetTemplateCommand";
+            tags: "template";
+            responses: {
+                key: "200"
+                value: {
+                    description: "OK";
+                }
+            }
+        };
+	};
 	rpc ListTemplateCommand (ListTemplateCommandRequest) returns (ListTemplateCommandResponse) {
 		option (google.api.http) = {
-			get : "/templates/{uid}/commands"
+			get : "/templates/{uid}/command"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "list template command";
@@ -379,7 +411,7 @@ service Template {
 //basic 
 message TemplateBasicInfo {
     string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板名称"}];
-    string desc = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板描述"}];
+    string description = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板描述"}];
 }
 
 message PropConfig {
@@ -387,7 +419,7 @@ message PropConfig {
     string id = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "标识符"}];
     string type = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "数据类型"}];
     google.protobuf.Value define = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "数据定义和约束"}];
-    string des = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "说明"}];
+    string description = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "说明"}];
 }
 
 /*message Attribute {
@@ -488,7 +520,8 @@ message GetTemplateAttributeRequest {
     string  id = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性ID"}];
 }
 message GetTemplateAttributeResponse { 
-    api.core.v1.EntityResponse templateAttrSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个属性对象"}];
+    //api.core.v1.EntityResponse templateAttrSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个属性对象"}];
+    google.protobuf.Value templateAttrSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个属性对象"}];
 }
 
 message ListTemplateAttributeRequest {
@@ -496,7 +529,8 @@ message ListTemplateAttributeRequest {
 }
 message ListTemplateAttributeResponse { 
     //repeated Attribute attributes = 3;
-    api.core.v1.EntityResponse templateAttrObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性列表对象"}];
+    //api.core.v1.EntityResponse templateAttrObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性列表对象"}];
+    google.protobuf.Value templateAttrObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性列表对象"}];
 }
 
     //telemetry
@@ -517,13 +551,15 @@ message GetTemplateTelemetryRequest {
     string  id = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测ID"}];
 }
 message GetTemplateTelemetryResponse { 
-    api.core.v1.EntityResponse templateTeleSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个遥测对象"}];
+    //api.core.v1.EntityResponse templateTeleSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个遥测对象"}];
+    google.protobuf.Value templateTeleSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个遥测对象"}];
 }
 message ListTemplateTelemetryRequest {
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性ID"}];
 }
 message ListTemplateTelemetryResponse { 
-    api.core.v1.EntityResponse templateTeleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测列表对象"}];
+    //api.core.v1.EntityResponse templateTeleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测列表对象"}];
+    google.protobuf.Value templateTeleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测列表对象"}];
 }
 
 message AddTemplateTelemetryExtRequest {
@@ -561,13 +597,15 @@ message GetTemplateCommandRequest {
     string  id = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令ID"}];
 }
 message GetTemplateCommandResponse { 
-    api.core.v1.EntityResponse templateCmdSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个命令对象"}];
+    //api.core.v1.EntityResponse templateCmdSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个命令对象"}];
+    google.protobuf.Value templateCmdSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个命令对象"}];
 }
 message ListTemplateCommandRequest {
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
 }
 message ListTemplateCommandResponse { 
-    api.core.v1.EntityResponse templateCmdObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令列表对象"}];
+    //api.core.v1.EntityResponse templateCmdObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令列表对象"}];
+    google.protobuf.Value templateCmdObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令列表对象"}];
 }
 
 // device to core 

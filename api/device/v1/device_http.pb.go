@@ -32,7 +32,6 @@ type DeviceHTTPServer interface {
 	CreateDevice(context.Context, *CreateDeviceRequest) (*CreateDeviceResponse, error)
 	DeleteDevice(context.Context, *DeleteDeviceRequest) (*emptypb.Empty, error)
 	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*emptypb.Empty, error)
-	EnableDevice(context.Context, *EnableDeviceRequest) (*emptypb.Empty, error)
 	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)
 	ListDevice(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
 	UpdateDevice(context.Context, *UpdateDeviceRequest) (*UpdateDeviceResponse, error)
@@ -247,69 +246,6 @@ func (h *DeviceHTTPHandler) DeleteDeviceExt(req *go_restful.Request, resp *go_re
 	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
 
 	out, err := h.srv.DeleteDeviceExt(ctx, &in)
-	if err != nil {
-		tErr := errors.FromError(err)
-		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
-		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
-		return
-	}
-	anyOut, err := anypb.New(out)
-	if err != nil {
-		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
-		return
-	}
-
-	outB, err := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		EmitUnpopulated: true,
-	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
-		Data: anyOut,
-	})
-	if err != nil {
-		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
-		return
-	}
-	resp.WriteHeader(http.StatusOK)
-
-	var remain int
-	for {
-		outB = outB[remain:]
-		remain, err = resp.Write(outB)
-		if err != nil {
-			return
-		}
-		if remain == 0 {
-			break
-		}
-	}
-}
-
-func (h *DeviceHTTPHandler) EnableDevice(req *go_restful.Request, resp *go_restful.Response) {
-	in := EnableDeviceRequest{}
-	if err := transportHTTP.GetBody(req, &in.Enable); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-	if err := transportHTTP.GetQuery(req, &in); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-	if err := transportHTTP.GetPathValue(req, &in); err != nil {
-		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
-		return
-	}
-
-	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
-
-	out, err := h.srv.EnableDevice(ctx, &in)
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
@@ -618,10 +554,8 @@ func RegisterDeviceHTTPServer(container *go_restful.Container, srv DeviceHTTPSer
 		To(handler.DeleteDevice))
 	ws.Route(ws.GET("/devices/{id}").
 		To(handler.GetDevice))
-	ws.Route(ws.POST("/devices/search").
+	ws.Route(ws.POST("/search").
 		To(handler.ListDevice))
-	ws.Route(ws.PUT("/devices/{id}/enable").
-		To(handler.EnableDevice))
 	ws.Route(ws.POST("/devices/{id}/ext").
 		To(handler.AddDeviceExt))
 	ws.Route(ws.POST("/devices/{id}/ext/delete").

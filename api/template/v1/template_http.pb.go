@@ -40,7 +40,8 @@ type TemplateHTTPServer interface {
 	DeleteTemplateTelemetryExt(context.Context, *DeleteTemplateTelemetryExtRequest) (*emptypb.Empty, error)
 	GetTemplate(context.Context, *GetTemplateRequest) (*GetTemplateResponse, error)
 	GetTemplateAttribute(context.Context, *GetTemplateAttributeRequest) (*GetTemplateAttributeResponse, error)
-	ListTemplate(context.Context, *ListTemplateRequest) (*ListTemplateResponse, error)
+	GetTemplateCommand(context.Context, *GetTemplateCommandRequest) (*GetTemplateCommandResponse, error)
+	GetTemplateTelemetry(context.Context, *GetTemplateTelemetryRequest) (*GetTemplateTelemetryResponse, error)
 	ListTemplateAttribute(context.Context, *ListTemplateAttributeRequest) (*ListTemplateAttributeResponse, error)
 	ListTemplateCommand(context.Context, *ListTemplateCommandRequest) (*ListTemplateCommandResponse, error)
 	ListTemplateTelemetry(context.Context, *ListTemplateTelemetryRequest) (*ListTemplateTelemetryResponse, error)
@@ -795,14 +796,14 @@ func (h *TemplateHTTPHandler) GetTemplateAttribute(req *go_restful.Request, resp
 	}
 }
 
-func (h *TemplateHTTPHandler) ListTemplate(req *go_restful.Request, resp *go_restful.Response) {
-	in := ListTemplateRequest{}
-	if err := transportHTTP.GetBody(req, &in.ListEntityQuery); err != nil {
+func (h *TemplateHTTPHandler) GetTemplateCommand(req *go_restful.Request, resp *go_restful.Response) {
+	in := GetTemplateCommandRequest{}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
 	}
-	if err := transportHTTP.GetQuery(req, &in); err != nil {
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
 		return
@@ -810,7 +811,65 @@ func (h *TemplateHTTPHandler) ListTemplate(req *go_restful.Request, resp *go_res
 
 	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
 
-	out, err := h.srv.ListTemplate(ctx, &in)
+	out, err := h.srv.GetTemplateCommand(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(httpCode, tErr.Message, out), "application/json")
+		return
+	}
+	anyOut, err := anypb.New(out)
+	if err != nil {
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+		return
+	}
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
+	}.Marshal(&result.Http{
+		Code: http.StatusOK,
+		Msg:  "ok",
+		Data: anyOut,
+	})
+	if err != nil {
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+		return
+	}
+	resp.WriteHeader(http.StatusOK)
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
+	}
+}
+
+func (h *TemplateHTTPHandler) GetTemplateTelemetry(req *go_restful.Request, resp *go_restful.Response) {
+	in := GetTemplateTelemetryRequest{}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.GetTemplateTelemetry(ctx, &in)
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
@@ -1366,17 +1425,15 @@ func RegisterTemplateHTTPServer(container *go_restful.Container, srv TemplateHTT
 		To(handler.DeleteTemplate))
 	ws.Route(ws.GET("/templates/{uid}").
 		To(handler.GetTemplate))
-	ws.Route(ws.POST("/templates/search").
-		To(handler.ListTemplate))
 	ws.Route(ws.POST("/templates/{uid}/attribute").
 		To(handler.AddTemplateAttribute))
 	ws.Route(ws.PUT("/templates/{uid}/attribute").
 		To(handler.UpdateTemplateAttribute))
 	ws.Route(ws.POST("/templates/{uid}/attribute/delete").
 		To(handler.DeleteTemplateAttribute))
-	ws.Route(ws.GET("/templates/{uid}/attributes/{id}").
+	ws.Route(ws.GET("/templates/{uid}/attribute/{id}").
 		To(handler.GetTemplateAttribute))
-	ws.Route(ws.GET("/templates/{uid}/attributes").
+	ws.Route(ws.GET("/templates/{uid}/attribute").
 		To(handler.ListTemplateAttribute))
 	ws.Route(ws.POST("/templates/{uid}/telemetry").
 		To(handler.AddTemplateTelemetry))
@@ -1384,6 +1441,8 @@ func RegisterTemplateHTTPServer(container *go_restful.Container, srv TemplateHTT
 		To(handler.UpdateTemplateTelemetry))
 	ws.Route(ws.POST("/templates/{uid}/telemetry/delete").
 		To(handler.DeleteTemplateTelemetry))
+	ws.Route(ws.GET("/templates/{uid}/telemetry/{id}").
+		To(handler.GetTemplateTelemetry))
 	ws.Route(ws.GET("/templates/{uid}/telemetry").
 		To(handler.ListTemplateTelemetry))
 	ws.Route(ws.POST("/templates/{uid}/telemetry/{id}/ext").
@@ -1398,6 +1457,8 @@ func RegisterTemplateHTTPServer(container *go_restful.Container, srv TemplateHTT
 		To(handler.UpdateTemplateCommand))
 	ws.Route(ws.POST("/templates/{uid}/command/delete").
 		To(handler.DeleteTemplateCommand))
-	ws.Route(ws.GET("/templates/{uid}/commands").
+	ws.Route(ws.GET("/templates/{uid}/command/{id}").
+		To(handler.GetTemplateCommand))
+	ws.Route(ws.GET("/templates/{uid}/command").
 		To(handler.ListTemplateCommand))
 }

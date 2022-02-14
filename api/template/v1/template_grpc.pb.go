@@ -24,7 +24,6 @@ type TemplateClient interface {
 	UpdateTemplate(ctx context.Context, in *UpdateTemplateRequest, opts ...grpc.CallOption) (*UpdateTemplateResponse, error)
 	DeleteTemplate(ctx context.Context, in *DeleteTemplateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetTemplate(ctx context.Context, in *GetTemplateRequest, opts ...grpc.CallOption) (*GetTemplateResponse, error)
-	ListTemplate(ctx context.Context, in *ListTemplateRequest, opts ...grpc.CallOption) (*ListTemplateResponse, error)
 	//operation template attribute
 	AddTemplateAttribute(ctx context.Context, in *AddTemplateAttributeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateTemplateAttribute(ctx context.Context, in *UpdateTemplateAttributeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -35,6 +34,7 @@ type TemplateClient interface {
 	AddTemplateTelemetry(ctx context.Context, in *AddTemplateTelemetryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateTemplateTelemetry(ctx context.Context, in *UpdateTemplateTelemetryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteTemplateTelemetry(ctx context.Context, in *DeleteTemplateTelemetryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetTemplateTelemetry(ctx context.Context, in *GetTemplateTelemetryRequest, opts ...grpc.CallOption) (*GetTemplateTelemetryResponse, error)
 	ListTemplateTelemetry(ctx context.Context, in *ListTemplateTelemetryRequest, opts ...grpc.CallOption) (*ListTemplateTelemetryResponse, error)
 	AddTemplateTelemetryExt(ctx context.Context, in *AddTemplateTelemetryExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateTemplateTelemetryExt(ctx context.Context, in *UpdateTemplateTelemetryExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -43,6 +43,7 @@ type TemplateClient interface {
 	AddTemplateCommand(ctx context.Context, in *AddTemplateCommandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateTemplateCommand(ctx context.Context, in *UpdateTemplateCommandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteTemplateCommand(ctx context.Context, in *DeleteTemplateCommandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetTemplateCommand(ctx context.Context, in *GetTemplateCommandRequest, opts ...grpc.CallOption) (*GetTemplateCommandResponse, error)
 	ListTemplateCommand(ctx context.Context, in *ListTemplateCommandRequest, opts ...grpc.CallOption) (*ListTemplateCommandResponse, error)
 }
 
@@ -84,15 +85,6 @@ func (c *templateClient) DeleteTemplate(ctx context.Context, in *DeleteTemplateR
 func (c *templateClient) GetTemplate(ctx context.Context, in *GetTemplateRequest, opts ...grpc.CallOption) (*GetTemplateResponse, error) {
 	out := new(GetTemplateResponse)
 	err := c.cc.Invoke(ctx, "/api.template.v1.Template/GetTemplate", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *templateClient) ListTemplate(ctx context.Context, in *ListTemplateRequest, opts ...grpc.CallOption) (*ListTemplateResponse, error) {
-	out := new(ListTemplateResponse)
-	err := c.cc.Invoke(ctx, "/api.template.v1.Template/ListTemplate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -171,6 +163,15 @@ func (c *templateClient) DeleteTemplateTelemetry(ctx context.Context, in *Delete
 	return out, nil
 }
 
+func (c *templateClient) GetTemplateTelemetry(ctx context.Context, in *GetTemplateTelemetryRequest, opts ...grpc.CallOption) (*GetTemplateTelemetryResponse, error) {
+	out := new(GetTemplateTelemetryResponse)
+	err := c.cc.Invoke(ctx, "/api.template.v1.Template/GetTemplateTelemetry", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *templateClient) ListTemplateTelemetry(ctx context.Context, in *ListTemplateTelemetryRequest, opts ...grpc.CallOption) (*ListTemplateTelemetryResponse, error) {
 	out := new(ListTemplateTelemetryResponse)
 	err := c.cc.Invoke(ctx, "/api.template.v1.Template/ListTemplateTelemetry", in, out, opts...)
@@ -234,6 +235,15 @@ func (c *templateClient) DeleteTemplateCommand(ctx context.Context, in *DeleteTe
 	return out, nil
 }
 
+func (c *templateClient) GetTemplateCommand(ctx context.Context, in *GetTemplateCommandRequest, opts ...grpc.CallOption) (*GetTemplateCommandResponse, error) {
+	out := new(GetTemplateCommandResponse)
+	err := c.cc.Invoke(ctx, "/api.template.v1.Template/GetTemplateCommand", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *templateClient) ListTemplateCommand(ctx context.Context, in *ListTemplateCommandRequest, opts ...grpc.CallOption) (*ListTemplateCommandResponse, error) {
 	out := new(ListTemplateCommandResponse)
 	err := c.cc.Invoke(ctx, "/api.template.v1.Template/ListTemplateCommand", in, out, opts...)
@@ -252,7 +262,6 @@ type TemplateServer interface {
 	UpdateTemplate(context.Context, *UpdateTemplateRequest) (*UpdateTemplateResponse, error)
 	DeleteTemplate(context.Context, *DeleteTemplateRequest) (*emptypb.Empty, error)
 	GetTemplate(context.Context, *GetTemplateRequest) (*GetTemplateResponse, error)
-	ListTemplate(context.Context, *ListTemplateRequest) (*ListTemplateResponse, error)
 	//operation template attribute
 	AddTemplateAttribute(context.Context, *AddTemplateAttributeRequest) (*emptypb.Empty, error)
 	UpdateTemplateAttribute(context.Context, *UpdateTemplateAttributeRequest) (*emptypb.Empty, error)
@@ -263,6 +272,7 @@ type TemplateServer interface {
 	AddTemplateTelemetry(context.Context, *AddTemplateTelemetryRequest) (*emptypb.Empty, error)
 	UpdateTemplateTelemetry(context.Context, *UpdateTemplateTelemetryRequest) (*emptypb.Empty, error)
 	DeleteTemplateTelemetry(context.Context, *DeleteTemplateTelemetryRequest) (*emptypb.Empty, error)
+	GetTemplateTelemetry(context.Context, *GetTemplateTelemetryRequest) (*GetTemplateTelemetryResponse, error)
 	ListTemplateTelemetry(context.Context, *ListTemplateTelemetryRequest) (*ListTemplateTelemetryResponse, error)
 	AddTemplateTelemetryExt(context.Context, *AddTemplateTelemetryExtRequest) (*emptypb.Empty, error)
 	UpdateTemplateTelemetryExt(context.Context, *UpdateTemplateTelemetryExtRequest) (*emptypb.Empty, error)
@@ -271,6 +281,7 @@ type TemplateServer interface {
 	AddTemplateCommand(context.Context, *AddTemplateCommandRequest) (*emptypb.Empty, error)
 	UpdateTemplateCommand(context.Context, *UpdateTemplateCommandRequest) (*emptypb.Empty, error)
 	DeleteTemplateCommand(context.Context, *DeleteTemplateCommandRequest) (*emptypb.Empty, error)
+	GetTemplateCommand(context.Context, *GetTemplateCommandRequest) (*GetTemplateCommandResponse, error)
 	ListTemplateCommand(context.Context, *ListTemplateCommandRequest) (*ListTemplateCommandResponse, error)
 	mustEmbedUnimplementedTemplateServer()
 }
@@ -290,9 +301,6 @@ func (UnimplementedTemplateServer) DeleteTemplate(context.Context, *DeleteTempla
 }
 func (UnimplementedTemplateServer) GetTemplate(context.Context, *GetTemplateRequest) (*GetTemplateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTemplate not implemented")
-}
-func (UnimplementedTemplateServer) ListTemplate(context.Context, *ListTemplateRequest) (*ListTemplateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListTemplate not implemented")
 }
 func (UnimplementedTemplateServer) AddTemplateAttribute(context.Context, *AddTemplateAttributeRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddTemplateAttribute not implemented")
@@ -318,6 +326,9 @@ func (UnimplementedTemplateServer) UpdateTemplateTelemetry(context.Context, *Upd
 func (UnimplementedTemplateServer) DeleteTemplateTelemetry(context.Context, *DeleteTemplateTelemetryRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTemplateTelemetry not implemented")
 }
+func (UnimplementedTemplateServer) GetTemplateTelemetry(context.Context, *GetTemplateTelemetryRequest) (*GetTemplateTelemetryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTemplateTelemetry not implemented")
+}
 func (UnimplementedTemplateServer) ListTemplateTelemetry(context.Context, *ListTemplateTelemetryRequest) (*ListTemplateTelemetryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTemplateTelemetry not implemented")
 }
@@ -338,6 +349,9 @@ func (UnimplementedTemplateServer) UpdateTemplateCommand(context.Context, *Updat
 }
 func (UnimplementedTemplateServer) DeleteTemplateCommand(context.Context, *DeleteTemplateCommandRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTemplateCommand not implemented")
+}
+func (UnimplementedTemplateServer) GetTemplateCommand(context.Context, *GetTemplateCommandRequest) (*GetTemplateCommandResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTemplateCommand not implemented")
 }
 func (UnimplementedTemplateServer) ListTemplateCommand(context.Context, *ListTemplateCommandRequest) (*ListTemplateCommandResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTemplateCommand not implemented")
@@ -423,24 +437,6 @@ func _Template_GetTemplate_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TemplateServer).GetTemplate(ctx, req.(*GetTemplateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Template_ListTemplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListTemplateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TemplateServer).ListTemplate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.template.v1.Template/ListTemplate",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TemplateServer).ListTemplate(ctx, req.(*ListTemplateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -589,6 +585,24 @@ func _Template_DeleteTemplateTelemetry_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Template_GetTemplateTelemetry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTemplateTelemetryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TemplateServer).GetTemplateTelemetry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.template.v1.Template/GetTemplateTelemetry",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TemplateServer).GetTemplateTelemetry(ctx, req.(*GetTemplateTelemetryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Template_ListTemplateTelemetry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListTemplateTelemetryRequest)
 	if err := dec(in); err != nil {
@@ -715,6 +729,24 @@ func _Template_DeleteTemplateCommand_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Template_GetTemplateCommand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTemplateCommandRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TemplateServer).GetTemplateCommand(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.template.v1.Template/GetTemplateCommand",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TemplateServer).GetTemplateCommand(ctx, req.(*GetTemplateCommandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Template_ListTemplateCommand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListTemplateCommandRequest)
 	if err := dec(in); err != nil {
@@ -757,10 +789,6 @@ var Template_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Template_GetTemplate_Handler,
 		},
 		{
-			MethodName: "ListTemplate",
-			Handler:    _Template_ListTemplate_Handler,
-		},
-		{
 			MethodName: "AddTemplateAttribute",
 			Handler:    _Template_AddTemplateAttribute_Handler,
 		},
@@ -793,6 +821,10 @@ var Template_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Template_DeleteTemplateTelemetry_Handler,
 		},
 		{
+			MethodName: "GetTemplateTelemetry",
+			Handler:    _Template_GetTemplateTelemetry_Handler,
+		},
+		{
 			MethodName: "ListTemplateTelemetry",
 			Handler:    _Template_ListTemplateTelemetry_Handler,
 		},
@@ -819,6 +851,10 @@ var Template_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteTemplateCommand",
 			Handler:    _Template_DeleteTemplateCommand_Handler,
+		},
+		{
+			MethodName: "GetTemplateCommand",
+			Handler:    _Template_GetTemplateCommand_Handler,
 		},
 		{
 			MethodName: "ListTemplateCommand",
