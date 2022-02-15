@@ -48,7 +48,7 @@ func (h *OpenapiHTTPHandler) AddonsIdentify(req *go_restful.Request, resp *go_re
 	in := v1.AddonsIdentifyRequest{}
 	if err := transportHTTP.GetBody(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -59,7 +59,7 @@ func (h *OpenapiHTTPHandler) AddonsIdentify(req *go_restful.Request, resp *go_re
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	resp.WriteHeaderAndJson(http.StatusOK, out, "application/json")
@@ -69,7 +69,7 @@ func (h *OpenapiHTTPHandler) Identify(req *go_restful.Request, resp *go_restful.
 	in := emptypb.Empty{}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -80,7 +80,7 @@ func (h *OpenapiHTTPHandler) Identify(req *go_restful.Request, resp *go_restful.
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	resp.WriteHeaderAndJson(http.StatusOK, out, "application/json")
@@ -90,7 +90,7 @@ func (h *OpenapiHTTPHandler) Status(req *go_restful.Request, resp *go_restful.Re
 	in := emptypb.Empty{}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -101,7 +101,7 @@ func (h *OpenapiHTTPHandler) Status(req *go_restful.Request, resp *go_restful.Re
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	resp.WriteHeaderAndJson(http.StatusOK, out, "application/json")
@@ -111,7 +111,7 @@ func (h *OpenapiHTTPHandler) TenantDisable(req *go_restful.Request, resp *go_res
 	in := v1.TenantDisableRequest{}
 	if err := transportHTTP.GetBody(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -122,7 +122,7 @@ func (h *OpenapiHTTPHandler) TenantDisable(req *go_restful.Request, resp *go_res
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	resp.WriteHeaderAndJson(http.StatusOK, out, "application/json")
@@ -132,7 +132,7 @@ func (h *OpenapiHTTPHandler) TenantEnable(req *go_restful.Request, resp *go_rest
 	in := v1.TenantEnableRequest{}
 	if err := transportHTTP.GetBody(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -143,7 +143,7 @@ func (h *OpenapiHTTPHandler) TenantEnable(req *go_restful.Request, resp *go_rest
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	resp.WriteHeaderAndJson(http.StatusOK, out, "application/json")

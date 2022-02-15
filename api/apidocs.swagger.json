@@ -28,7 +28,7 @@
     "/addons/identify": {
       "post": {
         "summary": "openapi addons identify",
-        "operationId": "Identify",
+        "operationId": "AddonsIdentify",
         "responses": {
           "200": {
             "description": "OK",
@@ -648,8 +648,8 @@
     },
     "/search": {
       "post": {
-        "summary": "list device entity",
-        "operationId": "ListDevice",
+        "summary": "search entity",
+        "operationId": "SearchEntity",
         "responses": {
           "200": {
             "description": "OK",
@@ -1682,14 +1682,28 @@
     "apidevicev1ListEntityQuery": {
       "type": "object",
       "properties": {
+        "page_num": {
+          "type": "integer",
+          "format": "int32",
+          "description": "记录开始位置",
+          "title": "Filter filter = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"限制\"}];\nPage page = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"分页\"}];"
+        },
+        "page_size": {
+          "type": "integer",
+          "format": "int32",
+          "description": "每页限制条数"
+        },
+        "order_by": {
+          "type": "string",
+          "description": "排序字段"
+        },
+        "is_descending": {
+          "type": "boolean",
+          "description": "是否逆序， false：不逆序，true:逆序"
+        },
         "query": {
           "type": "string",
           "description": "es查询条件"
-        },
-        "page": {
-          "$ref": "#/definitions/apidevicev1Page",
-          "description": "分页",
-          "title": "Filter filter = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"限制\"}];"
         },
         "condition": {
           "type": "array",
@@ -1697,29 +1711,6 @@
             "$ref": "#/definitions/apidevicev1Condition"
           },
           "description": "组合条件"
-        }
-      }
-    },
-    "apidevicev1Page": {
-      "type": "object",
-      "properties": {
-        "offset": {
-          "type": "integer",
-          "format": "int64",
-          "description": "记录开始位置"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int64",
-          "description": "每页限制条数"
-        },
-        "sort": {
-          "type": "string",
-          "description": "排序字段"
-        },
-        "reverse": {
-          "type": "boolean",
-          "description": "是否逆序， false：不逆序，true:逆序"
         }
       }
     },
@@ -1767,14 +1758,27 @@
     "apigroupv1ListEntityQuery": {
       "type": "object",
       "properties": {
+        "page_num": {
+          "type": "integer",
+          "format": "int32",
+          "description": "记录开始位置"
+        },
+        "page_size": {
+          "type": "integer",
+          "format": "int32",
+          "description": "每页限制条数"
+        },
+        "order_by": {
+          "type": "string",
+          "description": "排序字段"
+        },
+        "is_descending": {
+          "type": "boolean",
+          "description": "是否逆序， false：不逆序，true:逆序"
+        },
         "query": {
           "type": "string",
           "description": "es查询条件"
-        },
-        "page": {
-          "$ref": "#/definitions/apigroupv1Page",
-          "description": "分页",
-          "title": "Filter filter = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"限制\"}];"
         },
         "condition": {
           "type": "array",
@@ -1782,29 +1786,6 @@
             "$ref": "#/definitions/apigroupv1Condition"
           },
           "description": "组合条件"
-        }
-      }
-    },
-    "apigroupv1Page": {
-      "type": "object",
-      "properties": {
-        "offset": {
-          "type": "integer",
-          "format": "int32",
-          "description": "记录开始位置"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int32",
-          "description": "每页限制条数"
-        },
-        "sort": {
-          "type": "string",
-          "description": "排序字段"
-        },
-        "reverse": {
-          "type": "boolean",
-          "description": "是否逆序， false：不逆序，true:逆序"
         }
       }
     },

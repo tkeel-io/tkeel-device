@@ -50,17 +50,17 @@ func (h *GroupHTTPHandler) AddGroupExt(req *go_restful.Request, resp *go_restful
 	in := AddGroupExtRequest{}
 	if err := transportHTTP.GetBody(req, &in.Kvs); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -71,13 +71,13 @@ func (h *GroupHTTPHandler) AddGroupExt(req *go_restful.Request, resp *go_restful
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	anyOut, err := anypb.New(out)
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -85,16 +85,17 @@ func (h *GroupHTTPHandler) AddGroupExt(req *go_restful.Request, resp *go_restful
 		UseProtoNames:   true,
 		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
+		Code: errors.Success.Reason,
+		Msg:  "",
 		Data: anyOut,
 	})
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	resp.WriteHeader(http.StatusOK)
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
 	for {
@@ -113,12 +114,12 @@ func (h *GroupHTTPHandler) CreateGroup(req *go_restful.Request, resp *go_restful
 	in := CreateGroupRequest{}
 	if err := transportHTTP.GetBody(req, &in.Group); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -129,13 +130,13 @@ func (h *GroupHTTPHandler) CreateGroup(req *go_restful.Request, resp *go_restful
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	anyOut, err := anypb.New(out)
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -143,16 +144,17 @@ func (h *GroupHTTPHandler) CreateGroup(req *go_restful.Request, resp *go_restful
 		UseProtoNames:   true,
 		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
+		Code: errors.Success.Reason,
+		Msg:  "",
 		Data: anyOut,
 	})
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	resp.WriteHeader(http.StatusOK)
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
 	for {
@@ -171,17 +173,17 @@ func (h *GroupHTTPHandler) DelGroupExt(req *go_restful.Request, resp *go_restful
 	in := DelGroupExtRequest{}
 	if err := transportHTTP.GetBody(req, &in.Keys); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -192,13 +194,13 @@ func (h *GroupHTTPHandler) DelGroupExt(req *go_restful.Request, resp *go_restful
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	anyOut, err := anypb.New(out)
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -206,16 +208,17 @@ func (h *GroupHTTPHandler) DelGroupExt(req *go_restful.Request, resp *go_restful
 		UseProtoNames:   true,
 		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
+		Code: errors.Success.Reason,
+		Msg:  "",
 		Data: anyOut,
 	})
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	resp.WriteHeader(http.StatusOK)
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
 	for {
@@ -234,12 +237,12 @@ func (h *GroupHTTPHandler) DeleteGroup(req *go_restful.Request, resp *go_restful
 	in := DeleteGroupRequest{}
 	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -250,13 +253,13 @@ func (h *GroupHTTPHandler) DeleteGroup(req *go_restful.Request, resp *go_restful
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	anyOut, err := anypb.New(out)
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -264,16 +267,17 @@ func (h *GroupHTTPHandler) DeleteGroup(req *go_restful.Request, resp *go_restful
 		UseProtoNames:   true,
 		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
+		Code: errors.Success.Reason,
+		Msg:  "",
 		Data: anyOut,
 	})
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	resp.WriteHeader(http.StatusOK)
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
 	for {
@@ -292,12 +296,12 @@ func (h *GroupHTTPHandler) GetGroup(req *go_restful.Request, resp *go_restful.Re
 	in := GetGroupRequest{}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -308,13 +312,13 @@ func (h *GroupHTTPHandler) GetGroup(req *go_restful.Request, resp *go_restful.Re
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	anyOut, err := anypb.New(out)
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -322,16 +326,17 @@ func (h *GroupHTTPHandler) GetGroup(req *go_restful.Request, resp *go_restful.Re
 		UseProtoNames:   true,
 		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
+		Code: errors.Success.Reason,
+		Msg:  "",
 		Data: anyOut,
 	})
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	resp.WriteHeader(http.StatusOK)
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
 	for {
@@ -350,12 +355,12 @@ func (h *GroupHTTPHandler) GetGroupTree(req *go_restful.Request, resp *go_restfu
 	in := GetGroupTreeRequest{}
 	if err := transportHTTP.GetBody(req, &in.ListEntityQuery); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -366,13 +371,13 @@ func (h *GroupHTTPHandler) GetGroupTree(req *go_restful.Request, resp *go_restfu
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	anyOut, err := anypb.New(out)
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -380,16 +385,17 @@ func (h *GroupHTTPHandler) GetGroupTree(req *go_restful.Request, resp *go_restfu
 		UseProtoNames:   true,
 		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
+		Code: errors.Success.Reason,
+		Msg:  "",
 		Data: anyOut,
 	})
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	resp.WriteHeader(http.StatusOK)
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
 	for {
@@ -408,17 +414,17 @@ func (h *GroupHTTPHandler) UpdateGroup(req *go_restful.Request, resp *go_restful
 	in := UpdateGroupRequest{}
 	if err := transportHTTP.GetBody(req, &in.Group); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -429,13 +435,13 @@ func (h *GroupHTTPHandler) UpdateGroup(req *go_restful.Request, resp *go_restful
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	anyOut, err := anypb.New(out)
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -443,16 +449,17 @@ func (h *GroupHTTPHandler) UpdateGroup(req *go_restful.Request, resp *go_restful
 		UseProtoNames:   true,
 		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
+		Code: errors.Success.Reason,
+		Msg:  "",
 		Data: anyOut,
 	})
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	resp.WriteHeader(http.StatusOK)
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
 	for {
@@ -471,17 +478,17 @@ func (h *GroupHTTPHandler) UpdateGroupExt(req *go_restful.Request, resp *go_rest
 	in := UpdateGroupExtRequest{}
 	if err := transportHTTP.GetBody(req, &in.Kvs); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetQuery(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	if err := transportHTTP.GetPathValue(req, &in); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
-			result.Set(http.StatusBadRequest, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -492,13 +499,13 @@ func (h *GroupHTTPHandler) UpdateGroupExt(req *go_restful.Request, resp *go_rest
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
 		resp.WriteHeaderAndJson(httpCode,
-			result.Set(httpCode, tErr.Message, out), "application/json")
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
 	}
 	anyOut, err := anypb.New(out)
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 
@@ -506,16 +513,17 @@ func (h *GroupHTTPHandler) UpdateGroupExt(req *go_restful.Request, resp *go_rest
 		UseProtoNames:   true,
 		EmitUnpopulated: true,
 	}.Marshal(&result.Http{
-		Code: http.StatusOK,
-		Msg:  "ok",
+		Code: errors.Success.Reason,
+		Msg:  "",
 		Data: anyOut,
 	})
 	if err != nil {
 		resp.WriteHeaderAndJson(http.StatusInternalServerError,
-			result.Set(http.StatusInternalServerError, err.Error(), nil), "application/json")
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
 	resp.WriteHeader(http.StatusOK)
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
 	for {

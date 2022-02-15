@@ -208,8 +208,8 @@ func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest)
 	return out, nil
 }
 
-func (s *DeviceService) ListDevice(ctx context.Context, req *pb.ListDeviceRequest) (*pb.ListDeviceResponse, error) {
-	log.Debug("ListDevice")
+func (s *DeviceService) SearchEntity(ctx context.Context, req *pb.ListDeviceRequest) (*pb.ListDeviceResponse, error) {
+	log.Debug("SearchEntity")
 	//req.Filter.Page.Reverse = req.Filter.Page.GetReverse()
 	//req.Filter.Page.Limit = req.Filter.Page.GetLimit()
 	//req.Filter.Page.Offset = req.Filter.Page.GetOffset()

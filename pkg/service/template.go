@@ -208,7 +208,7 @@ func (s *TemplateService) GetTemplate(ctx context.Context, req *pb.GetTemplateRe
 	return out, nil
 }
 
-func (s *TemplateService) ListTemplate(ctx context.Context, req *pb.ListTemplateRequest) (*pb.ListTemplateResponse, error) {
+/*func (s *TemplateService) ListTemplate(ctx context.Context, req *pb.ListTemplateRequest) (*pb.ListTemplateResponse, error) {
 	log.Debug("ListTemplate")
 	log.Debug("req:", req)
 
@@ -247,7 +247,7 @@ func (s *TemplateService) ListTemplate(ctx context.Context, req *pb.ListTemplate
 	}
 
 	return out, nil
-}
+}*/
 func (s *TemplateService) AddTemplateAttribute(ctx context.Context, req *pb.AddTemplateAttributeRequest) (*emptypb.Empty, error) {
 	log.Debug("AddTemplateAttribute")
 	log.Debug("req:", req)

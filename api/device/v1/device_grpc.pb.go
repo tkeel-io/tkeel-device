@@ -23,24 +23,7 @@ type DeviceClient interface {
 	UpdateDevice(ctx context.Context, in *UpdateDeviceRequest, opts ...grpc.CallOption) (*UpdateDeviceResponse, error)
 	DeleteDevice(ctx context.Context, in *DeleteDeviceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetDevice(ctx context.Context, in *GetDeviceRequest, opts ...grpc.CallOption) (*GetDeviceResponse, error)
-	ListDevice(ctx context.Context, in *ListDeviceRequest, opts ...grpc.CallOption) (*ListDeviceResponse, error)
-	//rpc EnableDevice(EnableDeviceRequest) returns (google.protobuf.Empty) {
-	//option (google.api.http) = {
-	//put : "/devices/{id}/enable"
-	//body : "enable"
-	//};
-	//option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-	//summary: "enable device";
-	//operation_id: "EnableDevice";
-	//tags: "device";
-	//responses: {
-	//key: "200"
-	//value: {
-	//description: "OK";
-	//}
-	//}
-	//};
-	//};
+	SearchEntity(ctx context.Context, in *ListDeviceRequest, opts ...grpc.CallOption) (*ListDeviceResponse, error)
 	AddDeviceExt(ctx context.Context, in *AddDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteDeviceExt(ctx context.Context, in *DeleteDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateDeviceExt(ctx context.Context, in *UpdateDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -90,9 +73,9 @@ func (c *deviceClient) GetDevice(ctx context.Context, in *GetDeviceRequest, opts
 	return out, nil
 }
 
-func (c *deviceClient) ListDevice(ctx context.Context, in *ListDeviceRequest, opts ...grpc.CallOption) (*ListDeviceResponse, error) {
+func (c *deviceClient) SearchEntity(ctx context.Context, in *ListDeviceRequest, opts ...grpc.CallOption) (*ListDeviceResponse, error) {
 	out := new(ListDeviceResponse)
-	err := c.cc.Invoke(ctx, "/api.device.v1.Device/ListDevice", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/SearchEntity", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -134,24 +117,7 @@ type DeviceServer interface {
 	UpdateDevice(context.Context, *UpdateDeviceRequest) (*UpdateDeviceResponse, error)
 	DeleteDevice(context.Context, *DeleteDeviceRequest) (*emptypb.Empty, error)
 	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)
-	ListDevice(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
-	//rpc EnableDevice(EnableDeviceRequest) returns (google.protobuf.Empty) {
-	//option (google.api.http) = {
-	//put : "/devices/{id}/enable"
-	//body : "enable"
-	//};
-	//option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-	//summary: "enable device";
-	//operation_id: "EnableDevice";
-	//tags: "device";
-	//responses: {
-	//key: "200"
-	//value: {
-	//description: "OK";
-	//}
-	//}
-	//};
-	//};
+	SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
 	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*emptypb.Empty, error)
 	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*emptypb.Empty, error)
 	UpdateDeviceExt(context.Context, *UpdateDeviceExtRequest) (*emptypb.Empty, error)
@@ -174,8 +140,8 @@ func (UnimplementedDeviceServer) DeleteDevice(context.Context, *DeleteDeviceRequ
 func (UnimplementedDeviceServer) GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDevice not implemented")
 }
-func (UnimplementedDeviceServer) ListDevice(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListDevice not implemented")
+func (UnimplementedDeviceServer) SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchEntity not implemented")
 }
 func (UnimplementedDeviceServer) AddDeviceExt(context.Context, *AddDeviceExtRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddDeviceExt not implemented")
@@ -271,20 +237,20 @@ func _Device_GetDevice_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Device_ListDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Device_SearchEntity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListDeviceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DeviceServer).ListDevice(ctx, in)
+		return srv.(DeviceServer).SearchEntity(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.device.v1.Device/ListDevice",
+		FullMethod: "/api.device.v1.Device/SearchEntity",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DeviceServer).ListDevice(ctx, req.(*ListDeviceRequest))
+		return srv.(DeviceServer).SearchEntity(ctx, req.(*ListDeviceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -367,8 +333,8 @@ var Device_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Device_GetDevice_Handler,
 		},
 		{
-			MethodName: "ListDevice",
-			Handler:    _Device_ListDevice_Handler,
+			MethodName: "SearchEntity",
+			Handler:    _Device_SearchEntity_Handler,
 		},
 		{
 			MethodName: "AddDeviceExt",

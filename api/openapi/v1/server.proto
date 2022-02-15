@@ -49,7 +49,7 @@ service Openapi {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary : "openapi addons identify"
-      operation_id : "Identify"
+      operation_id : "AddonsIdentify"
       tags : "Openapi"
       responses : {
         key : "200"

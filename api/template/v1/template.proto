@@ -82,23 +82,6 @@ service Template {
             }
         };
 	};
-	/*rpc ListTemplate (ListTemplateRequest) returns (ListTemplateResponse) {
-		option (google.api.http) = {
-			post : "/templates/search"
-            body : "listEntityQuery"
-		};
-        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "list Template";
-            operation_id: "ListTemplate";
-            tags: "template";
-            responses: {
-                key: "200"
-                value: {
-                    description: "OK";
-                }
-            }
-        };
-	};*/
 
     //operation template attribute
 	rpc AddTemplateAttribute (AddTemplateAttributeRequest) returns (google.protobuf.Empty) {
@@ -422,40 +405,6 @@ message PropConfig {
     string description = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "说明"}];
 }
 
-/*message Attribute {
-    string name = 1;
-    string id = 2;
-    string type = 3;
-    google.protobuf.Value define = 4;
-    int32 rw = 5;
-    string des = 6;
-}
-
-message Telemetry {
-    string name = 1;
-    string id = 2;
-    string type = 3;
-    string unit = 4;
-    google.protobuf.Value define = 5;
-	google.protobuf.Value  ext = 6;
-    string des = 7;
-}
-
-message Command {
-    string name = 1;
-    string id = 2;
-    string invokeType = 3;
-    repeated CommandPars input = 4;
-    repeated CommandPars output = 5;
-    string des = 8;
-}
-
-message CommandPars {
-    string name = 1;
-    string id = 2;
-    string type = 3;
-}*/ 
-
 message Ids {
 	repeated string ids = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ID 数组"}];
 }
@@ -490,13 +439,6 @@ message GetTemplateRequest {
 }
 message GetTemplateResponse { 
     api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
-}
-
-message ListTemplateRequest {
-    ListEntityQuery listEntityQuery = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "请求条件"}];
-}
-message ListTemplateResponse { 
-    api.core.v1.ListEntityResponse listTemplateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板列表名称"}];
 }
 
     //attribute
@@ -614,46 +556,12 @@ message TemplateEntityCoreInfo {
     TemplateEntitySysField  sysField = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "系统信息"}];
 }
 
-message ConfigCoreEntity {
-    string  id               = 1;
-    string type              = 2;
-    int32 Weight             = 3;
-    bool enabled             = 4;
-    bool enabledSearch       = 5;
-    bool enabledTimeSeries   = 6;
-    string description       = 7;
-    google.protobuf.Value define  = 8; 
-    int64 lastTime           = 9;
-}
-
 message TemplateEntitySysField {
     string _id                       = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组ID"}];
 	int64 _createdAt 				 = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组创建时间"}];
     int64 _updatedAt 				 = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组更新时间"}];
     string _owner = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: " 所有者"}];
     string _source = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "来源"}];
-}
-
-message ListEntityQuery {
-    string query = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "es 查询条件"}];
-    //Filter filter = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "限制"}];
-  Page page = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "分页"}];
-  repeated Condition condition = 3  [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "组合条件"}];
-}
-message Filter {
-  Page page = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "分页"}];
-  repeated Condition condition = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "组合条件"}];
-}
-message Page {
-  uint32 offset = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "记录开始位置"}];
-  uint32 limit = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "每页限制条数"}];
-  string sort = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "排序字段"}];
-  bool reverse = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "是否逆序， false：不逆序，true:逆序"}];
-}
-message Condition {
-  string field = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "查询输出字段"}];
-  string value = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "值"}];
-  string operator = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "操作符, $eq为相等，$neq为不等，$lt为小于，$gt为大于，$lne为小于等于， $gne为大于等于"}];
 }
 
 //device <--->  core

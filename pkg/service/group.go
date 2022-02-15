@@ -475,28 +475,29 @@ func (s *GroupService) createSpaceTree(listEntityTotalInfo map[string]interface{
 
 		//create tree
 
-		tempTree := tree
+		/*tempTree := tree
 		for _, p := range str {
 			_, ok := tempTree[p]
 			if !ok {
 				tempTree[p] = make(map[string]interface{})
 			}
 			tempTree = tempTree[p].(map[string]interface{})
+		}*/
+		tempTree := tree
+		lastNode := tree
+		for _, p := range str {
+			_, ok := tempTree[p]
+			if !ok {
+				tempTree[p] = make(map[string]interface{})
+				tempTree[p].(map[string]interface{})["nodeInfo"] = make(map[string]interface{})
+				tempTree[p].(map[string]interface{})["subNode"] = make(map[string]interface{})
+			}
+			lastNode = tempTree[p].(map[string]interface{})["nodeInfo"].(map[string]interface{})
+			tempTree = tempTree[p].(map[string]interface{})["subNode"].(map[string]interface{})
 		}
-		/*tempTree := tree
-		        lastNode := tree
-				for _, p := range str {
-					_, ok := tempTree[p]
-					if !ok {
-						tempTree[p] = make(map[string]interface{})
-		                tempTree[p].(map[string]interface{})["nodeInfo"] = make(map[string]interface{})
-		                tempTree[p].(map[string]interface{})["subNode"] = make(map[string]interface{})
-					}
-		            tempTree = tempTree[p].(map[string]interface{})["subNode"].(map[string]interface{})
-		            lastNode = tempTree[p].(map[string]interface{})["nodeInfo"].(map[string]interface{})
-		        }
-		        lastNode.(map[string]interface{}) = v.(map[string]interface{})
-		        log.Debug(lastNode)*/
+		for k, v := range v.(map[string]interface{}) {
+			lastNode[k] = v
+		}
 	}
 	log.Debug("tree = ", tree)
 
