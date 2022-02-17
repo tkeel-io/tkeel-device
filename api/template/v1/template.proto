@@ -6,7 +6,7 @@ package api.template.v1;
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/empty.proto";
-import public "tkeel-io/core/api/v1/entity.proto";
+//import public "tkeel-io/core/api/v1/entity.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/tkeel-io/tkeel-device/api/template/v1;v1";
@@ -420,7 +420,8 @@ message CreateTemplateRequest {
 }
 
 message CreateTemplateResponse {
-    api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
+    //api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
+    google.protobuf.Value templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
 }
 
 message UpdateTemplateRequest { 
@@ -428,7 +429,8 @@ message UpdateTemplateRequest {
     string uid = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
 }
 message UpdateTemplateResponse {
-    api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
+    //api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
+    google.protobuf.Value templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
 }
 
 message DeleteTemplateRequest {
@@ -438,7 +440,8 @@ message GetTemplateRequest {
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
 }
 message GetTemplateResponse { 
-    api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
+    google.protobuf.Value templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
+    //api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
 }
 
     //attribute

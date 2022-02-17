@@ -76,7 +76,7 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 		log.Error("error parse token, ", err)
 		return nil, err2
 	}
-	var ar interface{}
+	/*var ar interface{}
 	if err3 := json.Unmarshal(resp2, &ar); nil != err3 {
 		log.Error("resp Unmarshal error, ", err3)
 		return nil, err3
@@ -89,9 +89,12 @@ func (c *CoreClient) parseToken(token string) (map[string]string, error) {
 	if res["code"].(float64) != 200 {
 		return nil, errors.New(res["msg"].(string))
 
+	}*/
+	//tokenMap := res["data"].(map[string]interface{})
+	tokenMap, ok := resp2.(map[string]interface{})
+	if !ok {
+		return nil, errors.New("auth trans error")
 	}
-	tokenMap := res["data"].(map[string]interface{})
-
 	// save token, map[entity_id:406c79543e0245a994a742e69ce48e71 entity_type:device tenant_id: token_id:de25624a-1d0a-4ab0-b1f1-5b0db5a12c30 user_id:abc]
 	urlMap := map[string]string{
 		"owner": tokenMap["user_id"].(string),
@@ -111,7 +114,16 @@ func (c *CoreClient) Post(url string, data []byte) ([]byte, error) {
 	AddDefaultAuthHeader(req)
 
 	resp, err := http.DefaultClient.Do(req)
-	return c.ParseResp(resp, err)
+	//return c.ParseResp(resp, err)
+	dt, err1 := c.ParseResp(resp, err)
+	if err1 != nil {
+		return nil, err1
+	}
+	dataByte, err2 := json.Marshal(dt)
+	if nil != err2 {
+		return nil, err2
+	}
+	return dataByte, nil
 }
 
 func (c *CoreClient) Get(url string) ([]byte, error) {
@@ -122,7 +134,16 @@ func (c *CoreClient) Get(url string) ([]byte, error) {
 	AddDefaultAuthHeader(req)
 
 	resp, err := http.DefaultClient.Do(req)
-	return c.ParseResp(resp, err)
+	//return c.ParseResp(resp, err)
+	dt, err1 := c.ParseResp(resp, err)
+	if err1 != nil {
+		return nil, err1
+	}
+	dataByte, err2 := json.Marshal(dt)
+	if nil != err2 {
+		return nil, err2
+	}
+	return dataByte, nil
 }
 
 func (c *CoreClient) Put(url string, data []byte) ([]byte, error) {
@@ -133,7 +154,16 @@ func (c *CoreClient) Put(url string, data []byte) ([]byte, error) {
 	AddDefaultAuthHeader(req)
 
 	resp, err := http.DefaultClient.Do(req)
-	return c.ParseResp(resp, err)
+	//return c.ParseResp(resp, err)
+	dt, err1 := c.ParseResp(resp, err)
+	if err1 != nil {
+		return nil, err1
+	}
+	dataByte, err2 := json.Marshal(dt)
+	if nil != err2 {
+		return nil, err2
+	}
+	return dataByte, nil
 }
 
 func (c *CoreClient) Patch(url string, data []byte) ([]byte, error) {
@@ -144,7 +174,16 @@ func (c *CoreClient) Patch(url string, data []byte) ([]byte, error) {
 	AddDefaultAuthHeader(req)
 
 	resp, err := http.DefaultClient.Do(req)
-	return c.ParseResp(resp, err)
+	//return c.ParseResp(resp, err)
+	dt, err1 := c.ParseResp(resp, err)
+	if err1 != nil {
+		return nil, err1
+	}
+	dataByte, err2 := json.Marshal(dt)
+	if nil != err2 {
+		return nil, err2
+	}
+	return dataByte, nil
 }
 
 func (c *CoreClient) Delete(url string) ([]byte, error) {
@@ -154,10 +193,19 @@ func (c *CoreClient) Delete(url string) ([]byte, error) {
 	AddDefaultAuthHeader(req)
 
 	resp, err := http.DefaultClient.Do(req)
-	return c.ParseResp(resp, err)
+	//return c.ParseResp(resp, err)
+	dt, err1 := c.ParseResp(resp, err)
+	if err1 != nil {
+		return nil, err1
+	}
+	dataByte, err2 := json.Marshal(dt)
+	if nil != err2 {
+		return nil, err2
+	}
+	return dataByte, nil
 }
 
-func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
+func (c *CoreClient) ParseResp(resp *http.Response, err error) (interface{}, error) {
 	if err != nil {
 		log.Error("error ", err)
 		return nil, err
@@ -168,15 +216,35 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) ([]byte, error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Error("error ReadAll", err)
-		return body, err
+		return nil, err
 	}
 
 	log.Debug("receive resp, ", string(body))
 	if resp.StatusCode != 200 {
 		log.Error("bad status ", resp.StatusCode)
-		return body, errors.New(resp.Status)
+		return nil, errors.New(resp.Status)
 	}
-	return body, nil
+
+	//Parse
+	var ar interface{}
+	if err3 := json.Unmarshal(body, &ar); nil != err3 {
+		log.Error("resp Unmarshal error", err3)
+		return nil, err3
+	}
+	//log.Debug("Unmarshal res:", ar)
+	res, ok := ar.(map[string]interface{})
+	if !ok {
+		return nil, errors.New("error resp type")
+	}
+	/*if res["code"].(float64) != 200 {
+		return "error code", errors.New(res["msg"].(string))
+
+	}*/
+	data, ok := res["data"]
+	if !ok {
+		return nil, errors.New("error return data")
+	}
+	return data, nil
 }
 
 func (c *CoreClient) CreatEntityToken(entityType, id, owner string, token string) (string, error) {
@@ -204,14 +272,15 @@ func (c *CoreClient) CreatEntityToken(entityType, id, owner string, token string
 	req.Header.Add(tokenKey, token)
 	AddDefaultAuthHeader(req)
 	resp, er := http.DefaultClient.Do(req)
-	body, err2 := c.ParseResp(resp, er)
+	//body, err2 := c.ParseResp(resp, er)
+	res, err2 := c.ParseResp(resp, er)
 	if nil != err2 {
 		log.Error("error return ", err2)
 		return "", err2
 	}
 
 	//Parse
-	var ar interface{}
+	/*var ar interface{}
 	if err3 := json.Unmarshal(body, &ar); nil != err3 {
 		log.Error("resp Unmarshal error", err3)
 		return "resp Unmarshal error", err3
@@ -224,11 +293,15 @@ func (c *CoreClient) CreatEntityToken(entityType, id, owner string, token string
 	if res["code"].(float64) != 200 {
 		return "error code", errors.New(res["msg"].(string))
 
+	}*/
+	//tokenMap := res["data"].(map[string]interface{})
+	tokenMap, ok := res.(map[string]interface{})
+	if !ok {
+		return "", errors.New("error resp trans")
 	}
-	tokenMap := res["data"].(map[string]interface{})
 	entityToken, ok2 := tokenMap["token"].(string)
 	if !ok2 {
-		return "error token", errors.New("error token")
+		return "", errors.New("error token")
 	}
 	return entityToken, nil
 }

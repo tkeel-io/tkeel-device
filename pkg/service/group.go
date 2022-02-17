@@ -72,8 +72,9 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	}
 
 	//fmt response
-	groupObject := &pb.EntityResponse{} // core define
-	err5 := json.Unmarshal(res, groupObject)
+	//groupObject := &pb.EntityResponse{} // core define
+	groupObject := make(map[string]interface{}) // core define
+	err5 := json.Unmarshal(res, &groupObject)
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
@@ -87,8 +88,13 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	}
 
 	//return
+	re, err7 := structpb.NewValue(groupObject)
+	if nil != err7 {
+		log.Error("convert tree failed ", err7)
+		return nil, err7
+	}
 	out := &pb.CreateGroupResponse{
-		GroupObject: groupObject,
+		GroupObject: re,
 	}
 
 	return out, nil
@@ -134,8 +140,9 @@ func (s *GroupService) UpdateGroup(ctx context.Context, req *pb.UpdateGroupReque
 	}
 
 	//fmt response
-	groupObject := &pb.EntityResponse{} // core define
-	err6 := json.Unmarshal(res, groupObject)
+	//groupObject := &pb.EntityResponse{} // core define
+	groupObject := make(map[string]interface{})
+	err6 := json.Unmarshal(res, &groupObject)
 	if err6 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err6
@@ -148,8 +155,14 @@ func (s *GroupService) UpdateGroup(ctx context.Context, req *pb.UpdateGroupReque
 		return nil, err1
 	}
 
+	//return
+	re, err7 := structpb.NewValue(groupObject)
+	if nil != err7 {
+		log.Error("convert tree failed ", err7)
+		return nil, err7
+	}
 	out := &pb.UpdateGroupResponse{
-		GroupObject: groupObject,
+		GroupObject: re,
 	}
 
 	return out, nil
@@ -208,14 +221,22 @@ func (s *GroupService) GetGroup(ctx context.Context, req *pb.GetGroupRequest) (*
 	}
 
 	//fmt response
-	groupObject := &pb.EntityResponse{} // core define
-	err3 := json.Unmarshal(res, groupObject)
+	//groupObject := &pb.EntityResponse{} // core define
+	groupObject := make(map[string]interface{})
+	err3 := json.Unmarshal(res, &groupObject)
 	if err3 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err3
 	}
+
+	//return
+	re, err7 := structpb.NewValue(groupObject)
+	if nil != err7 {
+		log.Error("convert tree failed ", err7)
+		return nil, err7
+	}
 	out := &pb.GetGroupResponse{
-		GroupObject: groupObject,
+		GroupObject: re,
 	}
 
 	return out, nil
@@ -277,7 +298,7 @@ func (s *GroupService) GetGroupTree(ctx context.Context, req *pb.GetGroupTreeReq
 	return out, nil
 }
 
-func (s *GroupService) ListGroupItems(ctx context.Context, req *pb.ListGroupItemsRequest) (*pb.ListGroupItemsResponse, error) {
+/*func (s *GroupService) ListGroupItems(ctx context.Context, req *pb.ListGroupItemsRequest) (*pb.ListGroupItemsResponse, error) {
 	log.Debug("ListGroup")
 	log.Debug("req:", req)
 
@@ -316,7 +337,7 @@ func (s *GroupService) ListGroupItems(ctx context.Context, req *pb.ListGroupItem
 	}
 
 	return out, nil
-}
+}*/
 
 func (s *GroupService) AddGroupExt(ctx context.Context, req *pb.AddGroupExtRequest) (*emptypb.Empty, error) {
 	log.Debug("AddGroupExt")

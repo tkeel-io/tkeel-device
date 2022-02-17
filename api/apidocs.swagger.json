@@ -58,6 +58,48 @@
         ]
       }
     },
+    "/devcies/{id}/relations": {
+      "put": {
+        "summary": "update data relation",
+        "operationId": "UpdateDeviceDataRelation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "实体Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "关系信息",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1Relation",
+              "description": "关系信息"
+            }
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      }
+    },
     "/devices": {
       "post": {
         "summary": "create device entity",
@@ -200,6 +242,90 @@
         ]
       }
     },
+    "/devices/{id}/attribute/set": {
+      "post": {
+        "summary": "set device attribte",
+        "operationId": "SetDeviceAttrubte",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": " 设备Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " 设置内容",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SetContent",
+              "description": " 设置内容"
+            }
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      }
+    },
+    "/devices/{id}/command/set": {
+      "post": {
+        "summary": "set device command",
+        "operationId": "SetDeviceCommand",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": " 设备Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " 设置内容",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SetContent",
+              "description": " 设置内容"
+            }
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      }
+    },
     "/devices/{id}/ext": {
       "post": {
         "summary": "add device extensions",
@@ -316,6 +442,120 @@
             "schema": {
               "$ref": "#/definitions/apidevicev1Keys",
               "description": "设备扩展属性Key 数组"
+            }
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      }
+    },
+    "/devices/{id}/relations": {
+      "get": {
+        "summary": "list data relation",
+        "operationId": "ListDeviceDataRelation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "实体Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      },
+      "post": {
+        "summary": "Create data relation",
+        "operationId": "CreateDeviceDataRelation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "实体Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "关系信息",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1Relation",
+              "description": "关系信息"
+            }
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      }
+    },
+    "/devices/{id}/relations/delete": {
+      "post": {
+        "summary": "delete data relation",
+        "operationId": "DeleteDeviceDataRelation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "实体Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "关系信息",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1Relation",
+              "description": "关系信息"
             }
           }
         ],
@@ -1927,8 +2167,9 @@
       "type": "object",
       "properties": {
         "deviceObject": {
-          "$ref": "#/definitions/v1EntityResponse",
-          "description": "设备对象"
+          "type": "object",
+          "description": "设备对象",
+          "title": "api.core.v1.EntityResponse deviceObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备对象\"}];"
         }
       }
     },
@@ -1936,9 +2177,9 @@
       "type": "object",
       "properties": {
         "groupObject": {
-          "$ref": "#/definitions/v1EntityResponse",
+          "type": "object",
           "description": "设备组信息",
-          "title": "string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"ok  or failed\"}];\nGroupEntityCoreInfo  entityInfo = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备组信息\"}];"
+          "title": "api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备组信息\"}];"
         }
       }
     },
@@ -1946,8 +2187,9 @@
       "type": "object",
       "properties": {
         "templateObject": {
-          "$ref": "#/definitions/v1EntityResponse",
-          "description": "模板对象"
+          "type": "object",
+          "description": "模板对象",
+          "title": "api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"模板对象\"}];"
         }
       }
     },
@@ -1985,48 +2227,13 @@
       },
       "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
     },
-    "v1EntityResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "entity id"
-        },
-        "source": {
-          "type": "string",
-          "description": "source id"
-        },
-        "owner": {
-          "type": "string",
-          "description": "owner id"
-        },
-        "type": {
-          "type": "string",
-          "description": "entity type"
-        },
-        "mappers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1MapperDesc"
-          },
-          "description": "entity mappers"
-        },
-        "configs": {
-          "type": "object",
-          "description": "entity configs"
-        },
-        "properties": {
-          "type": "object",
-          "description": "entity properties"
-        }
-      }
-    },
     "v1GetDeviceResponse": {
       "type": "object",
       "properties": {
         "deviceObject": {
-          "$ref": "#/definitions/v1EntityResponse",
-          "description": "设备对象"
+          "type": "object",
+          "description": "设备对象",
+          "title": "api.core.v1.EntityResponse deviceObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备对象\"}];"
         }
       }
     },
@@ -2034,9 +2241,9 @@
       "type": "object",
       "properties": {
         "groupObject": {
-          "$ref": "#/definitions/v1EntityResponse",
+          "type": "object",
           "description": "设备组信息",
-          "title": "string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"ok  or failed\"}];\nGroupEntityCoreInfo  entityInfo= 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备组信息\"}];"
+          "title": "api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备组信息\"}];"
         }
       }
     },
@@ -2073,7 +2280,7 @@
       "type": "object",
       "properties": {
         "templateObject": {
-          "$ref": "#/definitions/v1EntityResponse",
+          "type": "object",
           "description": "模板对象"
         }
       }
@@ -2176,35 +2383,9 @@
       "type": "object",
       "properties": {
         "listDeviceObject": {
-          "$ref": "#/definitions/v1ListEntityResponse",
-          "description": "设备列表对象"
-        }
-      }
-    },
-    "v1ListEntityResponse": {
-      "type": "object",
-      "properties": {
-        "total": {
-          "type": "string",
-          "format": "int64"
-        },
-        "page": {
-          "type": "string",
-          "format": "int64"
-        },
-        "limit": {
-          "type": "string",
-          "format": "int64"
-        },
-        "offset": {
-          "type": "string",
-          "format": "int64"
-        },
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1EntityResponse"
-          }
+          "type": "object",
+          "description": "设备列表对象",
+          "title": "api.core.v1.ListEntityResponse listDeviceObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备列表对象\"}];"
         }
       }
     },
@@ -2235,19 +2416,6 @@
           "type": "object",
           "description": "遥测列表对象",
           "title": "api.core.v1.EntityResponse templateTeleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"遥测列表对象\"}];"
-        }
-      }
-    },
-    "v1MapperDesc": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "mapper name"
-        },
-        "tql": {
-          "type": "string",
-          "description": "tql content"
         }
       }
     },
@@ -2287,6 +2455,19 @@
         }
       }
     },
+    "v1Relation": {
+      "type": "object",
+      "properties": {
+        "direction": {
+          "type": "string",
+          "description": "关系方向 from  or to"
+        },
+        "targetId": {
+          "type": "string",
+          "description": "源 或 目标  实体Id"
+        }
+      }
+    },
     "v1Result": {
       "type": "object",
       "properties": {
@@ -2308,6 +2489,19 @@
       ],
       "default": "OK",
       "description": "*\nerror code enum."
+    },
+    "v1SetContent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "属性 or  命令 标识符id"
+        },
+        "value": {
+          "type": "object",
+          "description": "设置的 value"
+        }
+      }
     },
     "v1StatusResponse": {
       "type": "object",
@@ -2383,8 +2577,9 @@
       "type": "object",
       "properties": {
         "deviceObject": {
-          "$ref": "#/definitions/v1EntityResponse",
-          "description": "设备对象"
+          "type": "object",
+          "description": "设备对象",
+          "title": "api.core.v1.EntityResponse deviceObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备对象\"}];"
         }
       }
     },
@@ -2392,8 +2587,9 @@
       "type": "object",
       "properties": {
         "groupObject": {
-          "$ref": "#/definitions/v1EntityResponse",
-          "description": "设备组信息"
+          "type": "object",
+          "description": "设备组信息",
+          "title": "api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备组信息\"}];"
         }
       }
     },
@@ -2401,8 +2597,9 @@
       "type": "object",
       "properties": {
         "templateObject": {
-          "$ref": "#/definitions/v1EntityResponse",
-          "description": "模板对象"
+          "type": "object",
+          "description": "模板对象",
+          "title": "api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"模板对象\"}];"
         }
       }
     }

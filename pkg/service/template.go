@@ -78,14 +78,22 @@ func (s *TemplateService) CreateTemplate(ctx context.Context, req *pb.CreateTemp
 	}
 
 	//fmt response
-	templateObject := &pb.EntityResponse{} // core define
-	err5 := json.Unmarshal(res, templateObject)
+	//templateObject := &pb.EntityResponse{} // core define
+	templateObject := make(map[string]interface{})
+	err5 := json.Unmarshal(res, &templateObject)
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
 	}
+
+	//return
+	re, err7 := structpb.NewValue(templateObject)
+	if nil != err7 {
+		log.Error("convert tree failed ", err7)
+		return nil, err7
+	}
 	out := &pb.CreateTemplateResponse{
-		TemplateObject: templateObject,
+		TemplateObject: re,
 	}
 
 	return out, nil
@@ -130,15 +138,22 @@ func (s *TemplateService) UpdateTemplate(ctx context.Context, req *pb.UpdateTemp
 	}
 
 	//fmt response
-	templateObject := &pb.EntityResponse{} // core define
-	err6 := json.Unmarshal(res, templateObject)
+	//templateObject := &pb.EntityResponse{} // core define
+	templateObject := make(map[string]interface{})
+	err6 := json.Unmarshal(res, &templateObject)
 	if err6 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err6
 	}
 
+	//return
+	re, err7 := structpb.NewValue(templateObject)
+	if nil != err7 {
+		log.Error("convert tree failed ", err7)
+		return nil, err7
+	}
 	out := &pb.UpdateTemplateResponse{
-		TemplateObject: templateObject,
+		TemplateObject: re,
 	}
 	return out, nil
 }
@@ -195,14 +210,22 @@ func (s *TemplateService) GetTemplate(ctx context.Context, req *pb.GetTemplateRe
 	}
 
 	//fmt response
-	templateObject := &pb.EntityResponse{} // core define
-	err3 := json.Unmarshal(res, templateObject)
+	//templateObject := &pb.EntityResponse{} // core define
+	templateObject := make(map[string]interface{})
+	err3 := json.Unmarshal(res, &templateObject)
 	if err3 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err3
 	}
+
+	//return
+	re, err7 := structpb.NewValue(templateObject)
+	if nil != err7 {
+		log.Error("convert tree failed ", err7)
+		return nil, err7
+	}
 	out := &pb.GetTemplateResponse{
-		TemplateObject: templateObject,
+		TemplateObject: re,
 	}
 
 	return out, nil
@@ -588,7 +611,7 @@ func (s *TemplateService) ListTemplateCommand(ctx context.Context, req *pb.ListT
 	//fmt response
 	return &emptypb.Empty{}, nil
 }*/
-func (s *TemplateService) ListTemplatePropConfig(ctx context.Context, entityId string, classify string) (*pb.EntityResponse, error) {
+/*func (s *TemplateService) ListTemplatePropConfig(ctx context.Context, entityId string, classify string) (*pb.EntityResponse, error) {
 
 	//get token
 	tm, err := s.httpClient.GetTokenMap(ctx)
@@ -618,7 +641,7 @@ func (s *TemplateService) ListTemplatePropConfig(ctx context.Context, entityId s
 		return nil, err5
 	}
 	return templatePropConfigObject, nil
-}
+}*/
 
 func (s *TemplateService) GetTemplatePropConfig(ctx context.Context, entityId string, pid string) (map[string]interface{}, error) {
 
@@ -643,14 +666,14 @@ func (s *TemplateService) GetTemplatePropConfig(ctx context.Context, entityId st
 	}
 
 	//fmt response
-	templateSinglePropConfigObject := &pb.EntityResponse{} // core define
-	err5 := json.Unmarshal(res, templateSinglePropConfigObject)
+	templateSinglePropConfigObject := make(map[string]interface{})
+	err5 := json.Unmarshal(res, &templateSinglePropConfigObject)
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
 	}
-
-	kv := templateSinglePropConfigObject.Configs.GetStructValue().Fields
+	return templateSinglePropConfigObject, nil
+	/*kv := templateSinglePropConfigObject.Configs.GetStructValue().Fields
 	propConfig, err3 := json.Marshal(kv)
 	if nil != err3 {
 		return nil, err3
@@ -660,7 +683,7 @@ func (s *TemplateService) GetTemplatePropConfig(ctx context.Context, entityId st
 	if nil != err4 {
 		return nil, err4
 	}
-	return pr, nil
+	return pr, nil*/
 
 	/*config, ok := pr[pid]
 	    if !ok {

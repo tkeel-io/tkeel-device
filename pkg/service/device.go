@@ -10,6 +10,7 @@ import (
 	pb "github.com/tkeel-io/tkeel-device/api/device/v1"
 	//go_struct "google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/structpb"
 )
 
 type DeviceService struct {
@@ -84,8 +85,9 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	}
 
 	// 6. fmt response to user
-	deviceObject := &pb.EntityResponse{} // core define
-	err5 := json.Unmarshal(res, deviceObject)
+	//deviceObject := &pb.EntityResponse{} // core define
+	deviceObject := make(map[string]interface{}) // core define
+	err5 := json.Unmarshal(res, &deviceObject)
 	if err5 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err5
@@ -98,8 +100,14 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 		return nil, err6
 	}
 
+	// 8 return
+	re, err7 := structpb.NewValue(deviceObject)
+	if nil != err7 {
+		log.Error("convert tree failed ", err7)
+		return nil, err7
+	}
 	out := &pb.CreateDeviceResponse{
-		DeviceObject: deviceObject,
+		DeviceObject: re,
 	}
 
 	return out, nil
@@ -140,8 +148,9 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	}
 
 	//fmt response
-	er := new(pb.EntityResponse)
-	if err4 := json.Unmarshal(res, er); nil != err4 {
+	//er := new(pb.EntityResponse)
+	deviceObject := make(map[string]interface{})
+	if err4 := json.Unmarshal(res, &deviceObject); nil != err4 {
 		return nil, err4
 	}
 
@@ -152,8 +161,14 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 		return nil, err6
 	}
 
+	//return
+	re, err7 := structpb.NewValue(deviceObject)
+	if nil != err7 {
+		log.Error("convert tree failed ", err7)
+		return nil, err7
+	}
 	out := &pb.UpdateDeviceResponse{
-		DeviceObject: er,
+		DeviceObject: re,
 	}
 
 	return out, nil
@@ -196,13 +211,22 @@ func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest)
 	if nil != err2 {
 		return nil, err2
 	}
-	er := new(pb.EntityResponse)
-	if err3 := json.Unmarshal(res, er); nil != err3 {
+
+	//return
+	//er := new(pb.EntityResponse)
+	deviceObject := make(map[string]interface{})
+	if err3 := json.Unmarshal(res, &deviceObject); nil != err3 {
 		return nil, err3
 	}
 
+	re, err7 := structpb.NewValue(deviceObject)
+	if nil != err7 {
+		log.Error("convert tree failed ", err7)
+		return nil, err7
+	}
+
 	out := &pb.GetDeviceResponse{
-		DeviceObject: er,
+		DeviceObject: re,
 	}
 
 	return out, nil
@@ -233,14 +257,20 @@ func (s *DeviceService) SearchEntity(ctx context.Context, req *pb.ListDeviceRequ
 		return nil, err2
 	}
 
-	listDeviceObject := &pb.ListEntityResponse{}
-	err3 := json.Unmarshal(res, listDeviceObject)
+	listDeviceObject := make(map[string]interface{})
+	err3 := json.Unmarshal(res, &listDeviceObject)
 	if err3 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err3
 	}
+
+	re, err6 := structpb.NewValue(listDeviceObject)
+	if nil != err6 {
+		log.Error("convert tree failed ", err6)
+		return nil, err6
+	}
 	out := &pb.ListDeviceResponse{
-		ListDeviceObject: listDeviceObject,
+		ListDeviceObject: re,
 	}
 
 	return out, nil
@@ -388,81 +418,36 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 	return &emptypb.Empty{}, nil
 }
 
-/*func (s *DeviceService) CorePatchMethod(ctx context.Context, entityId string, kv map[string]interface{}, path string, operator string) (*emptypb.Empty, error) {
-	log.Debug("CorePatchMethod")
-	log.Debug("path:", path)
-	log.Debug("operator:", operator)
+func (s *DeviceService) CreateDeviceDataRelation(ctx context.Context, req *pb.CreateDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	log.Debug("CreateDataRelation")
+	log.Debug("req:", req)
 
-	//get token
 	tm, err := s.client.GetTokenMap(ctx)
 	if nil != err {
 		return nil, err
 	}
-
-	//get core url
-	midUrl := "/" + entityId + "/patch"
-	url := s.client.GetCoreUrl(midUrl, tm, "group")
-	log.Debug("patch url :", url)
-
-	//fmt request
-	var patchArray []CorePatch
-
-	for k, v := range kv {
-		ph := CorePatch{
-			Path:     path + k,
-			Operator: operator,
-			Value:    v,
-		}
-		patchArray = append(patchArray, ph)
-	}
-	log.Debug("patch Array :", patchArray)
-
-	data, err3 := json.Marshal(patchArray)
-	if nil != err3 {
-		return nil, err3
-	}
-
-	// do it
-	_, err4 := s.client.Put(url, data)
-	if nil != err4 {
-		log.Error("error post data to core", data)
-		return nil, err4
-	}
-
-	//fmt response
-	return &emptypb.Empty{}, nil
-}*/
-
-/*func (s *DeviceService) setSpacePathMapper(tm map[string]string, Id string, parentId string) error {
-
-	log.Debug("setSpacePathMapper")
-	//check ParentId
-	if parentId == "" {
-		return nil
-	}
-
-	//get url
-	midUrl := "/" + parentId + "/mappers"
+	midUrl := "/" + req.GetId() + "/patch"
 	url := s.client.GetCoreUrl(midUrl, tm, "device")
-	log.Debug("mapper url = ", url)
+	log.Debug("get url :", url)
 
-	//fmt request
-	data := make(map[string]string)
-	data["name"] = "mapper_space_path"
-	data["tql"] = "insert into " + Id + " select " + parentId + ".sysField._spacePath + '/" + Id + "'  as " + "sysField._spacePath"
-	log.Debug("tql = ", data["tql"])
+	//write relation
 
-	send, err := json.Marshal(data)
-	if nil != err {
-		return err
-	}
+	//create mapper
 
-	// do it
-	_, err1 := s.client.Post(url, send)
-	if nil != err1 {
-		log.Error("error core return")
-		return err1
-	}
-
-	return nil
-}*/
+	return &emptypb.Empty{}, nil
+}
+func (s *DeviceService) UpdateDeviceDataRelation(ctx context.Context, req *pb.UpdateDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	return &emptypb.Empty{}, nil
+}
+func (s *DeviceService) DeleteDeviceDataRelation(ctx context.Context, req *pb.DeleteDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	return &emptypb.Empty{}, nil
+}
+func (s *DeviceService) ListDeviceDataRelation(ctx context.Context, req *pb.ListDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	return &emptypb.Empty{}, nil
+}
+func (s *DeviceService) SetDeviceAttribte(ctx context.Context, req *pb.SetDeviceAttributeRequest) (*emptypb.Empty, error) {
+	return &emptypb.Empty{}, nil
+}
+func (s *DeviceService) SetDeviceCommand(ctx context.Context, req *pb.SetDeviceCommandRequest) (*emptypb.Empty, error) {
+	return &emptypb.Empty{}, nil
+}

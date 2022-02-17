@@ -27,6 +27,12 @@ type DeviceClient interface {
 	AddDeviceExt(ctx context.Context, in *AddDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteDeviceExt(ctx context.Context, in *DeleteDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateDeviceExt(ctx context.Context, in *UpdateDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateDeviceDataRelation(ctx context.Context, in *CreateDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateDeviceDataRelation(ctx context.Context, in *UpdateDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteDeviceDataRelation(ctx context.Context, in *DeleteDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ListDeviceDataRelation(ctx context.Context, in *ListDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	SetDeviceAttribte(ctx context.Context, in *SetDeviceAttributeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	SetDeviceCommand(ctx context.Context, in *SetDeviceCommandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type deviceClient struct {
@@ -109,6 +115,60 @@ func (c *deviceClient) UpdateDeviceExt(ctx context.Context, in *UpdateDeviceExtR
 	return out, nil
 }
 
+func (c *deviceClient) CreateDeviceDataRelation(ctx context.Context, in *CreateDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/CreateDeviceDataRelation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) UpdateDeviceDataRelation(ctx context.Context, in *UpdateDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/UpdateDeviceDataRelation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) DeleteDeviceDataRelation(ctx context.Context, in *DeleteDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/DeleteDeviceDataRelation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) ListDeviceDataRelation(ctx context.Context, in *ListDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/ListDeviceDataRelation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) SetDeviceAttribte(ctx context.Context, in *SetDeviceAttributeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/SetDeviceAttribte", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) SetDeviceCommand(ctx context.Context, in *SetDeviceCommandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/SetDeviceCommand", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DeviceServer is the server API for Device service.
 // All implementations must embed UnimplementedDeviceServer
 // for forward compatibility
@@ -121,6 +181,12 @@ type DeviceServer interface {
 	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*emptypb.Empty, error)
 	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*emptypb.Empty, error)
 	UpdateDeviceExt(context.Context, *UpdateDeviceExtRequest) (*emptypb.Empty, error)
+	CreateDeviceDataRelation(context.Context, *CreateDeviceDataRelationRequest) (*emptypb.Empty, error)
+	UpdateDeviceDataRelation(context.Context, *UpdateDeviceDataRelationRequest) (*emptypb.Empty, error)
+	DeleteDeviceDataRelation(context.Context, *DeleteDeviceDataRelationRequest) (*emptypb.Empty, error)
+	ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*emptypb.Empty, error)
+	SetDeviceAttribte(context.Context, *SetDeviceAttributeRequest) (*emptypb.Empty, error)
+	SetDeviceCommand(context.Context, *SetDeviceCommandRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedDeviceServer()
 }
 
@@ -151,6 +217,24 @@ func (UnimplementedDeviceServer) DeleteDeviceExt(context.Context, *DeleteDeviceE
 }
 func (UnimplementedDeviceServer) UpdateDeviceExt(context.Context, *UpdateDeviceExtRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDeviceExt not implemented")
+}
+func (UnimplementedDeviceServer) CreateDeviceDataRelation(context.Context, *CreateDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateDeviceDataRelation not implemented")
+}
+func (UnimplementedDeviceServer) UpdateDeviceDataRelation(context.Context, *UpdateDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateDeviceDataRelation not implemented")
+}
+func (UnimplementedDeviceServer) DeleteDeviceDataRelation(context.Context, *DeleteDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteDeviceDataRelation not implemented")
+}
+func (UnimplementedDeviceServer) ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListDeviceDataRelation not implemented")
+}
+func (UnimplementedDeviceServer) SetDeviceAttribte(context.Context, *SetDeviceAttributeRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetDeviceAttribte not implemented")
+}
+func (UnimplementedDeviceServer) SetDeviceCommand(context.Context, *SetDeviceCommandRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetDeviceCommand not implemented")
 }
 func (UnimplementedDeviceServer) mustEmbedUnimplementedDeviceServer() {}
 
@@ -309,6 +393,114 @@ func _Device_UpdateDeviceExt_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Device_CreateDeviceDataRelation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateDeviceDataRelationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).CreateDeviceDataRelation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/CreateDeviceDataRelation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).CreateDeviceDataRelation(ctx, req.(*CreateDeviceDataRelationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_UpdateDeviceDataRelation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateDeviceDataRelationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).UpdateDeviceDataRelation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/UpdateDeviceDataRelation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).UpdateDeviceDataRelation(ctx, req.(*UpdateDeviceDataRelationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_DeleteDeviceDataRelation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDeviceDataRelationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).DeleteDeviceDataRelation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/DeleteDeviceDataRelation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).DeleteDeviceDataRelation(ctx, req.(*DeleteDeviceDataRelationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_ListDeviceDataRelation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListDeviceDataRelationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).ListDeviceDataRelation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/ListDeviceDataRelation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).ListDeviceDataRelation(ctx, req.(*ListDeviceDataRelationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_SetDeviceAttribte_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetDeviceAttributeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).SetDeviceAttribte(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/SetDeviceAttribte",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).SetDeviceAttribte(ctx, req.(*SetDeviceAttributeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_SetDeviceCommand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetDeviceCommandRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).SetDeviceCommand(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/SetDeviceCommand",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).SetDeviceCommand(ctx, req.(*SetDeviceCommandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Device_ServiceDesc is the grpc.ServiceDesc for Device service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -347,6 +539,30 @@ var Device_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateDeviceExt",
 			Handler:    _Device_UpdateDeviceExt_Handler,
+		},
+		{
+			MethodName: "CreateDeviceDataRelation",
+			Handler:    _Device_CreateDeviceDataRelation_Handler,
+		},
+		{
+			MethodName: "UpdateDeviceDataRelation",
+			Handler:    _Device_UpdateDeviceDataRelation_Handler,
+		},
+		{
+			MethodName: "DeleteDeviceDataRelation",
+			Handler:    _Device_DeleteDeviceDataRelation_Handler,
+		},
+		{
+			MethodName: "ListDeviceDataRelation",
+			Handler:    _Device_ListDeviceDataRelation_Handler,
+		},
+		{
+			MethodName: "SetDeviceAttribte",
+			Handler:    _Device_SetDeviceAttribte_Handler,
+		},
+		{
+			MethodName: "SetDeviceCommand",
+			Handler:    _Device_SetDeviceCommand_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

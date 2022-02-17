@@ -4,7 +4,7 @@ syntax = "proto3";
 package api.group.v1;
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
-import public "tkeel-io/core/api/v1/entity.proto";
+//import public "tkeel-io/core/api/v1/entity.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/empty.proto";
 
@@ -218,27 +218,23 @@ message GroupEntityCoreInfo {
 // device to user 
 
 message CreateGroupResponse {
-    //string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ok  or failed"}];
-    //GroupEntityCoreInfo  entityInfo = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
-    api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+    //api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+    google.protobuf.Value groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
 }
 
 message UpdateGroupResponse {
-    api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+    //api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+    google.protobuf.Value groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
 }
 
 message GetGroupResponse {
-    //string result = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "ok  or failed"}];
-    //GroupEntityCoreInfo  entityInfo= 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
-    api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+    //api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+    google.protobuf.Value groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
 }
 message GetGroupTreeResponse {
     google.protobuf.Value GroupTree = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组列表树"}];
 }
 
-message ListGroupItemsResponse {
-    api.core.v1.ListEntityResponse listEntityInfo = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组列表信息"}];
-}
 
 // Basic data types
 
