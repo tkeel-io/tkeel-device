@@ -319,7 +319,7 @@ func GetUUID() string {
 
 // get time
 func GetTime() int64 {
-	return time.Now().UnixNano()
+	return time.Now().UnixNano() / 1e6
 }
 func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, parentId string) error {
 

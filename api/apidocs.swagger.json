@@ -2208,6 +2208,10 @@
           "type": "string",
           "description": "设备组ID"
         },
+        "parentName": {
+          "type": "string",
+          "description": "设备组名称"
+        },
         "directConnection": {
           "type": "boolean",
           "description": "设备是否直连"
@@ -2215,6 +2219,10 @@
         "templateId": {
           "type": "string",
           "description": "设备模板ID"
+        },
+        "templateName": {
+          "type": "string",
+          "description": "设备模板名称"
         },
         "selfLearn": {
           "type": "boolean",
@@ -2309,6 +2317,10 @@
         "parentId": {
           "type": "string",
           "description": "父设备组ID"
+        },
+        "parentName": {
+          "type": "string",
+          "description": "父设备组名称"
         },
         "ext": {
           "type": "object",

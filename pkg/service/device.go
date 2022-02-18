@@ -56,6 +56,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	coreInfo.SysField.XOwner = tm["owner"]
 	coreInfo.SysField.XSource = tm["source"]
 	coreInfo.SysField.XSpacePath = devId
+	coreInfo.SysField.XSubscribeAddr = ""
 
 	//3.5 logical judgement
 	if coreInfo.BasicInfo.DirectConnection == false && coreInfo.BasicInfo.TemplateId == "" {
