@@ -343,7 +343,9 @@ message DeviceEntityCoreInfo {
   //google.protobuf.Value commands = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备命令"}];
   //google.protobuf.Value relations = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备数据关系"}];
 }
-
+message UpdateDeviceEntityCoreInfo {
+  DeviceEntityBasicInfo basicInfo = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}];
+}
 //------------------------------------------------------------------------------
 // Basic data types
 //------------------------------------------------------------------------------

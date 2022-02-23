@@ -558,6 +558,9 @@ message TemplateEntityCoreInfo {
     TemplateBasicInfo  basicInfo = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "基本信息"}];
     TemplateEntitySysField  sysField = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "系统信息"}];
 }
+message UpdateTemplateEntityCoreInfo {
+    TemplateBasicInfo  basicInfo = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "基本信息"}];
+}
 
 message TemplateEntitySysField {
     string _id                       = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组ID"}];

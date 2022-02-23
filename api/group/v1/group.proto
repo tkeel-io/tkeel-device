@@ -214,7 +214,9 @@ message GroupEntityCoreInfo {
     GroupEntitySysField     sysField = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组系统信息"}];
     //GroupEntitySubEntityIds subIds = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组子设备信息"}];
 }
-
+message UpdateGroupEntityCoreInfo {
+    GroupEntity             group = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
+}
 // device to user 
 
 message CreateGroupResponse {

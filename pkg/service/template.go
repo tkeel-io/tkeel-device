@@ -115,8 +115,9 @@ func (s *TemplateService) UpdateTemplate(ctx context.Context, req *pb.UpdateTemp
 	log.Debug("get url: ", url)
 
 	//fmt request
-
-	data, err3 := json.Marshal(req)
+	updateT := &pb.UpdateTemplateEntityCoreInfo{}
+	updateT.BasicInfo = req.BasicInfo
+	data, err3 := json.Marshal(updateT)
 	if nil != err3 {
 		return nil, err3
 	}
