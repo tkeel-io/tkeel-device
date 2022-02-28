@@ -31,7 +31,7 @@ type GroupHTTPServer interface {
 	AddGroupExt(context.Context, *AddGroupExtRequest) (*emptypb.Empty, error)
 	CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error)
 	DelGroupExt(context.Context, *DelGroupExtRequest) (*emptypb.Empty, error)
-	DeleteGroup(context.Context, *DeleteGroupRequest) (*emptypb.Empty, error)
+	DeleteGroup(context.Context, *DeleteGroupRequest) (*DeleteGroupResponse, error)
 	GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error)
 	GetGroupTree(context.Context, *GetGroupTreeRequest) (*GetGroupTreeResponse, error)
 	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)

@@ -4,7 +4,7 @@ syntax = "proto3";
 package api.group.v1;
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
-//import public "tkeel-io/core/api/v1/entity.proto";
+//import public "tkeel-io/search/api/v1/search.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/empty.proto";
 
@@ -47,7 +47,7 @@ service Group {
             }
         };
 	};
-	rpc DeleteGroup (DeleteGroupRequest) returns (google.protobuf.Empty) {
+	rpc DeleteGroup (DeleteGroupRequest) returns (DeleteGroupResponse) {
 		option (google.api.http) = {
 			post : "/groups/delete"
             body : "ids"
@@ -183,13 +183,18 @@ message DeleteGroupRequest {
 	Ids                ids = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组ID 数组"}];
 }
 
+message DeleteGroupResponse {
+    repeated FaildDelGroup faildDelGroup = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组删除失败 数组"}];
+}
+message FaildDelGroup {
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组ID"}];
+    string reason = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "原因"}];
+}
+
 message GetGroupRequest { 
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组ID"}];
 }
 message GetGroupTreeRequest { 
-    ListEntityQuery  listEntityQuery = 1;
-}
-message ListGroupItemsRequest {
     ListEntityQuery  listEntityQuery = 1;
 }
 
@@ -266,14 +271,7 @@ message ListEntityQuery {
     bool is_descending = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "是否逆序， false：不逆序，true:逆序"}];
     string query = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "es查询条件"}];
     repeated Condition condition = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "组合条件"}];
-}
-
-/*message Page {
-	int32 offset = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "记录开始位置"}];
-	int32 limit  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "每页限制条数"}];
-	string sort   = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "排序字段"}];
-	bool reverse  = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "是否逆序， false：不逆序，true:逆序"}];
-}*/
+} 
 
 message Condition {
 	string field 		= 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "查询输出字段"}];

@@ -21,7 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 type GroupClient interface {
 	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CreateGroupResponse, error)
 	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error)
-	DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*DeleteGroupResponse, error)
 	GetGroup(ctx context.Context, in *GetGroupRequest, opts ...grpc.CallOption) (*GetGroupResponse, error)
 	GetGroupTree(ctx context.Context, in *GetGroupTreeRequest, opts ...grpc.CallOption) (*GetGroupTreeResponse, error)
 	AddGroupExt(ctx context.Context, in *AddGroupExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -55,8 +55,8 @@ func (c *groupClient) UpdateGroup(ctx context.Context, in *UpdateGroupRequest, o
 	return out, nil
 }
 
-func (c *groupClient) DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *groupClient) DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*DeleteGroupResponse, error) {
+	out := new(DeleteGroupResponse)
 	err := c.cc.Invoke(ctx, "/api.group.v1.Group/DeleteGroup", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -115,7 +115,7 @@ func (c *groupClient) DelGroupExt(ctx context.Context, in *DelGroupExtRequest, o
 type GroupServer interface {
 	CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error)
 	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
-	DeleteGroup(context.Context, *DeleteGroupRequest) (*emptypb.Empty, error)
+	DeleteGroup(context.Context, *DeleteGroupRequest) (*DeleteGroupResponse, error)
 	GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error)
 	GetGroupTree(context.Context, *GetGroupTreeRequest) (*GetGroupTreeResponse, error)
 	AddGroupExt(context.Context, *AddGroupExtRequest) (*emptypb.Empty, error)
@@ -134,7 +134,7 @@ func (UnimplementedGroupServer) CreateGroup(context.Context, *CreateGroupRequest
 func (UnimplementedGroupServer) UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroup not implemented")
 }
-func (UnimplementedGroupServer) DeleteGroup(context.Context, *DeleteGroupRequest) (*emptypb.Empty, error) {
+func (UnimplementedGroupServer) DeleteGroup(context.Context, *DeleteGroupRequest) (*DeleteGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteGroup not implemented")
 }
 func (UnimplementedGroupServer) GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error) {

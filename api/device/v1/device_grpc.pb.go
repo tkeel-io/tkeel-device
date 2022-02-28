@@ -21,7 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 type DeviceClient interface {
 	CreateDevice(ctx context.Context, in *CreateDeviceRequest, opts ...grpc.CallOption) (*CreateDeviceResponse, error)
 	UpdateDevice(ctx context.Context, in *UpdateDeviceRequest, opts ...grpc.CallOption) (*UpdateDeviceResponse, error)
-	DeleteDevice(ctx context.Context, in *DeleteDeviceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteDevice(ctx context.Context, in *DeleteDeviceRequest, opts ...grpc.CallOption) (*DeleteDeviceResponse, error)
 	GetDevice(ctx context.Context, in *GetDeviceRequest, opts ...grpc.CallOption) (*GetDeviceResponse, error)
 	SearchEntity(ctx context.Context, in *ListDeviceRequest, opts ...grpc.CallOption) (*ListDeviceResponse, error)
 	AddDeviceExt(ctx context.Context, in *AddDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -61,8 +61,8 @@ func (c *deviceClient) UpdateDevice(ctx context.Context, in *UpdateDeviceRequest
 	return out, nil
 }
 
-func (c *deviceClient) DeleteDevice(ctx context.Context, in *DeleteDeviceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *deviceClient) DeleteDevice(ctx context.Context, in *DeleteDeviceRequest, opts ...grpc.CallOption) (*DeleteDeviceResponse, error) {
+	out := new(DeleteDeviceResponse)
 	err := c.cc.Invoke(ctx, "/api.device.v1.Device/DeleteDevice", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -175,7 +175,7 @@ func (c *deviceClient) SetDeviceCommand(ctx context.Context, in *SetDeviceComman
 type DeviceServer interface {
 	CreateDevice(context.Context, *CreateDeviceRequest) (*CreateDeviceResponse, error)
 	UpdateDevice(context.Context, *UpdateDeviceRequest) (*UpdateDeviceResponse, error)
-	DeleteDevice(context.Context, *DeleteDeviceRequest) (*emptypb.Empty, error)
+	DeleteDevice(context.Context, *DeleteDeviceRequest) (*DeleteDeviceResponse, error)
 	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)
 	SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
 	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*emptypb.Empty, error)
@@ -200,7 +200,7 @@ func (UnimplementedDeviceServer) CreateDevice(context.Context, *CreateDeviceRequ
 func (UnimplementedDeviceServer) UpdateDevice(context.Context, *UpdateDeviceRequest) (*UpdateDeviceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDevice not implemented")
 }
-func (UnimplementedDeviceServer) DeleteDevice(context.Context, *DeleteDeviceRequest) (*emptypb.Empty, error) {
+func (UnimplementedDeviceServer) DeleteDevice(context.Context, *DeleteDeviceRequest) (*DeleteDeviceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteDevice not implemented")
 }
 func (UnimplementedDeviceServer) GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error) {

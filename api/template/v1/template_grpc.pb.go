@@ -22,7 +22,7 @@ type TemplateClient interface {
 	//Operation template entity
 	CreateTemplate(ctx context.Context, in *CreateTemplateRequest, opts ...grpc.CallOption) (*CreateTemplateResponse, error)
 	UpdateTemplate(ctx context.Context, in *UpdateTemplateRequest, opts ...grpc.CallOption) (*UpdateTemplateResponse, error)
-	DeleteTemplate(ctx context.Context, in *DeleteTemplateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteTemplate(ctx context.Context, in *DeleteTemplateRequest, opts ...grpc.CallOption) (*DeleteTemplateResponse, error)
 	GetTemplate(ctx context.Context, in *GetTemplateRequest, opts ...grpc.CallOption) (*GetTemplateResponse, error)
 	//operation template attribute
 	AddTemplateAttribute(ctx context.Context, in *AddTemplateAttributeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -73,8 +73,8 @@ func (c *templateClient) UpdateTemplate(ctx context.Context, in *UpdateTemplateR
 	return out, nil
 }
 
-func (c *templateClient) DeleteTemplate(ctx context.Context, in *DeleteTemplateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *templateClient) DeleteTemplate(ctx context.Context, in *DeleteTemplateRequest, opts ...grpc.CallOption) (*DeleteTemplateResponse, error) {
+	out := new(DeleteTemplateResponse)
 	err := c.cc.Invoke(ctx, "/api.template.v1.Template/DeleteTemplate", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -260,7 +260,7 @@ type TemplateServer interface {
 	//Operation template entity
 	CreateTemplate(context.Context, *CreateTemplateRequest) (*CreateTemplateResponse, error)
 	UpdateTemplate(context.Context, *UpdateTemplateRequest) (*UpdateTemplateResponse, error)
-	DeleteTemplate(context.Context, *DeleteTemplateRequest) (*emptypb.Empty, error)
+	DeleteTemplate(context.Context, *DeleteTemplateRequest) (*DeleteTemplateResponse, error)
 	GetTemplate(context.Context, *GetTemplateRequest) (*GetTemplateResponse, error)
 	//operation template attribute
 	AddTemplateAttribute(context.Context, *AddTemplateAttributeRequest) (*emptypb.Empty, error)
@@ -296,7 +296,7 @@ func (UnimplementedTemplateServer) CreateTemplate(context.Context, *CreateTempla
 func (UnimplementedTemplateServer) UpdateTemplate(context.Context, *UpdateTemplateRequest) (*UpdateTemplateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTemplate not implemented")
 }
-func (UnimplementedTemplateServer) DeleteTemplate(context.Context, *DeleteTemplateRequest) (*emptypb.Empty, error) {
+func (UnimplementedTemplateServer) DeleteTemplate(context.Context, *DeleteTemplateRequest) (*DeleteTemplateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTemplate not implemented")
 }
 func (UnimplementedTemplateServer) GetTemplate(context.Context, *GetTemplateRequest) (*GetTemplateResponse, error) {

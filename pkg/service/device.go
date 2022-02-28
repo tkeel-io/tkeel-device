@@ -5,7 +5,6 @@ import (
 	json "encoding/json"
 	"errors"
 	"fmt"
-
 	"github.com/tkeel-io/kit/log"
 	pb "github.com/tkeel-io/tkeel-device/api/device/v1"
 	//go_struct "google.golang.org/protobuf/types/known/structpb"
@@ -27,6 +26,13 @@ func NewDeviceService() *DeviceService {
 func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRequest) (*pb.CreateDeviceResponse, error) {
 	log.Debug("CreateDevice")
 	log.Debug("req:", req.DevBasicInfo)
+
+	//0. check device name repeated
+	errRepeated := s.checkNameRepated(ctx, req.DevBasicInfo.Name)
+	if nil != errRepeated {
+		log.Debug("err:", errRepeated)
+		return nil, errRepeated
+	}
 
 	//1. verify Authentication in header and get user token map
 	tm, err := s.client.GetTokenMap(ctx)
@@ -57,6 +63,15 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	coreInfo.SysField.XSource = tm["source"]
 	coreInfo.SysField.XSpacePath = devId
 	coreInfo.SysField.XSubscribeAddr = ""
+
+	//connectInfo
+	coreInfo.ConnectInfo = new(pb.DeviceEntityConnectInfo)
+	coreInfo.ConnectInfo.XClientId = ""
+	coreInfo.ConnectInfo.XOnline = false
+	coreInfo.ConnectInfo.XSockPort = ""
+	coreInfo.ConnectInfo.XProtocol = ""
+	coreInfo.ConnectInfo.XPeerHost = ""
+	coreInfo.ConnectInfo.XUserName = ""
 
 	//3.5 logical judgement
 	if coreInfo.BasicInfo.DirectConnection == false && coreInfo.BasicInfo.TemplateId == "" {
@@ -175,13 +190,17 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	return out, nil
 }
 
-func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRequest) (*emptypb.Empty, error) {
+func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRequest) (*pb.DeleteDeviceResponse, error) {
 	log.Debug("DeleteDevice")
 	log.Debug("req:", req)
 
 	tm, err := s.client.GetTokenMap(ctx)
 	if nil != err {
 		return nil, err
+	}
+
+	out := &pb.DeleteDeviceResponse{
+		FaildDelDevice: make([]*pb.FaildDelDevice, 0),
 	}
 	ids := req.Ids.GetIds()
 	for _, id := range ids {
@@ -191,10 +210,16 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 
 		_, err2 := s.client.Delete(url)
 		if nil != err2 {
-			return nil, err2
+			fd := &pb.FaildDelDevice{
+				Id:     id,
+				Reason: err2.Error(),
+			}
+			out.FaildDelDevice = append(out.FaildDelDevice, fd)
+			log.Error("error core return error", id)
+			continue
 		}
 	}
-	return &emptypb.Empty{}, nil
+	return out, nil
 }
 
 func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest) (*pb.GetDeviceResponse, error) {
@@ -235,31 +260,8 @@ func (s *DeviceService) GetDevice(ctx context.Context, req *pb.GetDeviceRequest)
 
 func (s *DeviceService) SearchEntity(ctx context.Context, req *pb.ListDeviceRequest) (*pb.ListDeviceResponse, error) {
 	log.Debug("SearchEntity")
-	//req.Filter.Page.Reverse = req.Filter.Page.GetReverse()
-	//req.Filter.Page.Limit = req.Filter.Page.GetLimit()
-	//req.Filter.Page.Offset = req.Filter.Page.GetOffset()
-	//log.Debug("req:", req, req.Filter.Page)
-	log.Debug("req:", req, req.ListEntityQuery)
 
-	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err {
-		return nil, err
-	}
-	midUrl := "/search"
-	url := s.client.GetCoreUrl(midUrl, tm, "device")
-	log.Debug("get url :", url)
-
-	filter, err1 := json.Marshal(req.ListEntityQuery)
-	if err1 != nil {
-		return nil, err1
-	}
-	res, err2 := s.client.Post(url, filter)
-	if nil != err2 {
-		return nil, err2
-	}
-
-	listDeviceObject := make(map[string]interface{})
-	err3 := json.Unmarshal(res, &listDeviceObject)
+	listDeviceObject, err3 := s.CoreSearchEntity(ctx, req.ListEntityQuery)
 	if err3 != nil {
 		log.Error("error Unmarshal data from core")
 		return nil, err3
@@ -451,4 +453,97 @@ func (s *DeviceService) SetDeviceAttribte(ctx context.Context, req *pb.SetDevice
 }
 func (s *DeviceService) SetDeviceCommand(ctx context.Context, req *pb.SetDeviceCommandRequest) (*emptypb.Empty, error) {
 	return &emptypb.Empty{}, nil
+}
+func (s *DeviceService) CoreSearchEntity(ctx context.Context, listEntityQuery *pb.ListEntityQuery) (map[string]interface{}, error) {
+	log.Debug("CoreSearchEntity")
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+	midUrl := "/search"
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("core url :", url)
+
+	//Data isolation
+	user := &pb.Condition{
+		Field:    "owner",
+		Operator: "$eq",
+		Value:    tm["owner"],
+	}
+	listEntityQuery.Condition = append(listEntityQuery.Condition, user)
+
+	log.Debug("Query:", listEntityQuery)
+
+	//do it
+	filter, err1 := json.Marshal(listEntityQuery)
+	if err1 != nil {
+		return nil, err1
+	}
+	res, err2 := s.client.Post(url, filter)
+	if nil != err2 {
+		return nil, err2
+	}
+
+	listObject := make(map[string]interface{})
+	err3 := json.Unmarshal(res, &listObject)
+	if err3 != nil {
+		log.Error("error Unmarshal data from core")
+		return nil, err3
+	}
+
+	return listObject, nil
+}
+
+func (s *DeviceService) checkNameRepated(ctx context.Context, name string) error {
+	log.Debug("checkNameRepated")
+	if name == "" {
+		return errors.New("name cannot be empty")
+	}
+	//create query
+	query := &pb.ListEntityQuery{
+		PageNum:      1,
+		PageSize:     0,
+		OrderBy:      "name",
+		IsDescending: false,
+		Query:        "",
+		Condition:    make([]*pb.Condition, 0),
+	}
+	condition1 := &pb.Condition{
+		Field:    "basicInfo.name",
+		Operator: "$eq",
+		Value:    name,
+	}
+	condition2 := &pb.Condition{
+		Field:    "type",
+		Operator: "$eq",
+		Value:    "device",
+	}
+	query.Condition = append(query.Condition, condition1)
+	query.Condition = append(query.Condition, condition2)
+	//search
+	listObject, err := s.CoreSearchEntity(ctx, query)
+	if err != nil {
+		log.Error("error Core return ", err)
+		return err
+	}
+
+	//check
+	total, ok := listObject["total"]
+	if !ok {
+		log.Error("error  total field does not exist")
+		return errors.New("total field does not exist")
+	}
+    
+
+	tl, ok1 := total.(float64)
+	if !ok1 {
+		return errors.New("total is not int type")
+	}
+
+	if tl == 0 {
+		return nil
+	} else {
+		return errors.New("have repeated")
+	}
 }

@@ -33,7 +33,7 @@ type TemplateHTTPServer interface {
 	AddTemplateTelemetry(context.Context, *AddTemplateTelemetryRequest) (*emptypb.Empty, error)
 	AddTemplateTelemetryExt(context.Context, *AddTemplateTelemetryExtRequest) (*emptypb.Empty, error)
 	CreateTemplate(context.Context, *CreateTemplateRequest) (*CreateTemplateResponse, error)
-	DeleteTemplate(context.Context, *DeleteTemplateRequest) (*emptypb.Empty, error)
+	DeleteTemplate(context.Context, *DeleteTemplateRequest) (*DeleteTemplateResponse, error)
 	DeleteTemplateAttribute(context.Context, *DeleteTemplateAttributeRequest) (*emptypb.Empty, error)
 	DeleteTemplateCommand(context.Context, *DeleteTemplateCommandRequest) (*emptypb.Empty, error)
 	DeleteTemplateTelemetry(context.Context, *DeleteTemplateTelemetryRequest) (*emptypb.Empty, error)

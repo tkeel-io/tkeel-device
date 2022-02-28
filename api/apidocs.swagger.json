@@ -143,7 +143,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "properties": {}
+              "$ref": "#/definitions/v1DeleteDeviceResponse"
             }
           },
           "default": {
@@ -607,7 +607,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "properties": {}
+              "$ref": "#/definitions/v1DeleteGroupResponse"
             }
           },
           "default": {
@@ -987,7 +987,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "properties": {}
+              "$ref": "#/definitions/v1DeleteTemplateResponse"
             }
           },
           "default": {
@@ -2193,6 +2193,42 @@
         }
       }
     },
+    "v1DeleteDeviceResponse": {
+      "type": "object",
+      "properties": {
+        "faildDelDevice": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1FaildDelDevice"
+          },
+          "description": "设备删除失败 数组"
+        }
+      }
+    },
+    "v1DeleteGroupResponse": {
+      "type": "object",
+      "properties": {
+        "faildDelGroup": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1FaildDelGroup"
+          },
+          "description": "设备组删除失败 数组"
+        }
+      }
+    },
+    "v1DeleteTemplateResponse": {
+      "type": "object",
+      "properties": {
+        "faildDelTemplate": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1FaildDelTemplate"
+          },
+          "description": "模板删除失败 数组"
+        }
+      }
+    },
     "v1DeviceEntityBasicInfo": {
       "type": "object",
       "properties": {
@@ -2234,6 +2270,45 @@
         }
       },
       "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
+    },
+    "v1FaildDelDevice": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "设备ID"
+        },
+        "reason": {
+          "type": "string",
+          "description": "原因"
+        }
+      }
+    },
+    "v1FaildDelGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "设备组ID"
+        },
+        "reason": {
+          "type": "string",
+          "description": "原因"
+        }
+      }
+    },
+    "v1FaildDelTemplate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "模板ID"
+        },
+        "reason": {
+          "type": "string",
+          "description": "原因"
+        }
+      }
     },
     "v1GetDeviceResponse": {
       "type": "object",

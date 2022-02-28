@@ -37,6 +37,13 @@ type Config struct {
 func (s *TemplateService) CreateTemplate(ctx context.Context, req *pb.CreateTemplateRequest) (*pb.CreateTemplateResponse, error) {
 	log.Debug("CreateTemplate")
 	log.Debug("req:", req)
+	
+    //0. check device name repeated
+	errRepeated := s.checkNameRepated(ctx, req.BasicInfo.Name)
+	if nil != errRepeated {
+		log.Debug("err:", errRepeated)
+		return nil, errRepeated
+	}
 
 	//parse user token
 	tm, err := s.httpClient.GetTokenMap(ctx)
@@ -159,7 +166,7 @@ func (s *TemplateService) UpdateTemplate(ctx context.Context, req *pb.UpdateTemp
 	return out, nil
 }
 
-func (s *TemplateService) DeleteTemplate(ctx context.Context, req *pb.DeleteTemplateRequest) (*emptypb.Empty, error) {
+func (s *TemplateService) DeleteTemplate(ctx context.Context, req *pb.DeleteTemplateRequest) (*pb.DeleteTemplateResponse, error) {
 	log.Debug("DelTemplate")
 	log.Debug("req:", req)
 
@@ -169,7 +176,23 @@ func (s *TemplateService) DeleteTemplate(ctx context.Context, req *pb.DeleteTemp
 		return nil, err
 	}
 
+	out := &pb.DeleteTemplateResponse{
+		FaildDelTemplate: make([]*pb.FaildDelTemplate, 0),
+	}
+
 	for _, id := range req.Ids.GetIds() {
+		//check clild
+		err1 := s.checkChild(ctx, id)
+		if err1 != nil {
+			fd := &pb.FaildDelTemplate{
+				Id:     id,
+				Reason: err1.Error(),
+			}
+			out.FaildDelTemplate = append(out.FaildDelTemplate, fd)
+			log.Error("have SubNode", id)
+			continue
+		}
+
 		//get core url
 		midUrl := "/" + id
 		url := s.httpClient.GetCoreUrl(midUrl, tm, "template")
@@ -178,14 +201,19 @@ func (s *TemplateService) DeleteTemplate(ctx context.Context, req *pb.DeleteTemp
 		//fmt request
 
 		// do it
-		_, err1 := s.httpClient.Delete(url)
-		if nil != err1 {
-			log.Error("error post data to core", id)
-			return nil, err1
+		_, err2 := s.httpClient.Delete(url)
+		if nil != err2 {
+			fd := &pb.FaildDelTemplate{
+				Id:     id,
+				Reason: err2.Error(),
+			}
+			out.FaildDelTemplate = append(out.FaildDelTemplate, fd)
+			log.Error("error core return error", id)
+			continue
 		}
 	}
 	//fmt response
-	return &emptypb.Empty{}, nil
+	return out, nil
 }
 
 func (s *TemplateService) GetTemplate(ctx context.Context, req *pb.GetTemplateRequest) (*pb.GetTemplateResponse, error) {
@@ -734,4 +762,136 @@ func (s *TemplateService) opTemplatePropConfig(ctx context.Context, templateId s
 	propMap[prop.Id] = prop
 	//do it
 	return s.httpClient.CorePatchMethod(ctx, templateId, propMap, item, op, pathClassify)
+}
+
+func (s *TemplateService) checkChild(ctx context.Context, id string) error {
+	log.Debug("checkChild")
+	//create query
+	query := &pb.ListEntityQuery{
+		PageNum:      1,
+		PageSize:     1000,
+		OrderBy:      "name",
+		IsDescending: false,
+		Query:        "",
+		Condition:    make([]*pb.Condition, 0),
+	}
+	condition1 := &pb.Condition{
+		Field:    "templateId",
+		Operator: "$eq",
+		Value:    id,
+	}
+	query.Condition = append(query.Condition, condition1)
+	//search
+	listObject, err := s.CoreSearchEntity(ctx, query)
+	if err != nil {
+		log.Error("error Core return ", err)
+		return err
+	}
+
+	//check
+	total, ok := listObject["total"]
+	if !ok {
+		log.Error("error  total field does not exist")
+		return errors.New("total field does not exist")
+	}
+
+	tl, ok1 := total.(int)
+	if !ok1 {
+		return errors.New("total is not int type")
+	}
+
+	if tl == 0 {
+		return nil
+	} else {
+		return errors.New("have SubNode")
+	}
+}
+func (s *TemplateService) CoreSearchEntity(ctx context.Context, listEntityQuery *pb.ListEntityQuery) (map[string]interface{}, error) {
+	log.Debug("CoreSearchEntity")
+
+	tm, err := s.httpClient.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+	midUrl := "/search"
+	url := s.httpClient.GetCoreUrl(midUrl, tm, "template")
+	log.Debug("core url :", url)
+
+	//Data isolation
+	user := &pb.Condition{
+		Field:    "owner",
+		Operator: "$eq",
+		Value:    tm["owner"],
+	}
+	listEntityQuery.Condition = append(listEntityQuery.Condition, user)
+	log.Debug("Query:", listEntityQuery)
+
+	//do it
+	filter, err1 := json.Marshal(listEntityQuery)
+	if err1 != nil {
+		return nil, err1
+	}
+	res, err2 := s.httpClient.Post(url, filter)
+	if nil != err2 {
+		return nil, err2
+	}
+
+	listObject := make(map[string]interface{})
+	err3 := json.Unmarshal(res, &listObject)
+	if err3 != nil {
+		log.Error("error Unmarshal data from core")
+		return nil, err3
+	}
+	return listObject, nil
+}
+func (s *TemplateService) checkNameRepated(ctx context.Context, name string) error {
+	log.Debug("checkNameRepated")
+	if name == "" {
+		return errors.New("name cannot be empty")
+	}
+	//create query
+	query := &pb.ListEntityQuery{
+		PageNum:      1,
+		PageSize:     0,
+		OrderBy:      "name",
+		IsDescending: false,
+		Query:        "",
+		Condition:    make([]*pb.Condition, 0),
+	}
+	condition1 := &pb.Condition{
+		Field:    "basicInfo.name",
+		Operator: "$eq",
+		Value:    name,
+	}
+	condition2 := &pb.Condition{
+		Field:    "type",
+		Operator: "$eq",
+		Value:    "template",
+	}
+	query.Condition = append(query.Condition, condition1)
+	query.Condition = append(query.Condition, condition2)
+	//search
+	listObject, err := s.CoreSearchEntity(ctx, query)
+	if err != nil {
+		log.Error("error Core return ", err)
+		return err
+	}
+
+	//check
+	total, ok := listObject["total"]
+	if !ok {
+		log.Error("error  total field does not exist")
+		return errors.New("total field does not exist")
+	}
+
+	tl, ok1 := total.(int)
+	if !ok1 {
+		return errors.New("total is not int type")
+	}
+
+	if tl == 0 {
+		return nil
+	} else {
+		return errors.New("have repeated")
+	}
 }

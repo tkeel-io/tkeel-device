@@ -31,7 +31,7 @@ type DeviceHTTPServer interface {
 	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*emptypb.Empty, error)
 	CreateDevice(context.Context, *CreateDeviceRequest) (*CreateDeviceResponse, error)
 	CreateDeviceDataRelation(context.Context, *CreateDeviceDataRelationRequest) (*emptypb.Empty, error)
-	DeleteDevice(context.Context, *DeleteDeviceRequest) (*emptypb.Empty, error)
+	DeleteDevice(context.Context, *DeleteDeviceRequest) (*DeleteDeviceResponse, error)
 	DeleteDeviceDataRelation(context.Context, *DeleteDeviceDataRelationRequest) (*emptypb.Empty, error)
 	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*emptypb.Empty, error)
 	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)

@@ -32,6 +32,13 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	log.Debug("CreateGroup")
 	log.Debug("req:", req.Group)
 
+	//0. check group name repeated
+	errRepeated := s.checkNameRepated(ctx, req.Group.Name)
+	if nil != errRepeated {
+		log.Debug("err:", errRepeated)
+		return nil, errRepeated
+	}
+
 	//get token
 	tm, err := s.httpClient.GetTokenMap(ctx)
 	if nil != err {
@@ -90,7 +97,7 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	//return
 	re, err7 := structpb.NewValue(groupObject)
 	if nil != err7 {
-		log.Error("convert tree failed ", err7)
+		log.Error("convert  failed ", err7)
 		return nil, err7
 	}
 	out := &pb.CreateGroupResponse{
@@ -160,7 +167,7 @@ func (s *GroupService) UpdateGroup(ctx context.Context, req *pb.UpdateGroupReque
 	//return
 	re, err7 := structpb.NewValue(groupObject)
 	if nil != err7 {
-		log.Error("convert tree failed ", err7)
+		log.Error("convert  failed ", err7)
 		return nil, err7
 	}
 	out := &pb.UpdateGroupResponse{
@@ -171,7 +178,7 @@ func (s *GroupService) UpdateGroup(ctx context.Context, req *pb.UpdateGroupReque
 
 }
 
-func (s *GroupService) DeleteGroup(ctx context.Context, req *pb.DeleteGroupRequest) (*emptypb.Empty, error) {
+func (s *GroupService) DeleteGroup(ctx context.Context, req *pb.DeleteGroupRequest) (*pb.DeleteGroupResponse, error) {
 	log.Debug("DelGroup")
 	log.Debug("req:", req)
 
@@ -181,23 +188,41 @@ func (s *GroupService) DeleteGroup(ctx context.Context, req *pb.DeleteGroupReque
 		return nil, err
 	}
 
+	out := &pb.DeleteGroupResponse{
+		FaildDelGroup: make([]*pb.FaildDelGroup, 0),
+	}
 	for _, id := range req.Ids.GetIds() {
+		//check child
+		err1 := s.checkChild(ctx, id)
+		if err1 != nil {
+			fd := &pb.FaildDelGroup{
+				Id:     id,
+				Reason: err1.Error(),
+			}
+			out.FaildDelGroup = append(out.FaildDelGroup, fd)
+			log.Error("have SubNode", id)
+			continue
+		}
+
 		//get core url
 		midUrl := "/" + id
 		url := s.httpClient.GetCoreUrl(midUrl, tm, "group")
 		log.Debug("get url :", url)
 
-		//fmt request
-
 		// do it
-		_, err1 := s.httpClient.Delete(url)
-		if nil != err1 {
-			log.Error("error post data to core", id)
-			return nil, err1
+		_, err2 := s.httpClient.Delete(url)
+		if nil != err2 {
+			fd := &pb.FaildDelGroup{
+				Id:     id,
+				Reason: err2.Error(),
+			}
+			out.FaildDelGroup = append(out.FaildDelGroup, fd)
+			log.Error("error core return error", id)
+			continue
 		}
 	}
 	//fmt response
-	return &emptypb.Empty{}, nil
+	return out, nil
 }
 
 func (s *GroupService) GetGroup(ctx context.Context, req *pb.GetGroupRequest) (*pb.GetGroupResponse, error) {
@@ -234,7 +259,7 @@ func (s *GroupService) GetGroup(ctx context.Context, req *pb.GetGroupRequest) (*
 	//return
 	re, err7 := structpb.NewValue(groupObject)
 	if nil != err7 {
-		log.Error("convert tree failed ", err7)
+		log.Error("convert  failed ", err7)
 		return nil, err7
 	}
 	out := &pb.GetGroupResponse{
@@ -248,38 +273,11 @@ func (s *GroupService) GetGroupTree(ctx context.Context, req *pb.GetGroupTreeReq
 	log.Debug("getGroupTree")
 	log.Debug("req:", req)
 
-	//get token
-	tm, err := s.httpClient.GetTokenMap(ctx)
-	if nil != err {
-		return nil, err
-	}
-
-	//get core url
-	midUrl := "/search"
-	url := s.httpClient.GetCoreUrl(midUrl, tm, "group")
-	log.Debug("url :", url)
-
-	//
-	data, err := json.Marshal(req.ListEntityQuery)
-	if nil != err {
-		return nil, err
-	}
-
-	//do it
-	res, err2 := s.httpClient.Post(url, data)
-	if nil != err2 {
-		log.Error("error get data from core : ", err2)
-		return nil, err2
-	}
-
-	//fmt response
-	listEntityTotalInfo := make(map[string]interface{})
-	err3 := json.Unmarshal(res, &listEntityTotalInfo)
+	listEntityTotalInfo, err3 := s.CoreSearchEntity(ctx, req.ListEntityQuery)
 	if err3 != nil {
 		log.Error("error Unmarshal data from core", err3)
 		return nil, err3
 	}
-	log.Debug("listEntityTotalInfo = ", listEntityTotalInfo)
 
 	//create space tree
 	tree, err4 := s.createSpaceTree(listEntityTotalInfo)
@@ -299,47 +297,6 @@ func (s *GroupService) GetGroupTree(ctx context.Context, req *pb.GetGroupTreeReq
 
 	return out, nil
 }
-
-/*func (s *GroupService) ListGroupItems(ctx context.Context, req *pb.ListGroupItemsRequest) (*pb.ListGroupItemsResponse, error) {
-	log.Debug("ListGroup")
-	log.Debug("req:", req)
-
-	//get token
-	tm, err := s.httpClient.GetTokenMap(ctx)
-	if nil != err {
-		return nil, err
-	}
-
-	//get core url
-	midUrl := "/search"
-	url := s.httpClient.GetCoreUrl(midUrl, tm, "group")
-	log.Debug("url :", url)
-
-	data, err := json.Marshal(req.ListEntityQuery)
-	if nil != err {
-		return nil, err
-	}
-
-	//do it
-	res, err2 := s.httpClient.Post(url, data)
-	if nil != err2 {
-		log.Error("error get data from core : ", err2)
-		return nil, err2
-	}
-
-	//fmt response
-	listEntityTotalInfo := &pb.ListEntityResponse{}
-	err3 := json.Unmarshal(res, listEntityTotalInfo)
-	if err3 != nil {
-		log.Error("error Unmarshal data from core")
-		return nil, err3
-	}
-	out := &pb.ListGroupItemsResponse{
-		ListEntityInfo: listEntityTotalInfo,
-	}
-
-	return out, nil
-}*/
 
 func (s *GroupService) AddGroupExt(ctx context.Context, req *pb.AddGroupExtRequest) (*emptypb.Empty, error) {
 	log.Debug("AddGroupExt")
@@ -380,85 +337,6 @@ type CorePatch struct {
 	Operator string      `json:"operator"`
 	Value    interface{} `json:"value"`
 }
-
-/*func (s *GroupService) CorePatchMethod(ctx context.Context, entityId string, kv map[string]interface{}, path string, operator string) (*emptypb.Empty, error) {
-	log.Debug("CorePatchMethod")
-	log.Debug("path:", path)
-	log.Debug("operator:", operator)
-
-	//get token
-	tm, err := s.httpClient.GetTokenMap(ctx)
-	if nil != err {
-		return nil, err
-	}
-
-	//get core url
-	midUrl := "/" + entityId + "/patch"
-	url := s.httpClient.GetCoreUrl(midUrl, tm, "group")
-	log.Debug("patch url :", url)
-
-	//fmt request
-	var patchArray []CorePatch
-
-	for k, v := range kv {
-		ph := CorePatch{
-			Path:     path + k,
-			Operator: operator,
-			Value:    v,
-		}
-		patchArray = append(patchArray, ph)
-	}
-	log.Debug("patch Array :", patchArray)
-
-	data, err3 := json.Marshal(patchArray)
-	if nil != err3 {
-		return nil, err3
-	}
-
-	// do it
-	_, err4 := s.httpClient.Put(url, data)
-	if nil != err4 {
-		log.Error("error post data to core", data)
-		return nil, err4
-	}
-
-	//fmt response
-	return &emptypb.Empty{}, nil
-}*/
-
-/*func (s *GroupService) setSpacePathMapper(tm map[string]string, Id string, parentId string) error {
-
-	log.Debug("setSpacePathMapper")
-	//check ParentId
-	if parentId == "" {
-		return nil
-	}
-
-	//get url
-	midUrl := "/" + Id + "/mappers"
-	url := s.httpClient.GetCoreUrl(midUrl, tm, "group")
-	log.Debug("mapper url = ", url)
-
-	//fmt request
-	data := make(map[string]string)
-	data["name"] = "mapper_space_path"
-	data["tql"] = "insert into " + Id + " select " + parentId + ".sysField._spacePath + '/" + Id + "'  as " + "sysField._spacePath"
-	log.Debug("data = ", data)
-
-	send, err := json.Marshal(data)
-	if nil != err {
-		return err
-	}
-
-	// do it
-	_, err1 := s.httpClient.Post(url, send)
-	if nil != err1 {
-		log.Error("error core return")
-		return err1
-	}
-
-	return nil
-}*/
 
 func (s *GroupService) createSpaceTree(listEntityTotalInfo map[string]interface{}) (map[string]interface{}, error) {
 	log.Debug("createSpaceTree")
@@ -525,4 +403,160 @@ func (s *GroupService) createSpaceTree(listEntityTotalInfo map[string]interface{
 	log.Debug("tree = ", tree)
 
 	return tree, nil
+}
+
+func (s *GroupService) CoreSearchEntity(ctx context.Context, listEntityQuery *pb.ListEntityQuery) (map[string]interface{}, error) {
+	log.Debug("CoreSearchEntity")
+
+	tm, err := s.httpClient.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+	midUrl := "/search"
+	url := s.httpClient.GetCoreUrl(midUrl, tm, "group")
+	log.Debug("core url :", url)
+
+	//Data isolation
+	user := &pb.Condition{
+		Field:    "owner",
+		Operator: "$eq",
+		Value:    tm["owner"],
+	}
+	listEntityQuery.Condition = append(listEntityQuery.Condition, user)
+	log.Debug("Query:", listEntityQuery)
+
+	//do it
+	filter, err1 := json.Marshal(listEntityQuery)
+	if err1 != nil {
+		return nil, err1
+	}
+	res, err2 := s.httpClient.Post(url, filter)
+	if nil != err2 {
+		return nil, err2
+	}
+
+	listObject := make(map[string]interface{})
+	err3 := json.Unmarshal(res, &listObject)
+	if err3 != nil {
+		log.Error("error Unmarshal data from core")
+		return nil, err3
+	}
+
+	return listObject, nil
+}
+
+func (s *GroupService) checkChild(ctx context.Context, id string) error {
+	log.Debug("checkChild")
+	//create query
+	query := &pb.ListEntityQuery{
+		PageNum:      1,
+		PageSize:     1000,
+		OrderBy:      "name",
+		IsDescending: false,
+		Query:        "",
+		Condition:    make([]*pb.Condition, 0),
+	}
+	condition1 := &pb.Condition{
+		Field:    "sysField._spacePath",
+		Operator: "$wildcard",
+		Value:    id,
+	}
+	query.Condition = append(query.Condition, condition1)
+	condition2 := &pb.Condition{
+		Field:    "type",
+		Operator: "$eq",
+		Value:    "device",
+	}
+	query.Condition = append(query.Condition, condition2)
+
+	log.Debug("child q", query)
+	//search
+	listObject, err := s.CoreSearchEntity(ctx, query)
+	if err != nil {
+		log.Error("error Core return ", err)
+		return err
+	}
+
+	//check
+	total, ok := listObject["total"]
+	if !ok {
+		log.Error("error  total field does not exist")
+		return errors.New("total field does not exist")
+	}
+
+	tl, ok1 := total.(float64)
+	if !ok1 {
+		return errors.New("total is not int type")
+	}
+
+	if tl == 0 {
+		return nil
+	} else {
+		return errors.New("have SubNode")
+	}
+}
+
+func (s *GroupService) checkNameRepated(ctx context.Context, name string) error {
+	log.Debug("checkNameRepated")
+	if name == "" {
+		return errors.New("name cannot be empty")
+	}
+	//create query
+	query := &pb.ListEntityQuery{
+		PageNum:      1,
+		PageSize:     0,
+		OrderBy:      "name",
+		IsDescending: false,
+		Query:        "",
+		Condition:    make([]*pb.Condition, 0),
+	}
+	condition1 := &pb.Condition{
+		Field:    "group.name",
+		Operator: "$eq",
+		Value:    name,
+	}
+	condition2 := &pb.Condition{
+		Field:    "type",
+		Operator: "$eq",
+		Value:    "group",
+	}
+	query.Condition = append(query.Condition, condition1)
+	query.Condition = append(query.Condition, condition2)
+	//search
+	listObject, err := s.CoreSearchEntity(ctx, query)
+	if err != nil {
+		log.Error("error Core return ", err)
+		return err
+	}
+
+	//check
+	total, ok := listObject["total"]
+	if !ok {
+		log.Error("error  total field does not exist")
+		return errors.New("total field does not exist")
+	}
+    /*switch total.(type){
+    case string :
+        log.Debug("string")
+    case int32 :
+        log.Debug("int")
+    case uint32 :
+        log.Debug("uint")
+    case uint64 :
+        log.Debug("uint64")
+    case interface{} :
+        log.Debug("inter")
+    }
+    log.Debug("type:", reflect.TypeOf(total))*/ 
+
+	tl, ok1 := total.(float64)
+	if !ok1 {
+		return errors.New("total is not int type")
+	}
+
+	if tl == 0 {
+		return nil
+	} else {
+		return errors.New("have repeated")
+	}
 }
