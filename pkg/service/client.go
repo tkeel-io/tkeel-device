@@ -236,10 +236,9 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) (interface{}, err
 	if !ok {
 		return nil, errors.New("error resp type")
 	}
-	/*if res["code"].(float64) != 200 {
+	if res["code"].(string) != "io.tkeel.SUCCESS" {
 		return "error code", errors.New(res["msg"].(string))
-
-	}*/
+	}
 	data, ok := res["data"]
 	if !ok {
 		return nil, errors.New("error return data")

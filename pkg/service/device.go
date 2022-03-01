@@ -160,7 +160,7 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "sysField.", "replace", "/patch")
 	if nil != err3 {
 		log.Error("error patch _updateAt", err3)
-		return nil, err1
+		return nil, err3
 	}
 
 	//fmt response
@@ -448,6 +448,20 @@ func (s *DeviceService) DeleteDeviceDataRelation(ctx context.Context, req *pb.De
 func (s *DeviceService) ListDeviceDataRelation(ctx context.Context, req *pb.ListDeviceDataRelationRequest) (*emptypb.Empty, error) {
 	return &emptypb.Empty{}, nil
 }
+func (s *DeviceService) SetDeviceRaw(ctx context.Context, req *pb.SetDeviceRawRequest) (*emptypb.Empty, error) {
+	log.Debug("SetDeviceRaw")
+	log.Debug("req:", req)
+
+	ma := make(map[string]interface{})
+	ma["value"] = req.Value
+	_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "rawDown.", "replace", "/patch")
+	if nil != err3 {
+		log.Error("error patch _updateAt", err3)
+		return nil, err3
+	}
+	return &emptypb.Empty{}, nil
+}
+
 func (s *DeviceService) SetDeviceAttribte(ctx context.Context, req *pb.SetDeviceAttributeRequest) (*emptypb.Empty, error) {
 	return &emptypb.Empty{}, nil
 }
@@ -469,7 +483,8 @@ func (s *DeviceService) CoreSearchEntity(ctx context.Context, listEntityQuery *p
 	user := &pb.Condition{
 		Field:    "owner",
 		Operator: "$eq",
-		Value:    tm["owner"],
+		Value:    structpb.NewStringValue(tm["owner"]),
+		//Value:    tm["owner"],
 	}
 	listEntityQuery.Condition = append(listEntityQuery.Condition, user)
 
@@ -512,12 +527,13 @@ func (s *DeviceService) checkNameRepated(ctx context.Context, name string) error
 	condition1 := &pb.Condition{
 		Field:    "basicInfo.name",
 		Operator: "$eq",
-		Value:    name,
+		Value:    structpb.NewStringValue(name),
 	}
 	condition2 := &pb.Condition{
 		Field:    "type",
 		Operator: "$eq",
-		Value:    "device",
+		Value:    structpb.NewStringValue("device"),
+		//Value:    "device",
 	}
 	query.Condition = append(query.Condition, condition1)
 	query.Condition = append(query.Condition, condition2)
@@ -534,13 +550,11 @@ func (s *DeviceService) checkNameRepated(ctx context.Context, name string) error
 		log.Error("error  total field does not exist")
 		return errors.New("total field does not exist")
 	}
-    
 
 	tl, ok1 := total.(float64)
 	if !ok1 {
 		return errors.New("total is not int type")
 	}
-
 	if tl == 0 {
 		return nil
 	} else {

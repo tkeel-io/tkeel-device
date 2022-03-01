@@ -450,7 +450,7 @@ func (s *GroupService) checkChild(ctx context.Context, id string) error {
 	//create query
 	query := &pb.ListEntityQuery{
 		PageNum:      1,
-		PageSize:     1000,
+		PageSize:     0,
 		OrderBy:      "name",
 		IsDescending: false,
 		Query:        "",
@@ -462,12 +462,12 @@ func (s *GroupService) checkChild(ctx context.Context, id string) error {
 		Value:    id,
 	}
 	query.Condition = append(query.Condition, condition1)
-	condition2 := &pb.Condition{
+	/*condition2 := &pb.Condition{
 		Field:    "type",
 		Operator: "$eq",
 		Value:    "device",
 	}
-	query.Condition = append(query.Condition, condition2)
+	query.Condition = append(query.Condition, condition2)*/
 
 	log.Debug("child q", query)
 	//search
@@ -489,7 +489,7 @@ func (s *GroupService) checkChild(ctx context.Context, id string) error {
 		return errors.New("total is not int type")
 	}
 
-	if tl == 0 {
+	if tl == 1 { //self
 		return nil
 	} else {
 		return errors.New("have SubNode")
@@ -535,19 +535,19 @@ func (s *GroupService) checkNameRepated(ctx context.Context, name string) error 
 		log.Error("error  total field does not exist")
 		return errors.New("total field does not exist")
 	}
-    /*switch total.(type){
-    case string :
-        log.Debug("string")
-    case int32 :
-        log.Debug("int")
-    case uint32 :
-        log.Debug("uint")
-    case uint64 :
-        log.Debug("uint64")
-    case interface{} :
-        log.Debug("inter")
-    }
-    log.Debug("type:", reflect.TypeOf(total))*/ 
+	/*switch total.(type){
+	  case string :
+	      log.Debug("string")
+	  case int32 :
+	      log.Debug("int")
+	  case uint32 :
+	      log.Debug("uint")
+	  case uint64 :
+	      log.Debug("uint64")
+	  case interface{} :
+	      log.Debug("inter")
+	  }
+	  log.Debug("type:", reflect.TypeOf(total))*/
 
 	tl, ok1 := total.(float64)
 	if !ok1 {

@@ -217,6 +217,23 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
         }
     };
   };
+  rpc SetDeviceRaw(SetDeviceRawRequest)returns (google.protobuf.Empty){
+    option (google.api.http) = {
+      post : "/devices/{id}/raw/set"
+      body : "value"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "set device raw";
+        operation_id: "SetDeviceRaw";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
+  };  
   rpc SetDeviceAttribte(SetDeviceAttributeRequest)returns (google.protobuf.Empty){
     option (google.api.http) = {
       post : "/devices/{id}/attribute/set"
@@ -330,6 +347,10 @@ message DeleteDeviceDataRelationRequest {
 message ListDeviceDataRelationRequest {
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "实体Id"}];
 }
+message SetDeviceRawRequest {
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: " 设备Id"}];
+    google.protobuf.Value  value = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设置的 value"}];
+}
 message SetDeviceAttributeRequest {
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: " 设备Id"}];
     SetContent content = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: " 设置内容"}]; 
@@ -353,6 +374,7 @@ message DeviceEntityCoreInfo {
 message UpdateDeviceEntityCoreInfo {
   DeviceEntityBasicInfo basicInfo = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}];
 }
+
 //------------------------------------------------------------------------------
 // Basic data types
 //------------------------------------------------------------------------------
@@ -408,7 +430,8 @@ message ListEntityQuery {
 
 message Condition {
   string field = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "查询输出字段"}];
-  string value = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "值"}];
+  google.protobuf.Value value = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "值"}];
+  //string value = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "值"}];
   string operator = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "操作符, $eq为相等，$neq为不等，$lt为小于，$gt为大于，$lne为小于等于， $gne为大于等于"}];
 }
 

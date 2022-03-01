@@ -39,6 +39,7 @@ type DeviceHTTPServer interface {
 	SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
 	SetDeviceAttribte(context.Context, *SetDeviceAttributeRequest) (*emptypb.Empty, error)
 	SetDeviceCommand(context.Context, *SetDeviceCommandRequest) (*emptypb.Empty, error)
+	SetDeviceRaw(context.Context, *SetDeviceRawRequest) (*emptypb.Empty, error)
 	UpdateDevice(context.Context, *UpdateDeviceRequest) (*UpdateDeviceResponse, error)
 	UpdateDeviceDataRelation(context.Context, *UpdateDeviceDataRelationRequest) (*emptypb.Empty, error)
 	UpdateDeviceExt(context.Context, *UpdateDeviceExtRequest) (*emptypb.Empty, error)
@@ -731,6 +732,70 @@ func (h *DeviceHTTPHandler) SetDeviceCommand(req *go_restful.Request, resp *go_r
 	}
 }
 
+func (h *DeviceHTTPHandler) SetDeviceRaw(req *go_restful.Request, resp *go_restful.Response) {
+	in := SetDeviceRawRequest{}
+	if err := transportHTTP.GetBody(req, &in.Value); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.SetDeviceRaw(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
+		return
+	}
+	anyOut, err := anypb.New(out)
+	if err != nil {
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
+	}.Marshal(&result.Http{
+		Code: errors.Success.Reason,
+		Msg:  "",
+		Data: anyOut,
+	})
+	if err != nil {
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	resp.WriteHeader(http.StatusOK)
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
+	}
+}
+
 func (h *DeviceHTTPHandler) UpdateDevice(req *go_restful.Request, resp *go_restful.Response) {
 	in := UpdateDeviceRequest{}
 	if err := transportHTTP.GetBody(req, &in.DevBasicInfo); err != nil {
@@ -963,6 +1028,8 @@ func RegisterDeviceHTTPServer(container *go_restful.Container, srv DeviceHTTPSer
 		To(handler.DeleteDeviceDataRelation))
 	ws.Route(ws.GET("/devices/{id}/relations").
 		To(handler.ListDeviceDataRelation))
+	ws.Route(ws.POST("/devices/{id}/raw/set").
+		To(handler.SetDeviceRaw))
 	ws.Route(ws.POST("/devices/{id}/attribute/set").
 		To(handler.SetDeviceAttribte))
 	ws.Route(ws.POST("/devices/{id}/command/set").

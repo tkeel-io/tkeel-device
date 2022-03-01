@@ -37,8 +37,8 @@ type Config struct {
 func (s *TemplateService) CreateTemplate(ctx context.Context, req *pb.CreateTemplateRequest) (*pb.CreateTemplateResponse, error) {
 	log.Debug("CreateTemplate")
 	log.Debug("req:", req)
-	
-    //0. check device name repeated
+
+	//0. check device name repeated
 	errRepeated := s.checkNameRepated(ctx, req.BasicInfo.Name)
 	if nil != errRepeated {
 		log.Debug("err:", errRepeated)
@@ -769,7 +769,7 @@ func (s *TemplateService) checkChild(ctx context.Context, id string) error {
 	//create query
 	query := &pb.ListEntityQuery{
 		PageNum:      1,
-		PageSize:     1000,
+		PageSize:     0,
 		OrderBy:      "name",
 		IsDescending: false,
 		Query:        "",
@@ -795,7 +795,7 @@ func (s *TemplateService) checkChild(ctx context.Context, id string) error {
 		return errors.New("total field does not exist")
 	}
 
-	tl, ok1 := total.(int)
+	tl, ok1 := total.(float64)
 	if !ok1 {
 		return errors.New("total is not int type")
 	}
@@ -884,7 +884,7 @@ func (s *TemplateService) checkNameRepated(ctx context.Context, name string) err
 		return errors.New("total field does not exist")
 	}
 
-	tl, ok1 := total.(int)
+	tl, ok1 := total.(float64)
 	if !ok1 {
 		return errors.New("total is not int type")
 	}

@@ -31,6 +31,7 @@ type DeviceClient interface {
 	UpdateDeviceDataRelation(ctx context.Context, in *UpdateDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteDeviceDataRelation(ctx context.Context, in *DeleteDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ListDeviceDataRelation(ctx context.Context, in *ListDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	SetDeviceRaw(ctx context.Context, in *SetDeviceRawRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SetDeviceAttribte(ctx context.Context, in *SetDeviceAttributeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SetDeviceCommand(ctx context.Context, in *SetDeviceCommandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -151,6 +152,15 @@ func (c *deviceClient) ListDeviceDataRelation(ctx context.Context, in *ListDevic
 	return out, nil
 }
 
+func (c *deviceClient) SetDeviceRaw(ctx context.Context, in *SetDeviceRawRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/SetDeviceRaw", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *deviceClient) SetDeviceAttribte(ctx context.Context, in *SetDeviceAttributeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/api.device.v1.Device/SetDeviceAttribte", in, out, opts...)
@@ -185,6 +195,7 @@ type DeviceServer interface {
 	UpdateDeviceDataRelation(context.Context, *UpdateDeviceDataRelationRequest) (*emptypb.Empty, error)
 	DeleteDeviceDataRelation(context.Context, *DeleteDeviceDataRelationRequest) (*emptypb.Empty, error)
 	ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*emptypb.Empty, error)
+	SetDeviceRaw(context.Context, *SetDeviceRawRequest) (*emptypb.Empty, error)
 	SetDeviceAttribte(context.Context, *SetDeviceAttributeRequest) (*emptypb.Empty, error)
 	SetDeviceCommand(context.Context, *SetDeviceCommandRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedDeviceServer()
@@ -229,6 +240,9 @@ func (UnimplementedDeviceServer) DeleteDeviceDataRelation(context.Context, *Dele
 }
 func (UnimplementedDeviceServer) ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListDeviceDataRelation not implemented")
+}
+func (UnimplementedDeviceServer) SetDeviceRaw(context.Context, *SetDeviceRawRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetDeviceRaw not implemented")
 }
 func (UnimplementedDeviceServer) SetDeviceAttribte(context.Context, *SetDeviceAttributeRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetDeviceAttribte not implemented")
@@ -465,6 +479,24 @@ func _Device_ListDeviceDataRelation_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Device_SetDeviceRaw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetDeviceRawRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).SetDeviceRaw(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/SetDeviceRaw",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).SetDeviceRaw(ctx, req.(*SetDeviceRawRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Device_SetDeviceAttribte_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetDeviceAttributeRequest)
 	if err := dec(in); err != nil {
@@ -555,6 +587,10 @@ var Device_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListDeviceDataRelation",
 			Handler:    _Device_ListDeviceDataRelation_Handler,
+		},
+		{
+			MethodName: "SetDeviceRaw",
+			Handler:    _Device_SetDeviceRaw_Handler,
 		},
 		{
 			MethodName: "SetDeviceAttribte",

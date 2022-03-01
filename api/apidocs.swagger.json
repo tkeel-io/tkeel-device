@@ -450,6 +450,48 @@
         ]
       }
     },
+    "/devices/{id}/raw/set": {
+      "post": {
+        "summary": "set device raw",
+        "operationId": "SetDeviceRaw",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": " 设备Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "设置的 value",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "description": "设置的 value"
+            }
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      }
+    },
     "/devices/{id}/relations": {
       "get": {
         "summary": "list data relation",
@@ -1886,12 +1928,13 @@
           "description": "查询输出字段"
         },
         "value": {
-          "type": "string",
+          "type": "object",
           "description": "值"
         },
         "operator": {
           "type": "string",
-          "description": "操作符, $eq为相等，$neq为不等，$lt为小于，$gt为大于，$lne为小于等于， $gne为大于等于"
+          "description": "操作符, $eq为相等，$neq为不等，$lt为小于，$gt为大于，$lne为小于等于， $gne为大于等于",
+          "title": "string value = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"值\"}];"
         }
       }
     },
