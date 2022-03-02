@@ -304,7 +304,7 @@ func (s *TemplateService) AddTemplateAttribute(ctx context.Context, req *pb.AddT
 	log.Debug("AddTemplateAttribute")
 	log.Debug("req:", req)
 
-	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Attr, "attributes.", "add", "/configs/patch")
+	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Attr, "attributes.", "replace", "/configs/patch")
 }
 
 func (s *TemplateService) UpdateTemplateAttribute(ctx context.Context, req *pb.UpdateTemplateAttributeRequest) (*emptypb.Empty, error) {
@@ -373,7 +373,7 @@ func (s *TemplateService) AddTemplateTelemetry(ctx context.Context, req *pb.AddT
 	log.Debug("AddTemplateTelemetry")
 	log.Debug("req:", req)
 
-	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Tele, "telemetry.", "add", "/configs/patch")
+	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Tele, "telemetry.", "replace", "/configs/patch")
 }
 
 func (s *TemplateService) UpdateTemplateTelemetry(ctx context.Context, req *pb.UpdateTemplateTelemetryRequest) (*emptypb.Empty, error) {
@@ -532,7 +532,7 @@ func (s *TemplateService) AddTemplateCommand(ctx context.Context, req *pb.AddTem
 	log.Debug("req:", req)
 
 	//do it
-	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Cmd, "commands.", "add", "/configs/patch")
+	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Cmd, "commands.", "replace", "/configs/patch")
 }
 func (s *TemplateService) UpdateTemplateCommand(ctx context.Context, req *pb.UpdateTemplateCommandRequest) (*emptypb.Empty, error) {
 	log.Debug("UpdateTemplateCommand")
