@@ -88,7 +88,7 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	}
 
 	//set spacePath mapper
-	err1 := s.httpClient.setSpacePathMapper(tm, entityId, req.Group.ParentId)
+	err1 := s.httpClient.setSpacePathMapper(tm, entityId, req.Group.ParentId, "group")
 	if nil != err1 {
 		log.Error("error setSpacePath mapper", err1)
 		return nil, err1
@@ -158,7 +158,7 @@ func (s *GroupService) UpdateGroup(ctx context.Context, req *pb.UpdateGroupReque
 	}
 
 	//set spacePath mapper
-	err1 := s.httpClient.setSpacePathMapper(tm, req.GetId(), req.Group.ParentId)
+	err1 := s.httpClient.setSpacePathMapper(tm, req.GetId(), req.Group.ParentId, "group")
 	if nil != err1 {
 		log.Error("error addSpacePath mapper", err1)
 		return nil, err1

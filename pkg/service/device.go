@@ -110,7 +110,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	}
 
 	// 7 set mapper
-	err6 := s.client.setSpacePathMapper(tm, devId, req.DevBasicInfo.ParentId)
+	err6 := s.client.setSpacePathMapper(tm, devId, req.DevBasicInfo.ParentId, "device")
 	if nil != err6 {
 		log.Error("error addSpacePath mapper", err6)
 		return nil, err6
@@ -171,7 +171,7 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	}
 
 	// 7 set mapper
-	err6 := s.client.setSpacePathMapper(tm, req.Id, req.DevBasicInfo.ParentId)
+	err6 := s.client.setSpacePathMapper(tm, req.Id, req.DevBasicInfo.ParentId, "device")
 	if nil != err6 {
 		log.Error("error addSpacePath mapper", err6)
 		return nil, err6

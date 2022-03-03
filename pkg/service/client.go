@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/tkeel-io/kit/log"
 	transportHTTP "github.com/tkeel-io/kit/transport/http"
+	pbg "github.com/tkeel-io/tkeel-device/api/group/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"io/ioutil"
 	"net/http"
@@ -313,19 +314,28 @@ func AddDefaultAuthHeader(req *http.Request) {
 // generate uuid
 func GetUUID() string {
 	id := uuid.New()
-	return id.String()
+	return "iotd-" + id.String()
 }
 
 // get time
 func GetTime() int64 {
 	return time.Now().UnixNano() / 1e6
 }
-func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, parentId string) error {
+func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, pId string, entityType string) error {
 
 	log.Debug("setSpacePathMapper")
+	parentId := pId
 	//check ParentId
-	if parentId == "" {
-		return nil
+	if parentId == "" && entityType == "device" {
+		defaultGroupId := "iotd-" + tm["owner"] + "-defaultGroup"
+		exist := c.checkEntityExist(tm, entityType, defaultGroupId)
+		if !exist {
+			err := c.CreateDevDefaultGroup(tm, defaultGroupId)
+			if nil != err {
+				return err
+			}
+		}
+		parentId = defaultGroupId
 	}
 
 	//get url
@@ -397,4 +407,68 @@ func (c *CoreClient) CorePatchMethod(ctx context.Context, entityId string, kv ma
 
 	//fmt response
 	return &emptypb.Empty{}, nil
+}
+
+func (c *CoreClient) checkEntityExist(tm map[string]string, entityType string, id string) bool {
+
+	midUrl := "/" + id
+	url := c.GetCoreUrl(midUrl, tm, entityType)
+	log.Debug("get url :", url)
+
+	_, err2 := c.Get(url)
+	if nil != err2 {
+		return false
+	}
+	return true
+	//return
+	/*deviceObject := make(map[string]interface{})
+	if err3 := json.Unmarshal(res, &deviceObject); nil != err3 {
+		return nil, err3
+	}*/
+}
+func (c *CoreClient) CreateDevDefaultGroup(tm map[string]string, id string) error {
+	url := c.GetCoreUrl("", tm, "group") + "&id=" + id
+	log.Debug("core url: ", url)
+
+	//fmt request
+	sysField := &pbg.GroupEntitySysField{
+		XId:        id,
+		XCreatedAt: GetTime(),
+		XUpdatedAt: GetTime(),
+		XOwner:     tm["owner"],
+		XSource:    tm["source"],
+		XSpacePath: id,
+	}
+	groupInfo := &pbg.GroupEntity{
+		Name:        "默认分组",
+		Description: "系统默认创建",
+		ParentId:    "",
+		ParentName:  "",
+	}
+	entityInfo := &pbg.GroupEntityCoreInfo{
+		Group:    groupInfo,
+		SysField: sysField,
+	}
+
+	log.Debug("entityinfo : ", entityInfo)
+	data, err3 := json.Marshal(entityInfo)
+	if nil != err3 {
+		return err3
+	}
+
+	// do it
+	res, err4 := c.Post(url, data)
+	if nil != err4 {
+		log.Error("error post return", err4)
+		return err4
+	}
+
+	//fmt response
+	groupObject := make(map[string]interface{})
+	err5 := json.Unmarshal(res, &groupObject)
+	if err5 != nil {
+		log.Error("error Unmarshal data from core")
+		return err5
+	}
+	return nil
 }
