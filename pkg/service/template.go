@@ -776,7 +776,7 @@ func (s *TemplateService) checkChild(ctx context.Context, id string) error {
 		Condition:    make([]*pb.Condition, 0),
 	}
 	condition1 := &pb.Condition{
-		Field:    "templateId",
+		Field:    "basicInfo.templateId",
 		Operator: "$eq",
 		Value:    id,
 	}
