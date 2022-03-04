@@ -8,7 +8,7 @@ image:
   repository: tkeelio/tkeel-device
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.3.0"
+  tag: "0.4.0-alpha.3"
 
 imagePullSecrets: []
 nameOverride: "tkeel-device"

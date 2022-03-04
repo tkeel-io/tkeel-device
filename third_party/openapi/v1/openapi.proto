@@ -67,6 +67,12 @@ message ImplementedPlugin {
   repeated ImplementedAddons addons = 2; // implemented addons point list.
 }
 
+// console portal enum.
+enum ConsolePortal {
+  admin = 0;  // admin portal.
+  tenant = 1; // tenant portal.
+}
+
 // plugin console entry.
 message ConsoleEntry {
   string id = 1;
@@ -75,6 +81,22 @@ message ConsoleEntry {
   string path = 4;
   string entry = 5;
   repeated ConsoleEntry children = 6;
+  ConsolePortal portal = 7;
+}
+
+// plugin define permission.
+message Permission {
+  string id = 1;   // permission id,Same-level permissions cannot be repeated.
+  string name = 2; // permission name.
+  message Dependence {
+    string path =
+        1; // dependence path,The path format is plugin ID</parent permission
+           // ID>/authority ID.The content in <> is variable.
+    string desc = 2; // dependencs desc.
+  }
+  repeated Dependence dependences = 3; // dependences permission.
+  string desc = 4;                     // permission desc
+  repeated Permission children = 5;    // children permission.
 }
 
 /**
@@ -90,6 +112,11 @@ message IdentifyResponse {
   repeated ImplementedPlugin implemented_plugin =
       6;                             // register plugin implemented plugin list.
   repeated ConsoleEntry entries = 7; // register entries.
+  repeated BriefPluginInfo dependence =
+      8; // dependent plugins.Dependencies must be all installed to install.
+  repeated Permission permissions = 9; // plugins define permissions.
+  bool disable_manual_activation =
+      10; // plugins disable tenant manual activation.
 }
 
 /**

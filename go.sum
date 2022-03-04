@@ -340,6 +340,8 @@ github.com/tkeel-io/kit v0.0.0-20220120160441-cb2a03de1073 h1:mThJTNTtnls4UATeys
 github.com/tkeel-io/kit v0.0.0-20220120160441-cb2a03de1073/go.mod h1:FYeTM+tqf/tdrf2HxUX2wdAAHQM8ggN4+IbZv4b6+wU=
 github.com/tkeel-io/kit v0.0.0-20220214021338-d36b084b71ae h1:tnnp5eUyrL1zXGfTdbX0aKTGuSvJwJz2u4++E9hsxGc=
 github.com/tkeel-io/kit v0.0.0-20220214021338-d36b084b71ae/go.mod h1:FYeTM+tqf/tdrf2HxUX2wdAAHQM8ggN4+IbZv4b6+wU=
+github.com/tkeel-io/kit v0.0.0-20220303080455-8ab38f419f7c h1:9N3MBvT0WDaHSu9cIz3O8UEboqYMfEmNUc+COvdoFJU=
+github.com/tkeel-io/kit v0.0.0-20220303080455-8ab38f419f7c/go.mod h1:ki+q/zN0N2eSfjUnpkx8g3UlVps5waO2bkiIvO85ZCg=
 github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20211122135618-1bef12bc8c9c/go.mod h1:tjJgHPar2pFjydhnOCLspww8tSOvcKch241PeP9OL8E=
 github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20211201125403-d4d4343c7730 h1:svDGUiiWKw7M2uXLj2Es+G4R3+cCYVOfJI/lS5nd11M=
 github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20211201125403-d4d4343c7730/go.mod h1:tjJgHPar2pFjydhnOCLspww8tSOvcKch241PeP9OL8E=
@@ -355,6 +357,8 @@ github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220126015848-44427ba2b864 h
 github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220126015848-44427ba2b864/go.mod h1:tjJgHPar2pFjydhnOCLspww8tSOvcKch241PeP9OL8E=
 github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220214074546-06eaa2a61578 h1:qlLiU2Ld/x4UIEScgZq6BDSXVXHo8m9n79+d+9VjBXw=
 github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220214074546-06eaa2a61578/go.mod h1:tjJgHPar2pFjydhnOCLspww8tSOvcKch241PeP9OL8E=
+github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220303151503-0f9a4a00fd77 h1:odBS2F8zlZTMgDdEsItP5/qWGzO2EMWUku72fTsUsTE=
+github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220303151503-0f9a4a00fd77/go.mod h1:tjJgHPar2pFjydhnOCLspww8tSOvcKch241PeP9OL8E=
 github.com/tkeel-io/tkeel-interface/protoc-gen-go-http v0.0.0-20211122135618-1bef12bc8c9c/go.mod h1:JaPca0Fqdxddq5MqIU8ikUu86eqFRfXveJ4/ArLDCaE=
 github.com/tkeel-io/tkeel-interface/tool v0.0.0-20211122135618-1bef12bc8c9c/go.mod h1:9960sxFvuhgCEy0hDpUNpxcyEVPvYgerreM8D1wUw0w=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
@@ -738,6 +742,8 @@ google.golang.org/genproto v0.0.0-20220118154757-00ab72f36ad5 h1:zzNejm+EgrbLfDZ
 google.golang.org/genproto v0.0.0-20220118154757-00ab72f36ad5/go.mod h1:5CzLGKJ67TSI2B9POpiiyGha0AjJvZIUgRMt1dSmuhc=
 google.golang.org/genproto v0.0.0-20220211171837-173942840c17 h1:2X+CNIheCutWRyKRte8szGxrE5ggtV4U+NKAbh/oLhg=
 google.golang.org/genproto v0.0.0-20220211171837-173942840c17/go.mod h1:kGP+zUP2Ddo0ayMi4YuN7C3WZyJvGLZRh8Z5wnAqvEI=
+google.golang.org/genproto v0.0.0-20220303160752-862486edd9cc h1:fb/ViRpv3ln/LvbqZtTpoOd1YQDNH12gaGZreoSFovE=
+google.golang.org/genproto v0.0.0-20220303160752-862486edd9cc/go.mod h1:kGP+zUP2Ddo0ayMi4YuN7C3WZyJvGLZRh8Z5wnAqvEI=
 google.golang.org/grpc v1.19.0/go.mod h1:mqu4LbDTu4XGKhr4mRzUsmM4RtVoemTSY81AxZiDr8c=
 google.golang.org/grpc v1.20.1/go.mod h1:10oTOabMzJvdu6/UiuZezV6QK5dSlG84ov/aaiqXj38=
 google.golang.org/grpc v1.21.1/go.mod h1:oYelfM1adQP15Ek0mdvEgi9Df8B9CZIaU1084ijfRaM=

@@ -108,7 +108,6 @@ func (h *TemplateHTTPHandler) AddTemplateAttribute(req *go_restful.Request, resp
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -172,7 +171,6 @@ func (h *TemplateHTTPHandler) AddTemplateCommand(req *go_restful.Request, resp *
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -236,7 +234,6 @@ func (h *TemplateHTTPHandler) AddTemplateTelemetry(req *go_restful.Request, resp
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -300,7 +297,6 @@ func (h *TemplateHTTPHandler) AddTemplateTelemetryExt(req *go_restful.Request, r
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -359,7 +355,6 @@ func (h *TemplateHTTPHandler) CreateTemplate(req *go_restful.Request, resp *go_r
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -418,7 +413,6 @@ func (h *TemplateHTTPHandler) DeleteTemplate(req *go_restful.Request, resp *go_r
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -482,7 +476,6 @@ func (h *TemplateHTTPHandler) DeleteTemplateAttribute(req *go_restful.Request, r
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -546,7 +539,6 @@ func (h *TemplateHTTPHandler) DeleteTemplateCommand(req *go_restful.Request, res
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -610,7 +602,6 @@ func (h *TemplateHTTPHandler) DeleteTemplateTelemetry(req *go_restful.Request, r
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -674,7 +665,6 @@ func (h *TemplateHTTPHandler) DeleteTemplateTelemetryExt(req *go_restful.Request
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -733,7 +723,6 @@ func (h *TemplateHTTPHandler) GetTemplate(req *go_restful.Request, resp *go_rest
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -792,7 +781,6 @@ func (h *TemplateHTTPHandler) GetTemplateAttribute(req *go_restful.Request, resp
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -851,7 +839,6 @@ func (h *TemplateHTTPHandler) GetTemplateCommand(req *go_restful.Request, resp *
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -910,7 +897,6 @@ func (h *TemplateHTTPHandler) GetTemplateTelemetry(req *go_restful.Request, resp
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -969,7 +955,6 @@ func (h *TemplateHTTPHandler) ListTemplateAttribute(req *go_restful.Request, res
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -1028,7 +1013,6 @@ func (h *TemplateHTTPHandler) ListTemplateCommand(req *go_restful.Request, resp 
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -1087,7 +1071,6 @@ func (h *TemplateHTTPHandler) ListTemplateTelemetry(req *go_restful.Request, res
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -1151,7 +1134,6 @@ func (h *TemplateHTTPHandler) UpdateTemplate(req *go_restful.Request, resp *go_r
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -1215,7 +1197,6 @@ func (h *TemplateHTTPHandler) UpdateTemplateAttribute(req *go_restful.Request, r
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -1279,7 +1260,6 @@ func (h *TemplateHTTPHandler) UpdateTemplateCommand(req *go_restful.Request, res
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -1343,7 +1323,6 @@ func (h *TemplateHTTPHandler) UpdateTemplateTelemetry(req *go_restful.Request, r
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int
@@ -1407,7 +1386,6 @@ func (h *TemplateHTTPHandler) UpdateTemplateTelemetryExt(req *go_restful.Request
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
 
 	var remain int

@@ -1920,6 +1920,18 @@
     }
   },
   "definitions": {
+    "PermissionDependence": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string",
+          "description": "ID\u003e/authority ID.The content in \u003c\u003e is variable."
+        }
+      }
+    },
     "apidevicev1Condition": {
       "type": "object",
       "properties": {
@@ -2202,9 +2214,21 @@
           "items": {
             "$ref": "#/definitions/v1ConsoleEntry"
           }
+        },
+        "portal": {
+          "$ref": "#/definitions/v1ConsolePortal"
         }
       },
       "description": "plugin console entry."
+    },
+    "v1ConsolePortal": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "tenant"
+      ],
+      "default": "admin",
+      "description": "console portal enum."
     },
     "v1CreateDeviceResponse": {
       "type": "object",
@@ -2478,6 +2502,21 @@
           "items": {
             "$ref": "#/definitions/v1ConsoleEntry"
           }
+        },
+        "dependence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1BriefPluginInfo"
+          }
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Permission"
+          }
+        },
+        "disable_manual_activation": {
+          "type": "boolean"
         }
       },
       "description": "*\nThe response value of the GET /v1/identify,\nused when the plugin registered."
@@ -2548,6 +2587,33 @@
           "title": "api.core.v1.EntityResponse templateTeleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"遥测列表对象\"}];"
         }
       }
+    },
+    "v1Permission": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "dependences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PermissionDependence"
+          }
+        },
+        "desc": {
+          "type": "string"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Permission"
+          }
+        }
+      },
+      "description": "plugin define permission."
     },
     "v1PluginStatus": {
       "type": "string",
