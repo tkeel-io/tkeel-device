@@ -38,6 +38,10 @@ pipeline {
         stage ('build & push image') {
             steps {
                 container ('go') {
+                    sh 'rm -rf /usr/local/go'
+                    sh 'wget https://golang.org/dl/go1.17.6.linux-amd64.tar.gz'
+                    sh 'tar -C /usr/local -xzf go1.17.6.linux-amd64.tar.gz'
+                    sh 'go version'
                     sh 'make build'
                     sh 'docker build -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$APP_VERSION .'
                     withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
