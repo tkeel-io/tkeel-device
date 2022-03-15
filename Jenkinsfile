@@ -22,9 +22,9 @@ pipeline {
         // Docker 空间
         DOCKERHUB_NAMESPACE = 'tkeelio'
         // Github 账号
-        GITHUB_ACCOUNT = 'tkeel-io'
+        // GITHUB_ACCOUNT = 'tkeel-io'
         // 组件名称
-        // APP_NAME = 'tkeel-device'
+        APP_NAME = 'tkeel-device'
         // please ignore
         CHART_REPO_PATH = '/home/jenkins/agent/workspace/helm-charts'
     }
