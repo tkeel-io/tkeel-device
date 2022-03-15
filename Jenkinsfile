@@ -5,8 +5,9 @@ pipeline {
     }
   }
     parameters {
-        string(name:'APP_VERSION',defaultValue: '0.4.2',description:'')
-        string(name:'CHART_VERSION',defaultValue: '0.4.2',description:'')
+        string(name:'GITHUB_ACCOUNT',defaultValue: 'lunz1207',description:'helm chart 仓库名')
+        string(name:'APP_VERSION',defaultValue: '0.4.2',description:'组件镜像版本')
+        string(name:'CHART_VERSION',defaultValue: '0.4.2',description:'组件chart 版本')
     }
 
     environment {
@@ -23,7 +24,7 @@ pipeline {
         // Github 账号
         GITHUB_ACCOUNT = 'tkeel-io'
         // 组件名称
-        APP_NAME = 'tkeel-device'
+        // APP_NAME = 'tkeel-device'
         // please ignore
         CHART_REPO_PATH = '/home/jenkins/agent/workspace/helm-charts'
     }
