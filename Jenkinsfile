@@ -6,8 +6,8 @@ pipeline {
   }
     parameters {
         string(name:'GITHUB_ACCOUNT',defaultValue: 'lunz1207',description:'helm chart 仓库名')
-        string(name:'APP_VERSION',defaultValue: '0.4.2',description:'组件镜像版本')
-        string(name:'CHART_VERSION',defaultValue: '0.4.2',description:'组件chart 版本')
+        string(name:'APP_VERSION',defaultValue: '0.4.2-testing',description:'组件镜像版本')
+        string(name:'CHART_VERSION',defaultValue: '0.4.2-testing',description:'组件chart 版本')
     }
 
     environment {
@@ -56,7 +56,7 @@ pipeline {
         stage('build & push chart'){
           steps {
               container ('go') {
-                sh 'helm3 package chart/$APP_NAME --app-version=$APP_VERSION --version=$CHART_VERSION'
+                sh 'helm3 package chart/$APP_NAME --app-version=$BRANCH_NAME-$APP_VERSION --version=$CHART_VERSION'
                 // input(id: 'release-image-with-tag', message: 'release image with tag?')
                   withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                     sh 'git config --global user.email "lunz1207@yunify.com"'
