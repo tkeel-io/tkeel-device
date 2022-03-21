@@ -753,13 +753,20 @@ func (s *TemplateService) GetSinglePropConfExt(propConfig map[string]interface{}
 	return ext, nil
 }
 
-func (s *TemplateService) opTemplatePropConfig(ctx context.Context, templateId string, prop *pb.PropConfig, item string, op string, pathClassify string) (*emptypb.Empty, error) {
+func (s *TemplateService) opTemplatePropConfig(ctx context.Context, templateId string, prop *structpb.Value, item string, op string, pathClassify string) (*emptypb.Empty, error) {
 	//fmt request
 	propMap := make(map[string]interface{})
 	/*for _, p := range prop.PropAarry {
 		propMap[p.Id] = p
 	}*/
-	propMap[prop.Id] = prop
+	switch kv := prop.AsInterface().(type) {
+	case map[string]interface{}:
+		for k, v := range kv {
+			propMap[k] = v
+		}
+	default:
+		return nil, errors.New("error Invalid payload")
+	}
 	//do it
 	return s.httpClient.CorePatchMethod(ctx, templateId, propMap, item, op, pathClassify)
 }

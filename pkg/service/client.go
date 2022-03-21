@@ -426,6 +426,26 @@ func (c *CoreClient) checkEntityExist(tm map[string]string, entityType string, i
 		return nil, err3
 	}*/
 }
+func (c *CoreClient) GetCoreEntitySpecContent(tm map[string]string, entityId string, entityType string, classify string, pids string) (map[string]interface{}, error) {
+	midUrl := "/" + entityId + "/" + classify
+	url := c.GetCoreUrl(midUrl, tm, entityType) + fmt.Sprintf("&property_keys=%s", pids)
+	//url := c.GetCoreUrl(midUrl, tm, entityType) + fmt.Sprintf("&pids=%s", pids)
+	log.Debug("url :", url)
+
+	res, err1 := c.Get(url)
+	if nil != err1 {
+		log.Error("error post data to core", err1)
+		return nil, err1
+	}
+	xObject := make(map[string]interface{})
+	err2 := json.Unmarshal(res, &xObject)
+	if err2 != nil {
+		log.Error("error Unmarshal data from core")
+		return nil, err2
+	}
+	return xObject, nil
+}
+
 func (c *CoreClient) CreateDevDefaultGroup(tm map[string]string, id string) error {
 	url := c.GetCoreUrl("", tm, "group") + "&id=" + id
 	log.Debug("core url: ", url)

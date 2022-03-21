@@ -139,6 +139,9 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	}
 	midUrl := "/" + req.Id
 	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	if req.DevBasicInfo.TemplateId != "" {
+		url += "&from=" + req.DevBasicInfo.TemplateId
+	}
 	log.Debug("get url :", url)
 
 	updateBasicInfo := &pb.UpdateDeviceEntityCoreInfo{}
@@ -433,7 +436,7 @@ func (s *DeviceService) CreateDeviceDataRelation(ctx context.Context, req *pb.Cr
 	url := s.client.GetCoreUrl(midUrl, tm, "device")
 	log.Debug("get url :", url)
 
-	//write relation
+	//write relation id <------> id
 
 	//create mapper
 
@@ -453,21 +456,99 @@ func (s *DeviceService) SetDeviceRaw(ctx context.Context, req *pb.SetDeviceRawRe
 	log.Debug("req:", req)
 
 	ma := make(map[string]interface{})
-	ma["value"] = req.Value
-	_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "rawDown.", "replace", "/patch")
+	ma["rawDown"] = req.Value
+	_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "", "replace", "/patch")
 	if nil != err3 {
-		log.Error("error patch _updateAt", err3)
+		log.Error("error patch rawData", err3)
 		return nil, err3
 	}
 	return &emptypb.Empty{}, nil
 }
 
 func (s *DeviceService) SetDeviceAttribte(ctx context.Context, req *pb.SetDeviceAttributeRequest) (*emptypb.Empty, error) {
+	log.Debug("SetDeviceAttribte")
+	log.Debug("req:", req)
+
+	ma := make(map[string]interface{})
+	ma[req.Content.Id] = req.Content.Value
+	_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "attributes.", "replace", "/patch")
+	if nil != err3 {
+		log.Error("error patch attribute", err3)
+		return nil, err3
+	}
 	return &emptypb.Empty{}, nil
 }
 func (s *DeviceService) SetDeviceCommand(ctx context.Context, req *pb.SetDeviceCommandRequest) (*emptypb.Empty, error) {
 	return &emptypb.Empty{}, nil
 }
+
+func (s *DeviceService) SaveDeviceConfAsSelfTemplte(ctx context.Context, req *pb.SaveDeviceConfAsSelfTemplteRequest) (*emptypb.Empty, error) {
+	log.Debug("SaveDeviceConfAsSelfTemplte")
+	log.Debug("req:", req)
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+
+	//get configs
+	configObject, err := s.client.GetCoreEntitySpecContent(tm, req.Id, "device", "configs", "")
+	if nil != err {
+		return nil, err
+	}
+	configs, ok := configObject["configs"]
+	if !ok {
+		log.Error("error config non exist")
+		return nil, errors.New("error config non exist")
+	}
+	log.Debug(configs)
+
+	//get TemplateId
+	templateIdObject, err1 := s.client.GetCoreEntitySpecContent(tm, req.Id, "device", "properties", "basicInfo.templateId")
+	if nil != err1 {
+		return nil, err1
+	}
+	templateId := ""
+	if prop, ok := templateIdObject["properties"]; ok {
+		if prop1, ok1 := prop.(map[string]interface{}); ok1 {
+			if id, ok2 := prop1["basicInfo.templateId"]; ok2 {
+				if idstr, ok3 := id.(string); ok3 {
+					templateId = idstr
+				}
+			}
+		}
+	}
+	if templateId == "" {
+		log.Error("error templateId non exist")
+		return nil, errors.New("error templateId non exist")
+	}
+	log.Debug(templateId)
+
+	//patch
+	midUrl := "/" + templateId
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("put url :", url)
+
+	data := make(map[string]interface{})
+	data["configs"] = configs
+	log.Debug(data)
+	dt, err2 := json.Marshal(data)
+	if err2 != nil {
+		return nil, err2
+	}
+	_, err3 := s.client.Put(url, dt)
+	if nil != err3 {
+		return nil, err3
+	}
+
+	return &emptypb.Empty{}, nil
+
+}
+
+//func (s * DeviceService) SaveDeviceConfAsOtherTemplte(ctx context.Content, req *pb.SaveDeviceConfAsOtherTemplteRequest)(*emptypb.Empty, error){
+
+//}
+
 func (s *DeviceService) CoreSearchEntity(ctx context.Context, listEntityQuery *pb.ListEntityQuery) (map[string]interface{}, error) {
 	log.Debug("CoreSearchEntity")
 

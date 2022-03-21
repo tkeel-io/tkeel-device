@@ -34,6 +34,8 @@ type DeviceClient interface {
 	SetDeviceRaw(ctx context.Context, in *SetDeviceRawRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SetDeviceAttribte(ctx context.Context, in *SetDeviceAttributeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SetDeviceCommand(ctx context.Context, in *SetDeviceCommandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	SaveDeviceConfAsSelfTemplte(ctx context.Context, in *SaveDeviceConfAsSelfTemplteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	SaveDeviceConfAsOtherTemplte(ctx context.Context, in *SaveDeviceConfAsOtherTemplateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type deviceClient struct {
@@ -179,6 +181,24 @@ func (c *deviceClient) SetDeviceCommand(ctx context.Context, in *SetDeviceComman
 	return out, nil
 }
 
+func (c *deviceClient) SaveDeviceConfAsSelfTemplte(ctx context.Context, in *SaveDeviceConfAsSelfTemplteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/SaveDeviceConfAsSelfTemplte", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) SaveDeviceConfAsOtherTemplte(ctx context.Context, in *SaveDeviceConfAsOtherTemplateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/SaveDeviceConfAsOtherTemplte", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DeviceServer is the server API for Device service.
 // All implementations must embed UnimplementedDeviceServer
 // for forward compatibility
@@ -198,6 +218,8 @@ type DeviceServer interface {
 	SetDeviceRaw(context.Context, *SetDeviceRawRequest) (*emptypb.Empty, error)
 	SetDeviceAttribte(context.Context, *SetDeviceAttributeRequest) (*emptypb.Empty, error)
 	SetDeviceCommand(context.Context, *SetDeviceCommandRequest) (*emptypb.Empty, error)
+	SaveDeviceConfAsSelfTemplte(context.Context, *SaveDeviceConfAsSelfTemplteRequest) (*emptypb.Empty, error)
+	SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedDeviceServer()
 }
 
@@ -249,6 +271,12 @@ func (UnimplementedDeviceServer) SetDeviceAttribte(context.Context, *SetDeviceAt
 }
 func (UnimplementedDeviceServer) SetDeviceCommand(context.Context, *SetDeviceCommandRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetDeviceCommand not implemented")
+}
+func (UnimplementedDeviceServer) SaveDeviceConfAsSelfTemplte(context.Context, *SaveDeviceConfAsSelfTemplteRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveDeviceConfAsSelfTemplte not implemented")
+}
+func (UnimplementedDeviceServer) SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveDeviceConfAsOtherTemplte not implemented")
 }
 func (UnimplementedDeviceServer) mustEmbedUnimplementedDeviceServer() {}
 
@@ -533,6 +561,42 @@ func _Device_SetDeviceCommand_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Device_SaveDeviceConfAsSelfTemplte_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveDeviceConfAsSelfTemplteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).SaveDeviceConfAsSelfTemplte(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/SaveDeviceConfAsSelfTemplte",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).SaveDeviceConfAsSelfTemplte(ctx, req.(*SaveDeviceConfAsSelfTemplteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_SaveDeviceConfAsOtherTemplte_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveDeviceConfAsOtherTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).SaveDeviceConfAsOtherTemplte(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/SaveDeviceConfAsOtherTemplte",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).SaveDeviceConfAsOtherTemplte(ctx, req.(*SaveDeviceConfAsOtherTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Device_ServiceDesc is the grpc.ServiceDesc for Device service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -599,6 +663,14 @@ var Device_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetDeviceCommand",
 			Handler:    _Device_SetDeviceCommand_Handler,
+		},
+		{
+			MethodName: "SaveDeviceConfAsSelfTemplte",
+			Handler:    _Device_SaveDeviceConfAsSelfTemplte_Handler,
+		},
+		{
+			MethodName: "SaveDeviceConfAsOtherTemplte",
+			Handler:    _Device_SaveDeviceConfAsOtherTemplte_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

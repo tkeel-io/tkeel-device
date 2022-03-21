@@ -453,12 +453,14 @@ message GetTemplateResponse {
 
     //attribute
 message AddTemplateAttributeRequest {
-    PropConfig attr  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性对象"}];
+    //PropConfig attr  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性对象"}];
+    google.protobuf.Value attr  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性对象"}];
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
 }
 
 message UpdateTemplateAttributeRequest { 
-    PropConfig attr  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性对象"}];
+    //PropConfig attr  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性对象"}];
+    google.protobuf.Value attr  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性对象"}];
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
 }
 
@@ -487,11 +489,13 @@ message ListTemplateAttributeResponse {
 
     //telemetry
 message AddTemplateTelemetryRequest {
-    PropConfig tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
+    //PropConfig tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
+    google.protobuf.Value tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
 }
 message UpdateTemplateTelemetryRequest { 
-    PropConfig tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
+    //PropConfig tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
+    google.protobuf.Value tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
 }
 message DeleteTemplateTelemetryRequest { 
@@ -532,12 +536,15 @@ message DeleteTemplateTelemetryExtRequest {
 
     //command
 message AddTemplateCommandRequest {
-    PropConfig cmd  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令"}];
+    //PropConfig cmd  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令"}];
+    google.protobuf.Value cmd  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令"}];
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
 }
 
 message UpdateTemplateCommandRequest { 
-    PropConfig cmd  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令"}];
+    //PropConfig cmd  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令"}];
+    google.protobuf.Value cmd  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令"}];
+    //google.protobuf.Value cmd  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令"}];
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
 }
 message DeleteTemplateCommandRequest { 

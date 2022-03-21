@@ -326,6 +326,104 @@
         ]
       }
     },
+    "/devices/{id}/configs/saveAsOtherTemplate": {
+      "post": {
+        "summary": "save device confAsOtherTemplate",
+        "operationId": "SetDeviceConfAsOtherTemplte",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": " 设备Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " 设备Id",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": " 设备Id"
+            }
+          },
+          {
+            "name": "otherTemplateInfo.name",
+            "description": "模板名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "otherTemplateInfo.description",
+            "description": "模板描述",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      }
+    },
+    "/devices/{id}/configs/saveAsSelfTemplate": {
+      "post": {
+        "summary": "save device confAsSelfTemplate",
+        "operationId": "SetDeviceConfAsSelfTemplte",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": " 设备Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " 设备Id",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": " 设备Id"
+            }
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      }
+    },
     "/devices/{id}/ext": {
       "post": {
         "summary": "add device extensions",
@@ -1011,7 +1109,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1TemplateBasicInfo",
+              "$ref": "#/definitions/apitemplatev1TemplateBasicInfo",
               "description": "模板基本信息"
             }
           }
@@ -1118,7 +1216,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1TemplateBasicInfo",
+              "$ref": "#/definitions/apitemplatev1TemplateBasicInfo",
               "description": "模板基本信息"
             }
           }
@@ -1190,7 +1288,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1PropConfig",
+              "type": "object",
               "description": "属性对象"
             }
           }
@@ -1230,7 +1328,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1PropConfig",
+              "type": "object",
               "description": "属性对象"
             }
           }
@@ -1383,7 +1481,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1PropConfig",
+              "type": "object",
               "description": "命令"
             }
           }
@@ -1423,7 +1521,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1PropConfig",
+              "type": "object",
               "description": "命令"
             }
           }
@@ -1576,7 +1674,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1PropConfig",
+              "type": "object",
               "description": "遥测"
             }
           }
@@ -1616,7 +1714,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1PropConfig",
+              "type": "object",
               "description": "遥测"
             }
           }
@@ -2009,6 +2107,19 @@
         }
       }
     },
+    "apidevicev1TemplateBasicInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "模板名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "模板描述"
+        }
+      }
+    },
     "apigroupv1Condition": {
       "type": "object",
       "properties": {
@@ -2107,6 +2218,20 @@
           "description": "key 数组"
         }
       }
+    },
+    "apitemplatev1TemplateBasicInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "模板名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "模板描述"
+        }
+      },
+      "title": "basic"
     },
     "protobufAny": {
       "type": "object",
@@ -2626,37 +2751,16 @@
       "default": "UNKNOWN",
       "description": "*\nplugin state enum."
     },
-    "v1PropConfig": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "名称"
-        },
-        "id": {
-          "type": "string",
-          "description": "标识符"
-        },
-        "type": {
-          "type": "string",
-          "description": "数据类型"
-        },
-        "define": {
-          "type": "object",
-          "description": "数据定义和约束"
-        },
-        "description": {
-          "type": "string",
-          "description": "说明"
-        }
-      }
-    },
     "v1Relation": {
       "type": "object",
       "properties": {
         "direction": {
           "type": "string",
-          "description": "关系方向 from  or to"
+          "description": "关系方向 from or to   目前只有 from"
+        },
+        "relationType": {
+          "type": "string",
+          "description": "关系类型 目前只定 contain"
         },
         "targetId": {
           "type": "string",
@@ -2710,20 +2814,6 @@
         }
       },
       "description": "*\nThe request value of the GET /v1/Status.\nused when the tkeel checks the status of plugins regularly."
-    },
-    "v1TemplateBasicInfo": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "模板名称"
-        },
-        "description": {
-          "type": "string",
-          "description": "模板描述"
-        }
-      },
-      "title": "basic"
     },
     "v1TenantDisableRequest": {
       "type": "object",
