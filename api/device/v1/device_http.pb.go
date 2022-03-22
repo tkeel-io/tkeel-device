@@ -541,7 +541,7 @@ func (h *DeviceHTTPHandler) ListDeviceDataRelation(req *go_restful.Request, resp
 
 func (h *DeviceHTTPHandler) SaveDeviceConfAsOtherTemplte(req *go_restful.Request, resp *go_restful.Response) {
 	in := SaveDeviceConfAsOtherTemplateRequest{}
-	if err := transportHTTP.GetBody(req, &in.Id); err != nil {
+	if err := transportHTTP.GetBody(req, &in.OtherTemplateInfo); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return

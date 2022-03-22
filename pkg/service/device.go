@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/tkeel-io/kit/log"
 	pb "github.com/tkeel-io/tkeel-device/api/device/v1"
+	pbt "github.com/tkeel-io/tkeel-device/api/template/v1"
 	//go_struct "google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/structpb"
@@ -492,9 +493,9 @@ func (s *DeviceService) SaveDeviceConfAsSelfTemplte(ctx context.Context, req *pb
 	}
 
 	//get configs
-	configObject, err := s.client.GetCoreEntitySpecContent(tm, req.Id, "device", "configs", "")
-	if nil != err {
-		return nil, err
+	configObject, err1 := s.client.GetCoreEntitySpecContent(tm, req.Id, "device", "configs", "")
+	if nil != err1 {
+		return nil, err1
 	}
 	configs, ok := configObject["configs"]
 	if !ok {
@@ -504,9 +505,9 @@ func (s *DeviceService) SaveDeviceConfAsSelfTemplte(ctx context.Context, req *pb
 	log.Debug(configs)
 
 	//get TemplateId
-	templateIdObject, err1 := s.client.GetCoreEntitySpecContent(tm, req.Id, "device", "properties", "basicInfo.templateId")
-	if nil != err1 {
-		return nil, err1
+	templateIdObject, err2 := s.client.GetCoreEntitySpecContent(tm, req.Id, "device", "properties", "basicInfo.templateId")
+	if nil != err2 {
+		return nil, err2
 	}
 	templateId := ""
 	if prop, ok := templateIdObject["properties"]; ok {
@@ -532,22 +533,115 @@ func (s *DeviceService) SaveDeviceConfAsSelfTemplte(ctx context.Context, req *pb
 	data := make(map[string]interface{})
 	data["configs"] = configs
 	log.Debug(data)
-	dt, err2 := json.Marshal(data)
-	if err2 != nil {
-		return nil, err2
-	}
-	_, err3 := s.client.Put(url, dt)
-	if nil != err3 {
+	dt, err3 := json.Marshal(data)
+	if err3 != nil {
 		return nil, err3
+	}
+	_, err4 := s.client.Put(url, dt)
+	if nil != err4 {
+		return nil, err4
 	}
 
 	return &emptypb.Empty{}, nil
 
 }
 
-//func (s * DeviceService) SaveDeviceConfAsOtherTemplte(ctx context.Content, req *pb.SaveDeviceConfAsOtherTemplteRequest)(*emptypb.Empty, error){
+func (s *DeviceService) SaveDeviceConfAsOtherTemplte(ctx context.Context, req *pb.SaveDeviceConfAsOtherTemplateRequest) (*emptypb.Empty, error) {
+	log.Debug("SaveDeviceConfAsOtherTemplte")
+	log.Debug("req:", req)
 
-//}
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+	//get configs
+	configObject, err1 := s.client.GetCoreEntitySpecContent(tm, req.Id, "device", "configs", "")
+	if nil != err1 {
+		return nil, err1
+	}
+	configs, ok := configObject["configs"]
+	if !ok {
+		log.Error("error config non exist")
+		return nil, errors.New("error config non exist")
+	}
+
+	//create  new Template
+	//0. check device name repeated
+	errRepeated := s.checkNameRepated(ctx, req.OtherTemplateInfo.Name)
+	if nil != errRepeated {
+		log.Debug("err:", errRepeated)
+		return nil, errRepeated
+	}
+	//get core url
+	entityId := GetUUID()
+	url := s.client.GetCoreUrl("", tm, "template") + "&id=" + entityId
+
+	//fmt request
+	sysField := &pbt.TemplateEntitySysField{
+		XId:        entityId,
+		XCreatedAt: GetTime(),
+		XUpdatedAt: GetTime(),
+		XOwner:     tm["owner"],
+		XSource:    tm["source"],
+	}
+	otherTemplateInfo := &pbt.TemplateBasicInfo{
+		Name:        req.OtherTemplateInfo.Name,
+		Description: req.OtherTemplateInfo.Description,
+	}
+
+	entityInfo := &pbt.TemplateEntityCoreInfo{
+		BasicInfo: otherTemplateInfo,
+		SysField:  sysField,
+	}
+	log.Debug("entityinfo : ", entityInfo)
+	data, err2 := json.Marshal(entityInfo)
+	if nil != err2 {
+		return nil, err2
+	}
+	// do it
+	res, err3 := s.client.Post(url, data)
+	if nil != err3 {
+		log.Error("error post data to core", err3)
+		return nil, err3
+	}
+	//fmt response
+	templateObject := make(map[string]interface{})
+	err4 := json.Unmarshal(res, &templateObject)
+	if err4 != nil {
+		log.Error("error Unmarshal data from core")
+		return nil, err4
+	}
+
+	templateId := ""
+	if id, ok := templateObject["id"]; ok {
+		if idstr, ok1 := id.(string); ok1 {
+			templateId = idstr
+		}
+	}
+	if templateId == "" {
+		log.Error("error templateId non exist")
+		return nil, errors.New("error templateId non exist")
+	}
+	log.Debug(templateId)
+
+	//patch
+	midUrl := "/" + templateId
+	url1 := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("put url :", url1)
+
+	data1 := make(map[string]interface{})
+	data1["configs"] = configs
+	log.Debug(data1)
+	dt, err5 := json.Marshal(data1)
+	if err5 != nil {
+		return nil, err5
+	}
+	_, err6 := s.client.Put(url1, dt)
+	if nil != err6 {
+		return nil, err6
+	}
+	return &emptypb.Empty{}, nil
+}
 
 func (s *DeviceService) CoreSearchEntity(ctx context.Context, listEntityQuery *pb.ListEntityQuery) (map[string]interface{}, error) {
 	log.Debug("CoreSearchEntity")

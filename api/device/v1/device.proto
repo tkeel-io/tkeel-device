@@ -288,7 +288,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
   rpc SaveDeviceConfAsOtherTemplte(SaveDeviceConfAsOtherTemplateRequest)returns (google.protobuf.Empty){
     option (google.api.http) = {
       post : "/devices/{id}/configs/saveAsOtherTemplate"
-      body : "id"
+      body : "otherTemplateInfo"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "save device confAsOtherTemplate";
