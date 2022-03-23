@@ -682,7 +682,7 @@ func (s *TemplateService) GetTemplatePropConfig(ctx context.Context, entityId st
 
 	//get core url
 	midUrl := "/" + entityId + "/configs"
-	url := s.httpClient.GetCoreUrl(midUrl, tm, "template") + fmt.Sprintf("&property_ids=%s", pid)
+	url := s.httpClient.GetCoreUrl(midUrl, tm, "template") + fmt.Sprintf("&property_keys=%s", pid)
 	log.Debug("url :", url)
 
 	//fmt request

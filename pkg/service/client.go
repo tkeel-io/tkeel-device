@@ -337,6 +337,9 @@ func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, pId str
 		}
 		parentId = defaultGroupId
 	}
+	if Id == parentId {
+		return errors.New("error:  parent Id cannot be the same as the Id")
+	}
 
 	//get url
 	midUrl := "/" + Id + "/mappers"
