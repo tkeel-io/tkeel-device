@@ -78,6 +78,9 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	if coreInfo.BasicInfo.DirectConnection == false && coreInfo.BasicInfo.TemplateId == "" {
 		return nil, errors.New("non-direct connection must have template")
 	}
+	if coreInfo.BasicInfo.ParentId == coreInfo.SysField.XId {
+		return nil, errors.New("error ParentId")
+	}
 
 	//4. create device token
 	token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId, tm["owner"], tm["userToken"])
@@ -147,6 +150,11 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 
 	updateBasicInfo := &pb.UpdateDeviceEntityCoreInfo{}
 	updateBasicInfo.BasicInfo = req.DevBasicInfo
+
+	//check
+	if updateBasicInfo.BasicInfo.ParentId == req.Id {
+		return nil, errors.New("error ParentId")
+	}
 
 	//do it
 	//update BasicInfo

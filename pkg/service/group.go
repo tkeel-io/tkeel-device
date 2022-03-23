@@ -127,6 +127,11 @@ func (s *GroupService) UpdateGroup(ctx context.Context, req *pb.UpdateGroupReque
 	updateGroup := &pb.UpdateGroupEntityCoreInfo{}
 	updateGroup.Group = req.Group
 
+	//check
+	if updateGroup.Group.ParentId == req.GetId() {
+		return nil, errors.New("error ParentId")
+	}
+
 	data, err3 := json.Marshal(updateGroup)
 	if nil != err3 {
 		return nil, err3
