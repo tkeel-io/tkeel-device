@@ -326,7 +326,11 @@ func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, pId str
 	log.Debug("setSpacePathMapper")
 	parentId := pId
 	//check ParentId
-	if parentId == "" && entityType == "device" {
+	if (parentId == "" ) && entityType == "group" {
+		return nil
+	}
+
+	if (parentId == "") && entityType == "device" {
 		defaultGroupId := "iotd-" + tm["owner"] + "-defaultGroup"
 		exist := c.checkEntityExist(tm, entityType, defaultGroupId)
 		if !exist {
