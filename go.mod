@@ -5,7 +5,6 @@ go 1.17
 require (
 	github.com/emicklei/go-restful v2.15.0+incompatible
 	github.com/google/uuid v1.3.0
-	github.com/tkeel-io/core v0.2.0
 	github.com/tkeel-io/kit v0.0.0-20220303080455-8ab38f419f7c
 	github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220303151503-0f9a4a00fd77
 	google.golang.org/genproto v0.0.0-20220303160752-862486edd9cc
