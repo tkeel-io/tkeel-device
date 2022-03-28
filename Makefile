@@ -2,7 +2,7 @@
 
 GOCMD = GO111MODULE=on go
 
-VERSION := $(shell grep "const Version " cmd/root.go | sed -E 's/.*"(.+)"$$/\1/')
+#VERSION := $(shell grep "const Version " cmd/root.go | sed -E 's/.*"(.+)"$$/\1/')
 GIT_COMMIT=$(shell git rev-parse HEAD)
 GIT_DIRTY=$(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 BUILD_DATE=$(shell date '+%Y-%m-%d-%H:%M:%S')
@@ -175,9 +175,9 @@ endif
 #	docker push tkeelio/tkeel-device:0.2.0
 
 docker-build: build
-	docker build -t tkeelio/tkeel-device:0.4.1 .
+	docker build -t tkeelio/tkeel-device:0.4.4 .
 docker-push:
-	docker push tkeelio/tkeel-device:0.4.1
+	docker push tkeelio/tkeel-device:0.4.4
 ################################################################################
 # Target: lint                                                                 #
 ################################################################################
