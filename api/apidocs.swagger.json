@@ -354,27 +354,13 @@
           },
           {
             "name": "body",
-            "description": " 设备Id",
+            "description": "另存为模板的基本信息",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "string",
-              "description": " 设备Id"
+              "$ref": "#/definitions/apidevicev1TemplateBasicInfo",
+              "description": "另存为模板的基本信息"
             }
-          },
-          {
-            "name": "otherTemplateInfo.name",
-            "description": "模板名称",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "otherTemplateInfo.description",
-            "description": "模板描述",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
@@ -2765,6 +2751,14 @@
         "targetId": {
           "type": "string",
           "description": "源 或 目标  实体Id"
+        },
+        "targetType": {
+          "type": "string",
+          "description": "源 或 目标  实体类型"
+        },
+        "targetName": {
+          "type": "string",
+          "description": "源 或 目标  实体名称"
         }
       }
     },

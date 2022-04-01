@@ -117,7 +117,7 @@ func (s *TemplateService) UpdateTemplate(ctx context.Context, req *pb.UpdateTemp
 	}
 
 	//get core url
-	midUrl := "/" + req.GetUid()
+	midUrl := "/" + req.GetUid() + "/properties"
 	url := s.httpClient.GetCoreUrl(midUrl, tm, "template")
 	log.Debug("get url: ", url)
 
