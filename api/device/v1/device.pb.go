@@ -1332,7 +1332,6 @@ type UpdateDeviceEntityCoreInfo struct {
 
 	TemplateId  string                 `protobuf:"bytes,1,opt,name=template_id,json=templateId,proto3" json:"template_id"`
 	Description string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description"`
-	Description string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description"`
 	BasicInfo   *DeviceEntityBasicInfo `protobuf:"bytes,3,opt,name=basicInfo,proto3" json:"basicInfo"`
 }
 
