@@ -161,7 +161,7 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 		TemplateID:  req.DevBasicInfo.TemplateId,
 		Description: req.DevBasicInfo.Description,
 		Properties: map[string]interface{}{
-			"basiceInfo": req.DevBasicInfo,
+			"basicInfo": req.DevBasicInfo,
 		},
 	}
 
