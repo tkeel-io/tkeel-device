@@ -2751,6 +2751,14 @@
         "targetId": {
           "type": "string",
           "description": "源 或 目标  实体Id"
+        },
+        "targetType": {
+          "type": "string",
+          "description": "源 或 目标  实体类型"
+        },
+        "targetName": {
+          "type": "string",
+          "description": "源 或 目标  实体名称"
         }
       }
     },

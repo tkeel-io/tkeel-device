@@ -118,7 +118,7 @@ func (s *GroupService) UpdateGroup(ctx context.Context, req *pb.UpdateGroupReque
 	}
 
 	//get core url
-	midUrl := "/" + req.GetId()
+	midUrl := "/" + req.GetId() + "/properties"
 	url := s.httpClient.GetCoreUrl(midUrl, tm, "group")
 	log.Debug("put url :", url)
 	log.Debug("body :", req.Group)

@@ -497,6 +497,8 @@ message Relation {
     string direction = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系方向 from or to   目前只有 from"}];
     string relationType = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系类型 目前只定 contain"}];
     string targetId = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "源 或 目标  实体Id"}];
+    string targetType = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "源 或 目标  实体类型"}];
+    string targetName = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "源 或 目标  实体名称"}];
 }
 message SetContent {
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性 or  命令 标识符id"}];
