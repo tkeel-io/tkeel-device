@@ -1,18 +1,18 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/device/v1/device.proto",
+    "title": "api/group/v1/group.proto",
     "version": "version not set"
   },
   "tags": [
-    {
-      "name": "Device"
-    },
     {
       "name": "Group"
     },
     {
       "name": "Openapi"
+    },
+    {
+      "name": "Device"
     },
     {
       "name": "Template"

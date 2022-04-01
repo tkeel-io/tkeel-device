@@ -413,7 +413,9 @@ message DeviceEntityCoreInfo {
   //google.protobuf.Value relations = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备数据关系"}];
 }
 message UpdateDeviceEntityCoreInfo {
-  DeviceEntityBasicInfo basicInfo = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}];
+  string template_id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备模板ID"}];
+  string description = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备描述"}];
+  DeviceEntityBasicInfo basicInfo = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备信息"}];
 }
 
 //------------------------------------------------------------------------------
