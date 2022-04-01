@@ -5,9 +5,11 @@ import (
 	json "encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/tkeel-io/kit/log"
 	pb "github.com/tkeel-io/tkeel-device/api/device/v1"
 	pbt "github.com/tkeel-io/tkeel-device/api/template/v1"
+
 	//go_struct "google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/structpb"
@@ -133,6 +135,13 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	return out, nil
 }
 
+type UpdateEntityReq struct {
+	TemplateID  string                 `json:"template_id"`
+	Description string                 `json:"description"`
+	Configs     map[string]interface{} `json:"configs"`
+	Properties  map[string]interface{} `json:"properties"`
+}
+
 func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRequest) (*pb.UpdateDeviceResponse, error) {
 	log.Debug("UpdateDevice")
 	log.Debug("req:", req)
@@ -148,17 +157,22 @@ func (s *DeviceService) UpdateDevice(ctx context.Context, req *pb.UpdateDeviceRe
 	}
 	log.Debug("get url :", url)
 
-	updateBasicInfo := &pb.UpdateDeviceEntityCoreInfo{}
-	updateBasicInfo.BasicInfo = req.DevBasicInfo
+	updateData := &UpdateEntityReq{
+		TemplateID:  req.DevBasicInfo.TemplateId,
+		Description: req.DevBasicInfo.Description,
+		Properties: map[string]interface{}{
+			"basiceInfo": req.DevBasicInfo,
+		},
+	}
 
-	//check
-	if updateBasicInfo.BasicInfo.ParentId == req.Id {
+	//check cycle.
+	if req.DevBasicInfo.ParentId == req.Id {
 		return nil, errors.New("error ParentId")
 	}
 
 	//do it
 	//update BasicInfo
-	dev, err1 := json.Marshal(updateBasicInfo)
+	dev, err1 := json.Marshal(updateData)
 	if err1 != nil {
 		return nil, err1
 	}

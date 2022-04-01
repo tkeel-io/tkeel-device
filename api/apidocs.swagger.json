@@ -1,18 +1,18 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/device/v1/device.proto",
+    "title": "api/group/v1/group.proto",
     "version": "version not set"
   },
   "tags": [
-    {
-      "name": "Device"
-    },
     {
       "name": "Group"
     },
     {
       "name": "Openapi"
+    },
+    {
+      "name": "Device"
     },
     {
       "name": "Template"
@@ -354,27 +354,13 @@
           },
           {
             "name": "body",
-            "description": " 设备Id",
+            "description": "另存为模板的基本信息",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "string",
-              "description": " 设备Id"
+              "$ref": "#/definitions/apidevicev1TemplateBasicInfo",
+              "description": "另存为模板的基本信息"
             }
-          },
-          {
-            "name": "otherTemplateInfo.name",
-            "description": "模板名称",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "otherTemplateInfo.description",
-            "description": "模板描述",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
