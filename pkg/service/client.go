@@ -326,7 +326,7 @@ func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, pId str
 	log.Debug("setSpacePathMapper")
 	parentId := pId
 	//check ParentId
-	if (parentId == "" ) && entityType == "group" {
+	if (parentId == "") && entityType == "group" {
 		return nil
 	}
 

@@ -83,6 +83,11 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	if coreInfo.BasicInfo.ParentId == coreInfo.SysField.XId {
 		return nil, errors.New("error ParentId")
 	}
+	if coreInfo.BasicInfo.ParentId == "" { // 自动创建默认分组  先赋值 setmpper 里面会检查存在
+		coreInfo.BasicInfo.ParentId = "iotd-" + tm["owner"] + "-defaultGroup"
+		coreInfo.BasicInfo.ParentName = "默认分组"
+		//return nil, errors.New("error ParentId")
+	}
 
 	//4. create device token
 	token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId, tm["owner"], tm["userToken"])
