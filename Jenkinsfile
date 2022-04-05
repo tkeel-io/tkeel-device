@@ -39,13 +39,19 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         script {
                             /*
-                            如果是主分支,则使用最新的 tag 作为镜像和 chart 版本
+                            如果是主分支,且commit 和 tag 匹配,则使用最新的 tag 作为镜像和 chart 版本
                             */
                             if (env.GIT_BRANCH == 'main'){
                                 sh 'git fetch --all --tags'
                                 env.HELM_CHART_VERSION = "${sh(script:'git describe --abbrev=0 --tags',returnStdout:true)}"
-                                env.DOCKER_IMAGE_TAG = env.HELM_CHART_VERSION
-                                env.GITHUB_ORG = 'tkeel-io'
+                                if (env.HELM_CHART_VERSION == "${sh(script:'git tag --contains `git rev-parse HEAD`',returnStdout:true)}" ){
+                                    env.DOCKER_IMAGE_TAG = env.HELM_CHART_VERSION
+                                    env.GITHUB_ORG = 'tkeel-io'
+                                }else{
+                                    env.DOCKER_IMAGE_TAG = "${sh(script:'git rev-parse --short HEAD',returnStdout:true)}"
+                                    env.HELM_CHART_VERSION = "${sh(script:'date -d "+8 hour" "+%m.%d.%H%M%S"',returnStdout:true)}"
+                                    env.GITHUB_ORG = 'lunz1207'
+                                }
                             }
                             /*
                             如果是非主分支,则使用当前 commit id 作为镜像 tag ;使用月.日.时分秒作为 chart 版本
