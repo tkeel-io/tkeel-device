@@ -89,7 +89,7 @@ pipeline {
                         sh 'cd $CHART_REPO_PATH && helm3 repo index . --url=https://$GITHUB_ORG.github.io/helm-charts'
                         sh 'cd $CHART_REPO_PATH && git add . '
                         sh 'cd $CHART_REPO_PATH && git commit -m "feat:update chart"'
-                        sh 'cd $CHART_REPO_PATH && git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GITHUB_ACCOUNT/helm-charts.git'
+                        sh 'cd $CHART_REPO_PATH && git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GITHUB_ORG/helm-charts.git'
                     }
                 }
             }
