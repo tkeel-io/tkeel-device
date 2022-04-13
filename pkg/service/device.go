@@ -452,21 +452,38 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 	return &emptypb.Empty{}, nil
 }
 
+func (s *DeviceService) CreateMapperByConfigs(ctx context.Context, req *pb.CreateDeviceDataRelationRequest) (error) {
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return err
+	}
+
+	midUrl := "/" + req.GetId() + "/patch"
+    url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("url :", url)
+
+	return nil
+}
+
 func (s *DeviceService) CreateDeviceDataRelation(ctx context.Context, req *pb.CreateDeviceDataRelationRequest) (*emptypb.Empty, error) {
 	log.Debug("CreateDataRelation")
 	log.Debug("req:", req)
 
-	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err {
-		return nil, err
-	}
-	midUrl := "/" + req.GetId() + "/patch"
-	url := s.client.GetCoreUrl(midUrl, tm, "device")
-	log.Debug("get url :", url)
-
 	//write relation id <------> id
+	ma := make(map[string]interface{})
+	ma[req.Relation.TargetId] = req.Relation
+	_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "relation.", "replace", "/patch")
+	if nil != err3 {
+		log.Error("error patch relation", err3)
+		return nil, err3
+	}
 
 	//create mapper
+	err4 := s.CreateMapperByConfigs(ctx, req)
+	if nil != err4 {
+		log.Error("error creatte mapper", err4)
+		return nil, err4
+	}
 
 	return &emptypb.Empty{}, nil
 }
@@ -507,6 +524,16 @@ func (s *DeviceService) SetDeviceAttribte(ctx context.Context, req *pb.SetDevice
 	return &emptypb.Empty{}, nil
 }
 func (s *DeviceService) SetDeviceCommand(ctx context.Context, req *pb.SetDeviceCommandRequest) (*emptypb.Empty, error) {
+	log.Debug("SetDeviceCommand")
+	log.Debug("req:", req)
+
+	ma := make(map[string]interface{})
+	ma[req.Content.Id] = req.Content.Value
+	_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "commands.", "replace", "/patch")
+	if nil != err3 {
+		log.Error("error patch commands", err3)
+		return nil, err3
+	}
 	return &emptypb.Empty{}, nil
 }
 
