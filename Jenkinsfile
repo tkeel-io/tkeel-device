@@ -66,6 +66,7 @@ pipeline {
                             sh 'echo Docker image tag:$DOCKER_IMAGE_TAG'
                             sh 'echo Helm chart version:$HELM_CHART_VERSION'
                             sh 'echo Helm chart repo:$GITHUB_ORG'
+                            sh 'echo Branch:$GIT_BRANCH'
                         }
                     }
                 }
