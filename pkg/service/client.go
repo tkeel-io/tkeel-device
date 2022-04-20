@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/tkeel-io/kit/log"
 	transportHTTP "github.com/tkeel-io/kit/transport/http"
+	"github.com/tkeel-io/tdtl"
 	pbg "github.com/tkeel-io/tkeel-device/api/group/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"io/ioutil"
@@ -57,51 +58,32 @@ func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string, entityT
 func (c *CoreClient) GetTokenMap(ctx context.Context) (map[string]string, error) {
 	header := transportHTTP.HeaderFromContext(ctx)
 	token, ok := header[tokenKey]
-	if !ok {
-		return nil, errors.New("invalid Authorization")
+	if !ok && len(token)<1{
+		return nil, errors.New("invalid authorization")
 	}
-	// only use the first one
-	return c.parseToken(token[0])
-}
+	if token[0]==""{
+		return nil, errors.New("empty authorization token")
+	}
+	userToken := token[0]
 
-func (c *CoreClient) parseToken(token string) (map[string]string, error) {
+	// only use the first one
 	url := authUrl + "/v1/oauth/authenticate"
 	req, err := http.NewRequest("GET", url, nil)
 	if nil != err {
 		return nil, err
 	}
-	req.Header.Add(tokenKey, token)
+	req.Header.Add(tokenKey, userToken)
 	resp, err := http.DefaultClient.Do(req)
-	resp2, err2 := c.ParseResp(resp, err)
-	if nil != err2 {
-		log.Error("error parse token, ", err)
-		return nil, err2
-	}
-	/*var ar interface{}
-	if err3 := json.Unmarshal(resp2, &ar); nil != err3 {
-		log.Error("resp Unmarshal error, ", err3)
-		return nil, err3
-	}
-	//log.Debug("Unmarshal res:", ar)
-	res, ok := ar.(map[string]interface{})
-	if !ok {
-		return nil, errors.New("auth error")
-	}
-	if res["code"].(float64) != 200 {
-		return nil, errors.New(res["msg"].(string))
 
-	}*/
-	//tokenMap := res["data"].(map[string]interface{})
-	tokenMap, ok := resp2.(map[string]interface{})
-	if !ok {
-		return nil, errors.New("auth trans error")
-	}
+	cc := tdtl.New(resp)
+	owner := cc.Get("user_id").String()
+	device := cc.Get("device").String()
+
 	// save token, map[entity_id:406c79543e0245a994a742e69ce48e71 entity_type:device tenant_id: token_id:de25624a-1d0a-4ab0-b1f1-5b0db5a12c30 user_id:abc]
 	urlMap := map[string]string{
-		"owner": tokenMap["user_id"].(string),
-		//"type":      "device",
-		"source":    "device",
-		"userToken": token,
+		"owner": owner,
+		"source":   device,
+		"userToken": userToken,
 	}
 	return urlMap, nil
 }
