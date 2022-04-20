@@ -89,6 +89,11 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 		//return nil, errors.New("error ParentId")
 	}
 
+	//create  templateName mapper
+	if coreInfo.BasicInfo.TemplateId != "" {
+		s.client.setMapper(tm, "mapper_template_name", devId, "basicInfo.templateName", coreInfo.BasicInfo.TemplateId, "basicInfo.name")
+	}
+
 	//4. create device token
 	token, err2 := s.client.CreatEntityToken("device", coreInfo.SysField.XId, tm["owner"], tm["userToken"])
 	if nil != err2 {

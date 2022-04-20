@@ -22,7 +22,7 @@ const (
 	coreUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/core/v1/entities"
 	authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
 
-	//coreUrl string = "http://192.168.123.9:31438/v1/entities"
+	//coreUrl string = "http://192.168.123.9:32758/v1/entities"
 	//authUrl string = "http://192.168.123.9:30707/apis/security"
 
 	tokenKey string = "Authorization"
@@ -321,6 +321,36 @@ func GetUUID() string {
 func GetTime() int64 {
 	return time.Now().UnixNano() / 1e6
 }
+
+func (c *CoreClient) setMapper(tm map[string]string, mapperName string, curId string, curProp string, targetId string, targetProp string) error {
+	log.Debug("setMapper")
+
+	//get url
+	midUrl := "/" + curId + "/mappers"
+	url := c.GetCoreUrl(midUrl, tm, "group")
+	log.Debug("mapper url = ", url)
+
+	//fmt request
+	data := make(map[string]string)
+	data["name"] = mapperName
+	data["tql"] = "insert into " + curId + " select " + targetId + "." + targetProp + "+''  as " + curProp
+	log.Debug("data = ", data)
+
+	send, err := json.Marshal(data)
+	if nil != err {
+		return err
+	}
+
+	// do it
+	_, err1 := c.Post(url, send)
+	if nil != err1 {
+		log.Error("error core return")
+		return err1
+	}
+
+	return nil
+}
+
 func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, pId string, entityType string) error {
 
 	log.Debug("setSpacePathMapper")
@@ -353,7 +383,7 @@ func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, pId str
 	//fmt request
 	data := make(map[string]string)
 	data["name"] = "mapper_space_path"
-	data["tql"] = "insert into " + Id + " select " + parentId + ".sysField._spacePath + '/" + Id + "'  as " + "sysField._spacePath, "+ parentId + ".basicInfo.parentName + '/" + Id + "'  as " + "basicInfo.parentName"
+	data["tql"] = "insert into " + Id + " select " + parentId + ".sysField._spacePath + '/" + Id + "'  as " + "sysField._spacePath, " + parentId + ".group.name " + "  as " + "basicInfo.parentName"
 	log.Debug("data = ", data)
 
 	send, err := json.Marshal(data)
