@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/tkeel-io/kit/log"
 	transportHTTP "github.com/tkeel-io/kit/transport/http"
-	"github.com/tkeel-io/tdtl"
+	//"github.com/tkeel-io/tdtl"
 	pbg "github.com/tkeel-io/tkeel-device/api/group/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"io/ioutil"
@@ -23,7 +23,7 @@ const (
 	coreUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/core/v1/entities"
 	authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
 
-	//coreUrl string = "http://192.168.123.9:32758/v1/entities"
+    //coreUrl string = "http://192.168.123.9:32758/v1/entities"
 	//authUrl string = "http://192.168.123.9:30707/apis/security"
 
 	tokenKey string = "Authorization"
@@ -58,10 +58,10 @@ func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string, entityT
 func (c *CoreClient) GetTokenMap(ctx context.Context) (map[string]string, error) {
 	header := transportHTTP.HeaderFromContext(ctx)
 	token, ok := header[tokenKey]
-	if !ok && len(token)<1{
+	if !ok && len(token) < 1 {
 		return nil, errors.New("invalid authorization")
 	}
-	if token[0]==""{
+	if token[0] == "" {
 		return nil, errors.New("empty authorization token")
 	}
 	userToken := token[0]
@@ -75,14 +75,25 @@ func (c *CoreClient) GetTokenMap(ctx context.Context) (map[string]string, error)
 	req.Header.Add(tokenKey, userToken)
 	resp, err := http.DefaultClient.Do(req)
 
-	cc := tdtl.New(resp)
-	owner := cc.Get("user_id").String()
-	device := cc.Get("device").String()
+	resp2, err2 := c.ParseResp(resp, err)
+	if nil != err2 {
+		log.Error("error parse token, ", err)
+		return nil, err2
+	}
+
+	//cc := tdtl.New(resp)
+	//owner := cc.Get("user_id").String()
+	//device := cc.Get("device").String()
 
 	// save token, map[entity_id:406c79543e0245a994a742e69ce48e71 entity_type:device tenant_id: token_id:de25624a-1d0a-4ab0-b1f1-5b0db5a12c30 user_id:abc]
+	tokenMap, ok := resp2.(map[string]interface{})
+	if !ok {
+		return nil, errors.New("auth trans error")
+	}
+
 	urlMap := map[string]string{
-		"owner": owner,
-		"source":   device,
+		"owner":     tokenMap["user_id"].(string),
+		"source":    "device",
 		"userToken": userToken,
 	}
 	return urlMap, nil
