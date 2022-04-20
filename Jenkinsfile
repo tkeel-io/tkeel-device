@@ -63,10 +63,10 @@ pipeline {
                                 env.DOCKER_IMAGE_TAG = params.APP_VERSION
                                 env.HELM_CHART_VERSION = params.CHART_VERSION
                             }
-                            sh 'echo 当前分支:${GIT_BRANCH}'
-                            sh 'echo 当前环境:${GITHUB_ORG}'
-                            sh 'echo 当前标签::$DOCKER_IMAGE_TAG'
-                            sh 'echo 当前版本:$HELM_CHART_VERSION'
+                            sh 'echo Docker image tag:$DOCKER_IMAGE_TAG'
+                            sh 'echo Helm chart version:$HELM_CHART_VERSION'
+                            sh 'echo Helm chart repo:$GITHUB_ORG'
+                            sh 'echo Branch:$GIT_BRANCH'
                         }
                     }
                 }
@@ -118,7 +118,7 @@ pipeline {
                         sh 'wget -q https://raw.githubusercontent.com/tkeel-io/cli/master/install/install.sh -O - | /bin/bash'
                         sh 'tkeel admin login -p changeme'
                         sh 'sleep 1m'
-                        sh 'tkeel plugin upgrade lunz1207/$APP_NAME@$HELM_CHART_VERSION $APP_NAME'
+                        sh 'tkeel plugin upgrade $GITHUB_ORG/$APP_NAME@$HELM_CHART_VERSION $APP_NAME'
                     }                
                 }
             }
@@ -146,7 +146,7 @@ pipeline {
         failure { 
             mail(
                 to: 'lunzhou@yunify.com', 
-                cc: 'lunzhou@yunify.com', 
+                cc: '', 
                 subject: 'tkeel-device pipeline is failure', 
                 body:'failure'
             )
@@ -154,7 +154,7 @@ pipeline {
         success { 
             mail(
                 to: 'lunzhou@yunify.com', 
-                cc: 'lunzhou@yunify.com', 
+                cc: '', 
                 subject: 'tkeel-device pipeline is success', 
                 body:'success'
             )
