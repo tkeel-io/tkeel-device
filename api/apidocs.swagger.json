@@ -1,18 +1,18 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/group/v1/group.proto",
+    "title": "api/device/v1/device.proto",
     "version": "version not set"
   },
   "tags": [
+    {
+      "name": "Device"
+    },
     {
       "name": "Group"
     },
     {
       "name": "Openapi"
-    },
-    {
-      "name": "Device"
     },
     {
       "name": "Template"
@@ -334,7 +334,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "properties": {}
+              "$ref": "#/definitions/apidevicev1CreateTemplateResponse"
             }
           },
           "default": {
@@ -1078,7 +1078,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1CreateTemplateResponse"
+              "$ref": "#/definitions/apitemplatev1CreateTemplateResponse"
             }
           },
           "default": {
@@ -2034,6 +2034,15 @@
         }
       }
     },
+    "apidevicev1CreateTemplateResponse": {
+      "type": "object",
+      "properties": {
+        "templateObject": {
+          "type": "object",
+          "description": "模板对象"
+        }
+      }
+    },
     "apidevicev1Ids": {
       "type": "object",
       "properties": {
@@ -2178,6 +2187,16 @@
             "$ref": "#/definitions/apigroupv1Condition"
           },
           "description": "组合条件"
+        }
+      }
+    },
+    "apitemplatev1CreateTemplateResponse": {
+      "type": "object",
+      "properties": {
+        "templateObject": {
+          "type": "object",
+          "description": "模板对象",
+          "title": "api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"模板对象\"}];"
         }
       }
     },
@@ -2358,16 +2377,6 @@
           "type": "object",
           "description": "设备组信息",
           "title": "api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"设备组信息\"}];"
-        }
-      }
-    },
-    "v1CreateTemplateResponse": {
-      "type": "object",
-      "properties": {
-        "templateObject": {
-          "type": "object",
-          "description": "模板对象",
-          "title": "api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"模板对象\"}];"
         }
       }
     },

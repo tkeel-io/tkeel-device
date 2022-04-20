@@ -36,7 +36,7 @@ type DeviceHTTPServer interface {
 	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*emptypb.Empty, error)
 	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)
 	ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*emptypb.Empty, error)
-	SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*emptypb.Empty, error)
+	SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*CreateTemplateResponse, error)
 	SaveDeviceConfAsSelfTemplte(context.Context, *SaveDeviceConfAsSelfTemplteRequest) (*emptypb.Empty, error)
 	SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
 	SetDeviceAttribte(context.Context, *SetDeviceAttributeRequest) (*emptypb.Empty, error)

@@ -285,7 +285,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
         }
     };
   };
-  rpc SaveDeviceConfAsOtherTemplte(SaveDeviceConfAsOtherTemplateRequest)returns (google.protobuf.Empty){
+  rpc SaveDeviceConfAsOtherTemplte(SaveDeviceConfAsOtherTemplateRequest)returns (CreateTemplateResponse){
     option (google.api.http) = {
       post : "/devices/{id}/configs/saveAsOtherTemplate"
       body : "otherTemplateInfo"
@@ -503,4 +503,7 @@ message Relation {
 message SetContent {
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性 or  命令 标识符id"}];
     google.protobuf.Value  value = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设置的 value"}];
+}
+message CreateTemplateResponse {
+    google.protobuf.Value templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
 }

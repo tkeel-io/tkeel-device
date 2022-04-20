@@ -353,7 +353,7 @@ func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, pId str
 	//fmt request
 	data := make(map[string]string)
 	data["name"] = "mapper_space_path"
-	data["tql"] = "insert into " + Id + " select " + parentId + ".sysField._spacePath + '/" + Id + "'  as " + "sysField._spacePath"
+	data["tql"] = "insert into " + Id + " select " + parentId + ".sysField._spacePath + '/" + Id + "'  as " + "sysField._spacePath, "+ parentId + ".basicInfo.parentName + '/" + Id + "'  as " + "basicInfo.parentName"
 	log.Debug("data = ", data)
 
 	send, err := json.Marshal(data)

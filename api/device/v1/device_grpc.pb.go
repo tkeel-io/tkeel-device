@@ -35,7 +35,7 @@ type DeviceClient interface {
 	SetDeviceAttribte(ctx context.Context, in *SetDeviceAttributeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SetDeviceCommand(ctx context.Context, in *SetDeviceCommandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SaveDeviceConfAsSelfTemplte(ctx context.Context, in *SaveDeviceConfAsSelfTemplteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	SaveDeviceConfAsOtherTemplte(ctx context.Context, in *SaveDeviceConfAsOtherTemplateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	SaveDeviceConfAsOtherTemplte(ctx context.Context, in *SaveDeviceConfAsOtherTemplateRequest, opts ...grpc.CallOption) (*CreateTemplateResponse, error)
 }
 
 type deviceClient struct {
@@ -190,8 +190,8 @@ func (c *deviceClient) SaveDeviceConfAsSelfTemplte(ctx context.Context, in *Save
 	return out, nil
 }
 
-func (c *deviceClient) SaveDeviceConfAsOtherTemplte(ctx context.Context, in *SaveDeviceConfAsOtherTemplateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *deviceClient) SaveDeviceConfAsOtherTemplte(ctx context.Context, in *SaveDeviceConfAsOtherTemplateRequest, opts ...grpc.CallOption) (*CreateTemplateResponse, error) {
+	out := new(CreateTemplateResponse)
 	err := c.cc.Invoke(ctx, "/api.device.v1.Device/SaveDeviceConfAsOtherTemplte", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -219,7 +219,7 @@ type DeviceServer interface {
 	SetDeviceAttribte(context.Context, *SetDeviceAttributeRequest) (*emptypb.Empty, error)
 	SetDeviceCommand(context.Context, *SetDeviceCommandRequest) (*emptypb.Empty, error)
 	SaveDeviceConfAsSelfTemplte(context.Context, *SaveDeviceConfAsSelfTemplteRequest) (*emptypb.Empty, error)
-	SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*emptypb.Empty, error)
+	SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*CreateTemplateResponse, error)
 	mustEmbedUnimplementedDeviceServer()
 }
 
@@ -275,7 +275,7 @@ func (UnimplementedDeviceServer) SetDeviceCommand(context.Context, *SetDeviceCom
 func (UnimplementedDeviceServer) SaveDeviceConfAsSelfTemplte(context.Context, *SaveDeviceConfAsSelfTemplteRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveDeviceConfAsSelfTemplte not implemented")
 }
-func (UnimplementedDeviceServer) SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*emptypb.Empty, error) {
+func (UnimplementedDeviceServer) SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*CreateTemplateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveDeviceConfAsOtherTemplte not implemented")
 }
 func (UnimplementedDeviceServer) mustEmbedUnimplementedDeviceServer() {}
