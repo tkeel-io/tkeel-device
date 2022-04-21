@@ -470,37 +470,313 @@ func (s *DeviceService) CreateMapperByConfigs(ctx context.Context, req *pb.Creat
 	return nil
 }
 
-func (s *DeviceService) CreateDeviceDataRelation(ctx context.Context, req *pb.CreateDeviceDataRelationRequest) (*emptypb.Empty, error) {
-	log.Debug("CreateDataRelation")
-	log.Debug("req:", req)
+func (s *DeviceService) expByConfigs(configObject map[string]interface{}, classify string, curName string, curId string, targetName string, targetId string) []*pb.Expression {
+	//define
+	exps := make([]*pb.Expression, 0)
+	var attr map[string]interface{}
 
-	//write relation id <------> id
-	ma := make(map[string]interface{})
-	ma[req.Relation.TargetId] = req.Relation
-	_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "relation.", "replace", "/patch")
-	if nil != err3 {
-		log.Error("error patch relation", err3)
-		return nil, err3
+	//get
+	if configs1, okc1 := configObject["configs"]; okc1 == true {
+		if configs2, okc2 := configs1.(map[string]interface{}); okc2 == true {
+			if attr1, ok1 := configs2[classify]; ok1 == true {
+				if attr2, ok2 := attr1.(map[string]interface{}); ok2 == true {
+					if define1, ok3 := attr2["define"]; ok3 == true {
+						if define2, ok4 := define1.(map[string]interface{}); ok4 == true {
+							if field1, ok5 := define2["fields"]; ok5 == true {
+								if field2, ok6 := field1.(map[string]interface{}); ok6 == true {
+									attr = field2
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
-	//create mapper
-	err4 := s.CreateMapperByConfigs(ctx, req)
-	if nil != err4 {
-		log.Error("error creatte mapper", err4)
+	//create
+	for f := range attr {
+		//to do :devices or properties are converted according to ext's configuration(key = alias)
+        fAlias := f
+		if conf, ok := attr[f].(map[string]interface{}); ok == true {
+			if attrExt1, ok1 := conf["ext"]; ok1 == true {
+                if attrExt2,ok2 := attrExt1.(map[string]interface{}); ok2 == true {
+                    if alias, ok3 := attrExt2["alias"];ok3 == true {
+                        fAlias = alias.(string)
+                    }
+                }
+			}
+		}
+
+		attrName := ""
+		if conf, ok := attr[f].(map[string]interface{}); ok == true {
+			if attrName1, ok1 := conf["name"]; ok1 == true {
+				attrName = attrName1.(string)
+			}
+		}
+
+		exp := &pb.Expression{
+			Path:        classify + "." + f,
+			Expression:  targetId + "." + classify + "." + fAlias,
+			Name:        f,
+			Description: curId + "=" + curName + "," + f + "=" + attrName + "," + targetId + "=" + targetName,
+		}
+		exps = append(exps, exp)
+	}
+	return exps
+}
+
+func (s *DeviceService) CreateExpressionsByParseConfigs(tm map[string]string, curName string, curId string, targetName string, targetId string) ([]*pb.Expression, error) {
+
+	//check targetId
+	if targetId == "" {
+		return nil, errors.New("targetId is empty")
+	}
+
+	//get cur configs
+	configObject, err1 := s.client.GetCoreEntitySpecContent(tm, curId, "device", "configs", "")
+	if nil != err1 {
+		return nil, err1
+	}
+
+	//to do ?
+	//get targetId confings
+	//check TargetId configs
+	//check targetId Properties
+
+	//overlock
+	//get attr
+	expAttr := s.expByConfigs(configObject, "attributes", curName, curId, targetName, targetId)
+	expTele := s.expByConfigs(configObject, "telemetry", curName, curId, targetName, targetId)
+	expAll := append(expAttr, expTele...)
+	log.Debug("expAll  = ", expAll)
+
+	return expAll, nil
+}
+func (s *DeviceService) CreateDeviceDataRelationAuto(ctx context.Context, req *pb.CreateDeviceDataRelationAutoRequest) (*pb.CreateDeviceDataRelationAutoResponse, error) {
+	log.Debug("CreateDataRelationAuto")
+	log.Debug("req:", req)
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+
+	//create url
+	midUrl := "/" + req.GetId() + "/expressions"
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+
+	//create expressions
+	expressions, err2 := s.CreateExpressionsByParseConfigs(tm, req.Relation.GetCurName(), req.GetId(), req.Relation.GetTargetName(), req.Relation.GetTargetId())
+	if nil != err2 {
+		log.Error("error parse configs")
+		return nil, err2
+	}
+
+	//do it
+	ed := make(map[string]interface{})
+	ed["expressions"] = expressions
+	data, err3 := json.Marshal(ed)
+	if nil != err3 {
+		return nil, err3
+	}
+	log.Info("data: ", string(data))
+	log.Debug("url :", url)
+	_, err4 := s.client.Post(url, data)
+	if err4 != nil {
+		log.Error("error post data to core")
 		return nil, err4
 	}
 
+	//get list
+	res, err5 := s.client.Get(url)
+	if nil != err5 {
+		log.Error("error post data to core")
+		return nil, err5
+	}
+
+	expressionObject := make(map[string]interface{}) // core define
+	err6 := json.Unmarshal(res, &expressionObject)
+	if err6 != nil {
+		log.Error("error Unmarshal data from core")
+		return nil, err6
+	}
+
+	// return
+	re, err7 := structpb.NewValue(expressionObject)
+	if nil != err7 {
+		log.Error("convert failed ", err7)
+		return nil, err7
+	}
+	out := &pb.CreateDeviceDataRelationAutoResponse{
+		ExpressionObject: re,
+	}
+	return out, nil
+}
+
+func (s *DeviceService) CreateDeviceDataRelation(ctx context.Context, req *pb.CreateDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	log.Debug("CreateDataRelation")
+	log.Debug("req:", req)
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+
+	//create url
+	midUrl := "/" + req.GetId() + "/expressions"
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("url :", url)
+
+	//do it
+	data, err3 := json.Marshal(req.Expressions)
+	if nil != err3 {
+		return nil, err3
+	}
+	log.Info("data: ", string(data))
+	_, err4 := s.client.Post(url, data)
+	if nil != err4 {
+		log.Error("error post data to core")
+		return nil, err4
+	}
 	return &emptypb.Empty{}, nil
 }
 func (s *DeviceService) UpdateDeviceDataRelation(ctx context.Context, req *pb.UpdateDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	log.Debug("UpdateDataRelation")
+	log.Debug("req:", req)
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+
+	//create url
+	midUrl := "/" + req.GetId() + "/expressions"
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("url :", url)
+
+	//do it
+	data, err3 := json.Marshal(req.Expressions)
+	if nil != err3 {
+		return nil, err3
+	}
+	log.Info("data: ", string(data))
+	_, err4 := s.client.Post(url, data)
+	if nil != err4 {
+		log.Error("error post data to core")
+		return nil, err4
+	}
 	return &emptypb.Empty{}, nil
 }
 func (s *DeviceService) DeleteDeviceDataRelation(ctx context.Context, req *pb.DeleteDeviceDataRelationRequest) (*emptypb.Empty, error) {
+	log.Debug("DeleteDataRelation")
+	log.Debug("req:", req)
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+
+	//create url
+	midUrl := "/" + req.GetId() + "/expressions"
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+
+	//create query
+	paths := ""
+	for _, path := range req.Paths.Paths {
+		paths += path + ","
+	}
+	url += "&paths=" + paths
+	log.Debug("url :", url)
+
+	// do it
+	_, err4 := s.client.Delete(url)
+	if nil != err4 {
+		log.Error("error post data to core")
+		return nil, err4
+	}
 	return &emptypb.Empty{}, nil
 }
-func (s *DeviceService) ListDeviceDataRelation(ctx context.Context, req *pb.ListDeviceDataRelationRequest) (*emptypb.Empty, error) {
-	return &emptypb.Empty{}, nil
+
+func (s *DeviceService) GetDeviceDataRelation(ctx context.Context, req *pb.GetDeviceDataRelationRequest) (*pb.GetDeviceDataRelationResponse, error) {
+	log.Debug("GetDeviceDataRelation")
+	log.Debug("req:", req)
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+
+	//create url
+	midUrl := "/" + req.GetId() + "/expressions/" + req.Path
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("url :", url)
+
+	res, err4 := s.client.Get(url)
+	if nil != err4 {
+		log.Error("error post data to core")
+		return nil, err4
+	}
+
+	expression := make(map[string]interface{}) // core define
+	err5 := json.Unmarshal(res, &expression)
+	if err5 != nil {
+		log.Error("error Unmarshal data from core")
+		return nil, err5
+	}
+
+	// return
+	re, err7 := structpb.NewValue(expression)
+	if nil != err7 {
+		log.Error("convert failed ", err7)
+		return nil, err7
+	}
+	out := &pb.GetDeviceDataRelationResponse{
+		Expressions: re,
+	}
+
+	return out, nil
 }
+
+func (s *DeviceService) ListDeviceDataRelation(ctx context.Context, req *pb.ListDeviceDataRelationRequest) (*pb.ListDeviceDataRelationResponse, error) {
+	log.Debug("ListDeviceDataRelation")
+	log.Debug("req:", req)
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+
+	//create url
+	midUrl := "/" + req.GetId() + "/expressions"
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("url :", url)
+
+	res, err4 := s.client.Get(url)
+	if nil != err4 {
+		log.Error("error post data to core")
+		return nil, err4
+	}
+
+	expressionObject := make(map[string]interface{}) // core define
+	err5 := json.Unmarshal(res, &expressionObject)
+	if err5 != nil {
+		log.Error("error Unmarshal data from core")
+		return nil, err5
+	}
+
+	// return
+	re, err7 := structpb.NewValue(expressionObject)
+	if nil != err7 {
+		log.Error("convert failed ", err7)
+		return nil, err7
+	}
+	out := &pb.ListDeviceDataRelationResponse{
+		ExpressionObject: re,
+	}
+
+	return out, nil
+}
+
 func (s *DeviceService) SetDeviceRaw(ctx context.Context, req *pb.SetDeviceRawRequest) (*emptypb.Empty, error) {
 	log.Debug("SetDeviceRaw")
 	log.Debug("req:", req)

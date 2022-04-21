@@ -29,8 +29,10 @@ type DeviceClient interface {
 	UpdateDeviceExt(ctx context.Context, in *UpdateDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	CreateDeviceDataRelation(ctx context.Context, in *CreateDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateDeviceDataRelation(ctx context.Context, in *UpdateDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetDeviceDataRelation(ctx context.Context, in *GetDeviceDataRelationRequest, opts ...grpc.CallOption) (*GetDeviceDataRelationResponse, error)
 	DeleteDeviceDataRelation(ctx context.Context, in *DeleteDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	ListDeviceDataRelation(ctx context.Context, in *ListDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ListDeviceDataRelation(ctx context.Context, in *ListDeviceDataRelationRequest, opts ...grpc.CallOption) (*ListDeviceDataRelationResponse, error)
+	CreateDeviceDataRelationAuto(ctx context.Context, in *CreateDeviceDataRelationAutoRequest, opts ...grpc.CallOption) (*CreateDeviceDataRelationAutoResponse, error)
 	SetDeviceRaw(ctx context.Context, in *SetDeviceRawRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SetDeviceAttribte(ctx context.Context, in *SetDeviceAttributeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SetDeviceCommand(ctx context.Context, in *SetDeviceCommandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -136,6 +138,15 @@ func (c *deviceClient) UpdateDeviceDataRelation(ctx context.Context, in *UpdateD
 	return out, nil
 }
 
+func (c *deviceClient) GetDeviceDataRelation(ctx context.Context, in *GetDeviceDataRelationRequest, opts ...grpc.CallOption) (*GetDeviceDataRelationResponse, error) {
+	out := new(GetDeviceDataRelationResponse)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/GetDeviceDataRelation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *deviceClient) DeleteDeviceDataRelation(ctx context.Context, in *DeleteDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/api.device.v1.Device/DeleteDeviceDataRelation", in, out, opts...)
@@ -145,9 +156,18 @@ func (c *deviceClient) DeleteDeviceDataRelation(ctx context.Context, in *DeleteD
 	return out, nil
 }
 
-func (c *deviceClient) ListDeviceDataRelation(ctx context.Context, in *ListDeviceDataRelationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *deviceClient) ListDeviceDataRelation(ctx context.Context, in *ListDeviceDataRelationRequest, opts ...grpc.CallOption) (*ListDeviceDataRelationResponse, error) {
+	out := new(ListDeviceDataRelationResponse)
 	err := c.cc.Invoke(ctx, "/api.device.v1.Device/ListDeviceDataRelation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) CreateDeviceDataRelationAuto(ctx context.Context, in *CreateDeviceDataRelationAutoRequest, opts ...grpc.CallOption) (*CreateDeviceDataRelationAutoResponse, error) {
+	out := new(CreateDeviceDataRelationAutoResponse)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/CreateDeviceDataRelationAuto", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -213,8 +233,10 @@ type DeviceServer interface {
 	UpdateDeviceExt(context.Context, *UpdateDeviceExtRequest) (*emptypb.Empty, error)
 	CreateDeviceDataRelation(context.Context, *CreateDeviceDataRelationRequest) (*emptypb.Empty, error)
 	UpdateDeviceDataRelation(context.Context, *UpdateDeviceDataRelationRequest) (*emptypb.Empty, error)
+	GetDeviceDataRelation(context.Context, *GetDeviceDataRelationRequest) (*GetDeviceDataRelationResponse, error)
 	DeleteDeviceDataRelation(context.Context, *DeleteDeviceDataRelationRequest) (*emptypb.Empty, error)
-	ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*emptypb.Empty, error)
+	ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*ListDeviceDataRelationResponse, error)
+	CreateDeviceDataRelationAuto(context.Context, *CreateDeviceDataRelationAutoRequest) (*CreateDeviceDataRelationAutoResponse, error)
 	SetDeviceRaw(context.Context, *SetDeviceRawRequest) (*emptypb.Empty, error)
 	SetDeviceAttribte(context.Context, *SetDeviceAttributeRequest) (*emptypb.Empty, error)
 	SetDeviceCommand(context.Context, *SetDeviceCommandRequest) (*emptypb.Empty, error)
@@ -257,11 +279,17 @@ func (UnimplementedDeviceServer) CreateDeviceDataRelation(context.Context, *Crea
 func (UnimplementedDeviceServer) UpdateDeviceDataRelation(context.Context, *UpdateDeviceDataRelationRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDeviceDataRelation not implemented")
 }
+func (UnimplementedDeviceServer) GetDeviceDataRelation(context.Context, *GetDeviceDataRelationRequest) (*GetDeviceDataRelationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDeviceDataRelation not implemented")
+}
 func (UnimplementedDeviceServer) DeleteDeviceDataRelation(context.Context, *DeleteDeviceDataRelationRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteDeviceDataRelation not implemented")
 }
-func (UnimplementedDeviceServer) ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*emptypb.Empty, error) {
+func (UnimplementedDeviceServer) ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*ListDeviceDataRelationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListDeviceDataRelation not implemented")
+}
+func (UnimplementedDeviceServer) CreateDeviceDataRelationAuto(context.Context, *CreateDeviceDataRelationAutoRequest) (*CreateDeviceDataRelationAutoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateDeviceDataRelationAuto not implemented")
 }
 func (UnimplementedDeviceServer) SetDeviceRaw(context.Context, *SetDeviceRawRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetDeviceRaw not implemented")
@@ -471,6 +499,24 @@ func _Device_UpdateDeviceDataRelation_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Device_GetDeviceDataRelation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDeviceDataRelationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).GetDeviceDataRelation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/GetDeviceDataRelation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).GetDeviceDataRelation(ctx, req.(*GetDeviceDataRelationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Device_DeleteDeviceDataRelation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteDeviceDataRelationRequest)
 	if err := dec(in); err != nil {
@@ -503,6 +549,24 @@ func _Device_ListDeviceDataRelation_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DeviceServer).ListDeviceDataRelation(ctx, req.(*ListDeviceDataRelationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_CreateDeviceDataRelationAuto_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateDeviceDataRelationAutoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).CreateDeviceDataRelationAuto(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/CreateDeviceDataRelationAuto",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).CreateDeviceDataRelationAuto(ctx, req.(*CreateDeviceDataRelationAutoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -645,12 +709,20 @@ var Device_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Device_UpdateDeviceDataRelation_Handler,
 		},
 		{
+			MethodName: "GetDeviceDataRelation",
+			Handler:    _Device_GetDeviceDataRelation_Handler,
+		},
+		{
 			MethodName: "DeleteDeviceDataRelation",
 			Handler:    _Device_DeleteDeviceDataRelation_Handler,
 		},
 		{
 			MethodName: "ListDeviceDataRelation",
 			Handler:    _Device_ListDeviceDataRelation_Handler,
+		},
+		{
+			MethodName: "CreateDeviceDataRelationAuto",
+			Handler:    _Device_CreateDeviceDataRelationAuto_Handler,
 		},
 		{
 			MethodName: "SetDeviceRaw",

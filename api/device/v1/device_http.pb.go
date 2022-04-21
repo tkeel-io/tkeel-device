@@ -31,11 +31,13 @@ type DeviceHTTPServer interface {
 	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*emptypb.Empty, error)
 	CreateDevice(context.Context, *CreateDeviceRequest) (*CreateDeviceResponse, error)
 	CreateDeviceDataRelation(context.Context, *CreateDeviceDataRelationRequest) (*emptypb.Empty, error)
+	CreateDeviceDataRelationAuto(context.Context, *CreateDeviceDataRelationAutoRequest) (*CreateDeviceDataRelationAutoResponse, error)
 	DeleteDevice(context.Context, *DeleteDeviceRequest) (*DeleteDeviceResponse, error)
 	DeleteDeviceDataRelation(context.Context, *DeleteDeviceDataRelationRequest) (*emptypb.Empty, error)
 	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*emptypb.Empty, error)
 	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)
-	ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*emptypb.Empty, error)
+	GetDeviceDataRelation(context.Context, *GetDeviceDataRelationRequest) (*GetDeviceDataRelationResponse, error)
+	ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*ListDeviceDataRelationResponse, error)
 	SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*CreateTemplateResponse, error)
 	SaveDeviceConfAsSelfTemplte(context.Context, *SaveDeviceConfAsSelfTemplteRequest) (*emptypb.Empty, error)
 	SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
@@ -178,7 +180,7 @@ func (h *DeviceHTTPHandler) CreateDevice(req *go_restful.Request, resp *go_restf
 
 func (h *DeviceHTTPHandler) CreateDeviceDataRelation(req *go_restful.Request, resp *go_restful.Response) {
 	in := CreateDeviceDataRelationRequest{}
-	if err := transportHTTP.GetBody(req, &in.Relation); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Expressions); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
@@ -197,6 +199,69 @@ func (h *DeviceHTTPHandler) CreateDeviceDataRelation(req *go_restful.Request, re
 	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
 
 	out, err := h.srv.CreateDeviceDataRelation(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
+		return
+	}
+	anyOut, err := anypb.New(out)
+	if err != nil {
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
+	}.Marshal(&result.Http{
+		Code: errors.Success.Reason,
+		Msg:  "",
+		Data: anyOut,
+	})
+	if err != nil {
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
+	}
+}
+
+func (h *DeviceHTTPHandler) CreateDeviceDataRelationAuto(req *go_restful.Request, resp *go_restful.Response) {
+	in := CreateDeviceDataRelationAutoRequest{}
+	if err := transportHTTP.GetBody(req, &in.Relation); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.CreateDeviceDataRelationAuto(ctx, &in)
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
@@ -299,7 +364,7 @@ func (h *DeviceHTTPHandler) DeleteDevice(req *go_restful.Request, resp *go_restf
 
 func (h *DeviceHTTPHandler) DeleteDeviceDataRelation(req *go_restful.Request, resp *go_restful.Response) {
 	in := DeleteDeviceDataRelationRequest{}
-	if err := transportHTTP.GetBody(req, &in.Relation); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Paths); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
@@ -439,6 +504,64 @@ func (h *DeviceHTTPHandler) GetDevice(req *go_restful.Request, resp *go_restful.
 	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
 
 	out, err := h.srv.GetDevice(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
+		return
+	}
+	anyOut, err := anypb.New(out)
+	if err != nil {
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
+	}.Marshal(&result.Http{
+		Code: errors.Success.Reason,
+		Msg:  "",
+		Data: anyOut,
+	})
+	if err != nil {
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
+	}
+}
+
+func (h *DeviceHTTPHandler) GetDeviceDataRelation(req *go_restful.Request, resp *go_restful.Response) {
+	in := GetDeviceDataRelationRequest{}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.GetDeviceDataRelation(ctx, &in)
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
@@ -977,7 +1100,7 @@ func (h *DeviceHTTPHandler) UpdateDevice(req *go_restful.Request, resp *go_restf
 
 func (h *DeviceHTTPHandler) UpdateDeviceDataRelation(req *go_restful.Request, resp *go_restful.Response) {
 	in := UpdateDeviceDataRelationRequest{}
-	if err := transportHTTP.GetBody(req, &in.Relation); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Expressions); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
@@ -1133,14 +1256,18 @@ func RegisterDeviceHTTPServer(container *go_restful.Container, srv DeviceHTTPSer
 		To(handler.DeleteDeviceExt))
 	ws.Route(ws.PUT("/devices/{id}/ext").
 		To(handler.UpdateDeviceExt))
-	ws.Route(ws.POST("/devices/{id}/relations").
+	ws.Route(ws.POST("/devices/{id}/relation").
 		To(handler.CreateDeviceDataRelation))
-	ws.Route(ws.PUT("/devcies/{id}/relations").
+	ws.Route(ws.PUT("/devices/{id}/relation").
 		To(handler.UpdateDeviceDataRelation))
-	ws.Route(ws.POST("/devices/{id}/relations/delete").
+	ws.Route(ws.GET("/devices/{id}/relation/{path}").
+		To(handler.GetDeviceDataRelation))
+	ws.Route(ws.POST("/devices/{id}/relation/delete").
 		To(handler.DeleteDeviceDataRelation))
-	ws.Route(ws.GET("/devices/{id}/relations").
+	ws.Route(ws.GET("/devices/{id}/relation").
 		To(handler.ListDeviceDataRelation))
+	ws.Route(ws.POST("/devices/{id}/relation/auto").
+		To(handler.CreateDeviceDataRelationAuto))
 	ws.Route(ws.POST("/devices/{id}/raw/set").
 		To(handler.SetDeviceRaw))
 	ws.Route(ws.POST("/devices/{id}/attribute/set").

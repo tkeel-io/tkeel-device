@@ -23,7 +23,7 @@ const (
 	coreUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/core/v1/entities"
 	authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
 
-    //coreUrl string = "http://192.168.123.9:32758/v1/entities"
+	//coreUrl string = "http://192.168.123.9:32758/v1/entities"
 	//authUrl string = "http://192.168.123.9:30707/apis/security"
 
 	tokenKey string = "Authorization"

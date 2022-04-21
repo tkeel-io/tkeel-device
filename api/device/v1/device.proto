@@ -152,8 +152,8 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
   };
   rpc CreateDeviceDataRelation(CreateDeviceDataRelationRequest)returns (google.protobuf.Empty){
     option (google.api.http) = {
-      post : "/devices/{id}/relations"
-      body : "relation"
+      post : "/devices/{id}/relation"
+      body : "expressions"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "Create data relation";
@@ -169,8 +169,8 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
   };
   rpc UpdateDeviceDataRelation(UpdateDeviceDataRelationRequest)returns (google.protobuf.Empty){
     option (google.api.http) = {
-      put : "/devcies/{id}/relations"
-      body : "relation"
+      put : "/devices/{id}/relation"
+      body : "expressions"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "update data relation";
@@ -184,10 +184,26 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
         }
     };
   };
+  rpc GetDeviceDataRelation(GetDeviceDataRelationRequest)returns (GetDeviceDataRelationResponse){
+    option (google.api.http) = {
+      get : "/devices/{id}/relation/{path}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "get single relation";
+        operation_id: "GetDeviceDataRelation";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
+  };
   rpc DeleteDeviceDataRelation(DeleteDeviceDataRelationRequest)returns (google.protobuf.Empty){
     option (google.api.http) = {
-      post : "/devices/{id}/relations/delete"
-      body : "relation"
+      post : "/devices/{id}/relation/delete"
+      body : "paths"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "delete data relation";
@@ -201,13 +217,30 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
         }
     };
   };
-  rpc ListDeviceDataRelation(ListDeviceDataRelationRequest)returns (google.protobuf.Empty){
+  rpc ListDeviceDataRelation(ListDeviceDataRelationRequest)returns (ListDeviceDataRelationResponse){
     option (google.api.http) = {
-      get : "/devices/{id}/relations"
+      get : "/devices/{id}/relation"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "list data relation";
         operation_id: "ListDeviceDataRelation";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
+  };
+  rpc CreateDeviceDataRelationAuto(CreateDeviceDataRelationAutoRequest)returns (CreateDeviceDataRelationAutoResponse){
+    option (google.api.http) = {
+      post : "/devices/{id}/relation/auto"
+      body : "relation"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "Create data relation auto";
+        operation_id: "CreateDeviceDataRelationAuto";
         tags: "device";
         responses: {
             key: "200"
@@ -368,18 +401,37 @@ message UpdateDeviceExtRequest {
 
 message CreateDeviceDataRelationRequest {
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "实体Id"}];
-    Relation relation = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系信息"}];
+    listEntityExpression expressions = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系信息"}];
 }
 message UpdateDeviceDataRelationRequest {
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "实体Id"}];
-    Relation relation = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系信息"}];
+    listEntityExpression expressions = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系信息"}];
+}
+
+message GetDeviceDataRelationRequest {
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "实体Id"}];
+    string path = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "路径"}];
+}
+message GetDeviceDataRelationResponse {
+    google.protobuf.Value expressions = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个关系表达式"}];
 }
 message DeleteDeviceDataRelationRequest {
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "实体Id"}];
-    Relation relation = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系信息"}];
+    Paths paths = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系信息path 数组"}];
 }
 message ListDeviceDataRelationRequest {
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "实体Id"}];
+}
+
+message ListDeviceDataRelationResponse {
+    google.protobuf.Value expressionObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系表达式列表对象"}];
+}
+message CreateDeviceDataRelationAutoRequest {
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "实体Id"}];
+    Relation relation = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系信息"}];
+}
+message CreateDeviceDataRelationAutoResponse {
+    google.protobuf.Value expressionObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系表达式列表对象"}];
 }
 message SetDeviceRawRequest {
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: " 设备Id"}];
@@ -486,6 +538,8 @@ message Ids { repeated string ids = 1 [(grpc.gateway.protoc_gen_openapiv2.option
 
 message Keys { repeated string keys = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "key 字符串数组"}]; }
 
+message Paths { repeated string paths = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "path 字符串数组"}]; }
+
 message Ext {
   string key = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "扩展配置key"}];
   string value = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "扩展配置value"}];
@@ -493,12 +547,25 @@ message Ext {
 
 message Enable { bool enable = 1; }
 
+message listEntityExpression {
+    repeated Expression expressions = 1;
+}
+
+message Expression {
+    string path = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "当前设备属性 or 遥测id 路径"}];
+    string expression = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "数据来源设备的路径：设备id + 属性or遥测id"}];
+    string description = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "可用于承载id 与名称的映射 便于展示"}];
+    string name = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: ""}];
+}
+
 message Relation {
-    string direction = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系方向 from or to   目前只有 from"}];
-    string relationType = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系类型 目前只定 contain"}];
-    string targetId = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "源 或 目标  实体Id"}];
-    string targetType = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "源 或 目标  实体类型"}];
-    string targetName = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "源 或 目标  实体名称"}];
+    string curName = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "当前设备名称"}];
+    string direction = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系方向 from or to   目前只填： from"}];
+    string relationType = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "关系类型 目前只填： contain"}];
+    string targetName = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: " 来源设备名称"}];
+    string targetId = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "来源设备Id"}];
+    string targetType = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "来源设备类型 目前只填:device"}];
+    //string operation = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "binding or unbinding"}];
 }
 message SetContent {
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性 or  命令 标识符id"}];
