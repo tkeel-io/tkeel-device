@@ -496,15 +496,26 @@ func (s *DeviceService) expByConfigs(configObject map[string]interface{}, classi
 
 	//create
 	for f := range attr {
-		//to do :devices or properties are converted according to ext's configuration(key = alias)
-        fAlias := f
+		//to do :devices or properties are converted according to ext's configuration(key = mapper_alias)
+		fAlias := f
 		if conf, ok := attr[f].(map[string]interface{}); ok == true {
 			if attrExt1, ok1 := conf["ext"]; ok1 == true {
-                if attrExt2,ok2 := attrExt1.(map[string]interface{}); ok2 == true {
-                    if alias, ok3 := attrExt2["alias"];ok3 == true {
-                        fAlias = alias.(string)
-                    }
-                }
+				if attrExt2, ok2 := attrExt1.(map[string]interface{}); ok2 == true {
+					if alias, ok3 := attrExt2["mapper_alias"]; ok3 == true {
+						fAlias = alias.(string)
+					}
+				}
+			}
+		}
+		//to do :devices or properties are converted according to ext's configuration(key = mappr_prefix)
+		fPrefix := ""
+		if conf, ok := attr[f].(map[string]interface{}); ok == true {
+			if attrExt1, ok1 := conf["ext"]; ok1 == true {
+				if attrExt2, ok2 := attrExt1.(map[string]interface{}); ok2 == true {
+					if prefix, ok3 := attrExt2["mapper_prefix"]; ok3 == true {
+						fPrefix = "." + prefix.(string)
+					}
+				}
 			}
 		}
 
@@ -517,7 +528,7 @@ func (s *DeviceService) expByConfigs(configObject map[string]interface{}, classi
 
 		exp := &pb.Expression{
 			Path:        classify + "." + f,
-			Expression:  targetId + "." + classify + "." + fAlias,
+			Expression:  targetId + "." + classify + fPrefix + "." + fAlias,
 			Name:        f,
 			Description: curId + "=" + curName + "," + f + "=" + attrName + "," + targetId + "=" + targetName,
 		}
