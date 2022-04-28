@@ -457,19 +457,6 @@ func (s *DeviceService) UpdateDeviceExt(ctx context.Context, req *pb.UpdateDevic
 	return &emptypb.Empty{}, nil
 }
 
-func (s *DeviceService) CreateMapperByConfigs(ctx context.Context, req *pb.CreateDeviceDataRelationRequest) error {
-	tm, err := s.client.GetTokenMap(ctx)
-	if nil != err {
-		return err
-	}
-
-	midUrl := "/" + req.GetId() + "/patch"
-	url := s.client.GetCoreUrl(midUrl, tm, "device")
-	log.Debug("url :", url)
-
-	return nil
-}
-
 func (s *DeviceService) expByConfigs(configObject map[string]interface{}, classify string, curName string, curId string, targetName string, targetId string) []*pb.Expression {
 	//define
 	exps := make([]*pb.Expression, 0)
@@ -519,18 +506,20 @@ func (s *DeviceService) expByConfigs(configObject map[string]interface{}, classi
 			}
 		}
 
+        /***
 		attrName := ""
 		if conf, ok := attr[f].(map[string]interface{}); ok == true {
 			if attrName1, ok1 := conf["name"]; ok1 == true {
 				attrName = attrName1.(string)
 			}
-		}
+		}***/
 
 		exp := &pb.Expression{
-			Path:        classify + "." + f,
-			Expression:  targetId + "." + classify + fPrefix + "." + fAlias,
-			Name:        f,
-			Description: curId + "=" + curName + "," + f + "=" + attrName + "," + targetId + "=" + targetName,
+			Path:       classify + "." + f,
+			Expression: targetId + "." + classify + fPrefix + "." + fAlias,
+			Name:       f,
+			//Description: curId + "=" + curName + "," + f + "=" + attrName + "," + targetId + "=" + targetName,
+			Description: targetId + "=" + targetName,
 		}
 		exps = append(exps, exp)
 	}
