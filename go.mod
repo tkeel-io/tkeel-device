@@ -6,17 +6,10 @@ require (
 	github.com/emicklei/go-restful v2.15.0+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/tkeel-io/kit v0.0.0-20220303080455-8ab38f419f7c
-	github.com/tkeel-io/tdtl v0.1.4
 	github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220303151503-0f9a4a00fd77
 	google.golang.org/genproto v0.0.0-20220303160752-862486edd9cc
 	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
-)
-
-require (
-	github.com/antlr/antlr4 v0.0.0-20200503195918-621b933c7a7f // indirect
-	github.com/tidwall/match v1.1.1 // indirect
-	github.com/tidwall/pretty v1.2.0 // indirect
 )
 
 require (
