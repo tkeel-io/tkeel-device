@@ -24,6 +24,9 @@ type DeviceClient interface {
 	DeleteDevice(ctx context.Context, in *DeleteDeviceRequest, opts ...grpc.CallOption) (*DeleteDeviceResponse, error)
 	GetDevice(ctx context.Context, in *GetDeviceRequest, opts ...grpc.CallOption) (*GetDeviceResponse, error)
 	SearchEntity(ctx context.Context, in *ListDeviceRequest, opts ...grpc.CallOption) (*ListDeviceResponse, error)
+	AddDeviceExtBusiness(ctx context.Context, in *AddDeviceExtBusinessRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateDeviceExtBusiness(ctx context.Context, in *UpdateDeviceExtBusinessRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteDeviceExtBusiness(ctx context.Context, in *DeleteDeviceExtBusinessRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	AddDeviceExt(ctx context.Context, in *AddDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteDeviceExt(ctx context.Context, in *DeleteDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateDeviceExt(ctx context.Context, in *UpdateDeviceExtRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -87,6 +90,33 @@ func (c *deviceClient) GetDevice(ctx context.Context, in *GetDeviceRequest, opts
 func (c *deviceClient) SearchEntity(ctx context.Context, in *ListDeviceRequest, opts ...grpc.CallOption) (*ListDeviceResponse, error) {
 	out := new(ListDeviceResponse)
 	err := c.cc.Invoke(ctx, "/api.device.v1.Device/SearchEntity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) AddDeviceExtBusiness(ctx context.Context, in *AddDeviceExtBusinessRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/AddDeviceExtBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) UpdateDeviceExtBusiness(ctx context.Context, in *UpdateDeviceExtBusinessRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/UpdateDeviceExtBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) DeleteDeviceExtBusiness(ctx context.Context, in *DeleteDeviceExtBusinessRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/DeleteDeviceExtBusiness", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -228,6 +258,9 @@ type DeviceServer interface {
 	DeleteDevice(context.Context, *DeleteDeviceRequest) (*DeleteDeviceResponse, error)
 	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)
 	SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
+	AddDeviceExtBusiness(context.Context, *AddDeviceExtBusinessRequest) (*emptypb.Empty, error)
+	UpdateDeviceExtBusiness(context.Context, *UpdateDeviceExtBusinessRequest) (*emptypb.Empty, error)
+	DeleteDeviceExtBusiness(context.Context, *DeleteDeviceExtBusinessRequest) (*emptypb.Empty, error)
 	AddDeviceExt(context.Context, *AddDeviceExtRequest) (*emptypb.Empty, error)
 	DeleteDeviceExt(context.Context, *DeleteDeviceExtRequest) (*emptypb.Empty, error)
 	UpdateDeviceExt(context.Context, *UpdateDeviceExtRequest) (*emptypb.Empty, error)
@@ -263,6 +296,15 @@ func (UnimplementedDeviceServer) GetDevice(context.Context, *GetDeviceRequest) (
 }
 func (UnimplementedDeviceServer) SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchEntity not implemented")
+}
+func (UnimplementedDeviceServer) AddDeviceExtBusiness(context.Context, *AddDeviceExtBusinessRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddDeviceExtBusiness not implemented")
+}
+func (UnimplementedDeviceServer) UpdateDeviceExtBusiness(context.Context, *UpdateDeviceExtBusinessRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateDeviceExtBusiness not implemented")
+}
+func (UnimplementedDeviceServer) DeleteDeviceExtBusiness(context.Context, *DeleteDeviceExtBusinessRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteDeviceExtBusiness not implemented")
 }
 func (UnimplementedDeviceServer) AddDeviceExt(context.Context, *AddDeviceExtRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddDeviceExt not implemented")
@@ -405,6 +447,60 @@ func _Device_SearchEntity_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DeviceServer).SearchEntity(ctx, req.(*ListDeviceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_AddDeviceExtBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddDeviceExtBusinessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).AddDeviceExtBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/AddDeviceExtBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).AddDeviceExtBusiness(ctx, req.(*AddDeviceExtBusinessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_UpdateDeviceExtBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateDeviceExtBusinessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).UpdateDeviceExtBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/UpdateDeviceExtBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).UpdateDeviceExtBusiness(ctx, req.(*UpdateDeviceExtBusinessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_DeleteDeviceExtBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDeviceExtBusinessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).DeleteDeviceExtBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/DeleteDeviceExtBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).DeleteDeviceExtBusiness(ctx, req.(*DeleteDeviceExtBusinessRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -687,6 +783,18 @@ var Device_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SearchEntity",
 			Handler:    _Device_SearchEntity_Handler,
+		},
+		{
+			MethodName: "AddDeviceExtBusiness",
+			Handler:    _Device_AddDeviceExtBusiness_Handler,
+		},
+		{
+			MethodName: "UpdateDeviceExtBusiness",
+			Handler:    _Device_UpdateDeviceExtBusiness_Handler,
+		},
+		{
+			MethodName: "DeleteDeviceExtBusiness",
+			Handler:    _Device_DeleteDeviceExtBusiness_Handler,
 		},
 		{
 			MethodName: "AddDeviceExt",

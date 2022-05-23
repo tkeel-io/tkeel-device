@@ -342,6 +342,119 @@ func (s *DeviceService) EnableDevice(ctx context.Context, req *pb.EnableDeviceRe
 	return &emptypb.Empty{}, nil
 }
 
+func (s *DeviceService) AddDeviceExtBusiness(ctx context.Context, req *pb.AddDeviceExtBusinessRequest) (*emptypb.Empty, error) {
+	log.Debug("AddDeviceExtBusiness")
+	log.Debug("req:", req)
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+	midUrl := "/" + req.GetId() + "/patch"
+	url := s.client.GetCoreUrl(midUrl, tm, "devcie")
+	log.Debug("get url :", url)
+
+	var exts []interface{}
+	switch kv := req.ExtBusiness.AsInterface().(type) {
+	case map[string]interface{}:
+		for k, v := range kv {
+			e := map[string]interface{}{
+				"path":     fmt.Sprintf("basicInfo.extBusiness.%s", k),
+				"operator": "replace",
+				"value":    v,
+			}
+			exts = append(exts, e)
+		}
+	default:
+		return nil, errors.New("error Invalid payload")
+	}
+
+	log.Debug("ExtBusiness body: ", exts)
+	data, err1 := json.Marshal(exts)
+	if err1 != nil {
+		return nil, err1
+	}
+	_, err2 := s.client.Put(url, data)
+	if nil != err2 {
+		return nil, err2
+	}
+
+	return &emptypb.Empty{}, nil
+}
+func (s *DeviceService) UpdateDeviceExtBusiness(ctx context.Context, req *pb.UpdateDeviceExtBusinessRequest) (*emptypb.Empty, error) {
+	log.Debug("UpdateDeviceExtBusiness")
+	log.Debug("req:", req)
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+	midUrl := "/" + req.GetId() + "/patch"
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("get url :", url)
+
+	var exts []interface{}
+	switch kv := req.ExtBusiness.AsInterface().(type) {
+	case map[string]interface{}:
+		for k, v := range kv {
+			e := map[string]interface{}{
+				"path":     fmt.Sprintf("basicInfo.extBusiness.%s", k),
+				"operator": "replace",
+				"value":    v,
+			}
+			exts = append(exts, e)
+		}
+	default:
+		return nil, errors.New("error Invalid payload")
+	}
+
+	log.Debug("extBusiness body: ", exts)
+	data, err1 := json.Marshal(exts)
+	if err1 != nil {
+		return nil, err1
+	}
+	_, err2 := s.client.Put(url, data)
+	if nil != err2 {
+		return nil, err2
+	}
+
+	return &emptypb.Empty{}, nil
+}
+func (s *DeviceService) DeleteDeviceExtBusiness(ctx context.Context, req *pb.DeleteDeviceExtBusinessRequest) (*emptypb.Empty, error) {
+	log.Debug("DeleteDeviceExtBusiness")
+	log.Debug("req:", req)
+	// todo when core support
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+	midUrl := "/" + req.GetId() + "/patch"
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+
+	// var exts []interface{}
+	keys := req.Keys.Keys
+	exts := make([]interface{}, len(keys))
+	for i, k := range keys {
+		e := map[string]interface{}{
+			"path":     fmt.Sprintf("basicInfo.extBusiness.%s", k),
+			"operator": "remove",
+			"value":    "",
+		}
+		exts[i] = e
+	}
+
+	log.Debug("ext body: ", exts)
+	data, err1 := json.Marshal(exts)
+	if err1 != nil {
+		return nil, err1
+	}
+	_, err2 := s.client.Put(url, data)
+	if nil != err2 {
+		return nil, err2
+	}
+	return &emptypb.Empty{}, nil
+}
+
 func (s *DeviceService) AddDeviceExt(ctx context.Context, req *pb.AddDeviceExtRequest) (*emptypb.Empty, error) {
 	log.Debug("AddDeviceExt")
 	log.Debug("req:", req)
@@ -506,7 +619,7 @@ func (s *DeviceService) expByConfigs(configObject map[string]interface{}, classi
 			}
 		}
 
-        /***
+		/***
 		attrName := ""
 		if conf, ok := attr[f].(map[string]interface{}); ok == true {
 			if attrName1, ok1 := conf["name"]; ok1 == true {

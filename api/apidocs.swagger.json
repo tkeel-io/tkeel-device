@@ -492,6 +492,130 @@
         ]
       }
     },
+    "/devices/{id}/extBusiness": {
+      "post": {
+        "summary": "add device extensions business",
+        "operationId": "AddDeviceExtBusiness",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "设备ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "设备扩展业务",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "description": "设备扩展业务"
+            }
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      },
+      "put": {
+        "summary": "update device extensions business",
+        "operationId": "UpdateDeviceExtBusiness",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "设备ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "设备扩展业务",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "description": "设备扩展业务"
+            }
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      }
+    },
+    "/devices/{id}/extBusiness/delete": {
+      "post": {
+        "summary": "delete device extensions business",
+        "operationId": "DelDeviceExt",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "设备ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "设备扩展业务Key 数组",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apidevicev1Keys",
+              "description": "设备扩展业务Key 数组"
+            }
+          }
+        ],
+        "tags": [
+          "device"
+        ]
+      }
+    },
     "/devices/{id}/raw/set": {
       "post": {
         "summary": "set device raw",
@@ -2541,7 +2665,11 @@
         },
         "ext": {
           "type": "object",
-          "description": "设备扩展配置"
+          "description": "设备扩展信息"
+        },
+        "extBusiness": {
+          "type": "object",
+          "description": "设备扩展业务"
         }
       },
       "title": "------------------------------------------------------------------------------\nBasic data types\n------------------------------------------------------------------------------"
