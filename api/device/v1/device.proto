@@ -139,7 +139,7 @@ rpc AddDeviceExtBusiness(AddDeviceExtBusinessRequest) returns (google.protobuf.E
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
         summary: "delete device extensions business";
-        operation_id: "DelDeviceExt";
+        operation_id: "DelDeviceExtBusiness";
         tags: "device";
         responses: {
             key: "200"

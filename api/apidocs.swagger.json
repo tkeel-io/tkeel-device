@@ -577,7 +577,7 @@
     "/devices/{id}/extBusiness/delete": {
       "post": {
         "summary": "delete device extensions business",
-        "operationId": "DelDeviceExt",
+        "operationId": "DelDeviceExtBusiness",
         "responses": {
           "200": {
             "description": "OK",
