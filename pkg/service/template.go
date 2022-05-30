@@ -53,6 +53,9 @@ func (s *TemplateService) CreateTemplate(ctx context.Context, req *pb.CreateTemp
 
 	//get core url
 	entityId := GetUUID()
+	if req.BasicInfo.CustomId != "" {
+		entityId = req.BasicInfo.CustomId
+	}
 	url := s.httpClient.GetCoreUrl("", tm, "template") + "&id=" + entityId
 	log.Debug("get url: ", url)
 
@@ -64,7 +67,10 @@ func (s *TemplateService) CreateTemplate(ctx context.Context, req *pb.CreateTemp
 		XOwner:     tm["owner"],
 		XSource:    tm["source"],
 	}
-
+	/*basicInfo1 := &pb.TemplateBasicInfo1{
+	    Name: req.BasicInfo.Name,
+	    Description :req.BasicInfo.Description,
+	}*/
 	entityInfo := &pb.TemplateEntityCoreInfo{
 		BasicInfo: req.BasicInfo,
 		SysField:  sysField,
