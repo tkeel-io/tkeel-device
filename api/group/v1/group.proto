@@ -247,10 +247,11 @@ message GetGroupTreeResponse {
 
 message GroupEntity {
 	string name 			   = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组名称"}];
-	string description 		   = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组说明"}];
-	string parentId      		   = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "父设备组ID"}];
-	string parentName      		   = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "父设备组名称"}];
-	google.protobuf.Value  ext = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组扩展属性"}];
+	string customId 		   = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组自定义ID"}];
+	string description 		   = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组说明"}];
+	string parentId      		   = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "父设备组ID"}];
+	string parentName      		   = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "父设备组名称"}];
+	google.protobuf.Value  ext = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组扩展属性"}];
 }
 message GroupEntitySubEntityIds {
     map<string,string>  subEntityId  = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "子设备ID列表"}];

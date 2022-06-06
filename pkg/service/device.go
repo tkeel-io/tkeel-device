@@ -46,6 +46,9 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 
 	// 2. get url
 	devId := GetUUID()
+	if req.DevBasicInfo.CustomId != "" {
+		devId = req.DevBasicInfo.CustomId
+	}
 	url := s.client.GetCoreUrl("", tm, "device") + "&id=" + devId
 	if req.DevBasicInfo.TemplateId != "" {
 		url += "&from=" + req.DevBasicInfo.TemplateId

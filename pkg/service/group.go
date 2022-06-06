@@ -47,6 +47,9 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 
 	//get core url
 	entityId := GetUUID()
+	if req.Group.CustomId != "" {
+		entityId = req.Group.CustomId
+	}
 	url := s.httpClient.GetCoreUrl("", tm, "group") + "&id=" + entityId
 	log.Debug("core url: ", url)
 

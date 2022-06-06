@@ -2639,6 +2639,10 @@
           "type": "string",
           "description": "设备名称"
         },
+        "customId": {
+          "type": "string",
+          "description": "设备自定义Id"
+        },
         "description": {
           "type": "string",
           "description": "设备描述"
@@ -2820,6 +2824,10 @@
         "name": {
           "type": "string",
           "description": "设备组名称"
+        },
+        "customId": {
+          "type": "string",
+          "description": "设备组自定义ID"
         },
         "description": {
           "type": "string",

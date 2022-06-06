@@ -541,6 +541,7 @@ message UpdateDeviceEntityCoreInfo {
 //------------------------------------------------------------------------------
 message DeviceEntityBasicInfo {
   string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备名称"}];
+  string customId = 11 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备自定义Id"}];
   string description = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备描述"}];
   string parentId = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组ID"}];
   string parentName = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组名称"}];
