@@ -70,6 +70,9 @@ func (h *GroupHTTPHandler) AddGroupExt(req *go_restful.Request, resp *go_restful
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		if httpCode == http.StatusMovedPermanently {
+			resp.Header().Set("Location", tErr.Message)
+		}
 		resp.WriteHeaderAndJson(httpCode,
 			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
@@ -128,6 +131,9 @@ func (h *GroupHTTPHandler) CreateGroup(req *go_restful.Request, resp *go_restful
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		if httpCode == http.StatusMovedPermanently {
+			resp.Header().Set("Location", tErr.Message)
+		}
 		resp.WriteHeaderAndJson(httpCode,
 			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
@@ -191,6 +197,9 @@ func (h *GroupHTTPHandler) DelGroupExt(req *go_restful.Request, resp *go_restful
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		if httpCode == http.StatusMovedPermanently {
+			resp.Header().Set("Location", tErr.Message)
+		}
 		resp.WriteHeaderAndJson(httpCode,
 			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
@@ -249,6 +258,9 @@ func (h *GroupHTTPHandler) DeleteGroup(req *go_restful.Request, resp *go_restful
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		if httpCode == http.StatusMovedPermanently {
+			resp.Header().Set("Location", tErr.Message)
+		}
 		resp.WriteHeaderAndJson(httpCode,
 			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
@@ -307,6 +319,9 @@ func (h *GroupHTTPHandler) GetGroup(req *go_restful.Request, resp *go_restful.Re
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		if httpCode == http.StatusMovedPermanently {
+			resp.Header().Set("Location", tErr.Message)
+		}
 		resp.WriteHeaderAndJson(httpCode,
 			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
@@ -365,6 +380,9 @@ func (h *GroupHTTPHandler) GetGroupTree(req *go_restful.Request, resp *go_restfu
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		if httpCode == http.StatusMovedPermanently {
+			resp.Header().Set("Location", tErr.Message)
+		}
 		resp.WriteHeaderAndJson(httpCode,
 			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
@@ -428,6 +446,9 @@ func (h *GroupHTTPHandler) UpdateGroup(req *go_restful.Request, resp *go_restful
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		if httpCode == http.StatusMovedPermanently {
+			resp.Header().Set("Location", tErr.Message)
+		}
 		resp.WriteHeaderAndJson(httpCode,
 			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return
@@ -491,6 +512,9 @@ func (h *GroupHTTPHandler) UpdateGroupExt(req *go_restful.Request, resp *go_rest
 	if err != nil {
 		tErr := errors.FromError(err)
 		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		if httpCode == http.StatusMovedPermanently {
+			resp.Header().Set("Location", tErr.Message)
+		}
 		resp.WriteHeaderAndJson(httpCode,
 			result.Set(tErr.Reason, tErr.Message, out), "application/json")
 		return

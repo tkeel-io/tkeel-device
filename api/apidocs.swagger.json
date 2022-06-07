@@ -2894,6 +2894,10 @@
         },
         "disable_manual_activation": {
           "type": "boolean"
+        },
+        "profiles": {
+          "type": "string",
+          "format": "byte"
         }
       },
       "description": "*\nThe response value of the GET /v1/identify,\nused when the plugin registered."
