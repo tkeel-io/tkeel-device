@@ -25,6 +25,8 @@ const (
 
 	//coreUrl string = "http://192.168.100.5:31874/v1/entities"
 	//authUrl string = "http://192.168.100.5:30707/apis/security"
+	//coreUrl string = "http://192.168.123.9:30535/v1/entities"
+	//authUrl string = "http://192.168.123.9:30707/apis/security"
 
 	tokenKey string = "Authorization"
 
@@ -95,6 +97,7 @@ func (c *CoreClient) GetTokenMap(ctx context.Context) (map[string]string, error)
 		"owner":     tokenMap["user_id"].(string),
 		"source":    "device",
 		"userToken": userToken,
+		"tenantId":  tokenMap["tenant_id"].(string),
 	}
 	return urlMap, nil
 }
@@ -213,7 +216,7 @@ func (c *CoreClient) ParseResp(resp *http.Response, err error) (interface{}, err
 		return nil, err
 	}
 
-	log.Debug("receive resp, ", string(body))
+	//log.Debug("receive resp, ", string(body))
 	if resp.StatusCode != 200 {
 		log.Error("bad status ", resp.StatusCode)
 		return nil, errors.New(resp.Status)
@@ -524,4 +527,44 @@ func (c *CoreClient) CreateDevDefaultGroup(tm map[string]string, id string) erro
 		return err5
 	}
 	return nil
+}
+
+func (c *CoreClient) GetTenantsList() ([]string, error) {
+	tenantList := make([]string, 0)
+	url := fmt.Sprintf(authUrl+"/v1/tenants"+"?"+"page_num=%d&page_size=%d", 0, 10000)
+	log.Debug("GetTenantsList url", url)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if nil != err {
+		return tenantList, err
+	}
+	resp, err := http.DefaultClient.Do(req)
+
+	resp2, err2 := c.ParseResp(resp, err)
+	if nil != err2 {
+		log.Error("error get tenants, ", err)
+		return tenantList, err2
+	}
+
+	tenantsMap, ok := resp2.(map[string]interface{})
+	if !ok {
+		return tenantList, errors.New("auth trans error")
+	}
+
+	tenants, ok1 := tenantsMap["tenants"]
+	if !ok1 {
+		return tenantList, errors.New("tenants error")
+	}
+	tenantsArry, ok2 := tenants.([]interface{})
+	if !ok2 {
+		return tenantList, errors.New("tenants error")
+	}
+	for _, v := range tenantsArry {
+		if v1, ok1 := v.(map[string]interface{}); ok1 == true {
+			if v2, ok2 := v1["tenant_id"]; ok2 == true {
+				tenantList = append(tenantList, v2.(string))
+			}
+		}
+	}
+	return tenantList, nil
 }

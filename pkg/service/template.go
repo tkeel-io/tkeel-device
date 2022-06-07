@@ -65,6 +65,7 @@ func (s *TemplateService) CreateTemplate(ctx context.Context, req *pb.CreateTemp
 		XCreatedAt: GetTime(),
 		XUpdatedAt: GetTime(),
 		XOwner:     tm["owner"],
+		XTenantId:  tm["tenantId"],
 		XSource:    tm["source"],
 	}
 	/*basicInfo1 := &pb.TemplateBasicInfo1{

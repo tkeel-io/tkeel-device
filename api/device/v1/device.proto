@@ -571,6 +571,7 @@ message DeviceEntitySysField {
   string _source = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "来源"}];
   string _spacePath = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "空间树路径"}];
   string _subscribeAddr = 10 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "订阅地址"}];
+  string _tenantId = 11 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "租户ID"}];
 }
 
 // connectInfo 

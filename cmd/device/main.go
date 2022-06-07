@@ -12,11 +12,13 @@ import (
 	"github.com/tkeel-io/kit/transport"
 	"github.com/tkeel-io/tkeel-device/pkg/server"
 	"github.com/tkeel-io/tkeel-device/pkg/service"
+	"github.com/tkeel-io/tkeel-device/pkg/service/metrics"
 )
 
 import ( //User import
 	Device_v1 "github.com/tkeel-io/tkeel-device/api/device/v1"
 	Group_v1 "github.com/tkeel-io/tkeel-device/api/group/v1"
+	Metrics_v1 "github.com/tkeel-io/tkeel-device/api/metrics/v1"
 	openapi "github.com/tkeel-io/tkeel-device/api/openapi/v1"
 	Template_v1 "github.com/tkeel-io/tkeel-device/api/template/v1"
 )
@@ -69,6 +71,9 @@ func main() {
 		TemplateSrv := service.NewTemplateService()
 		Template_v1.RegisterTemplateHTTPServer(httpSrv.Container, TemplateSrv)
 		Template_v1.RegisterTemplateServer(grpcSrv.GetServe(), TemplateSrv)
+
+		metricsSrv := service.NewMetricsService(metrics.CollectorDeviceNumRequest, metrics.CollectorDeviceTemplateRequest)
+		Metrics_v1.RegisterMetricsHTTPServer(httpSrv.Container, metricsSrv)
 	}
 
 	if err := app.Run(context.TODO()); err != nil {

@@ -263,6 +263,7 @@ message GroupEntitySysField {
     string _owner = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: " 所有者"}];
     string _source = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "来源"}];
     string _spacePath = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "空间树路径"}];
+    string _tenantId = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "租户ID"}];
 }
 
 message ListEntityQuery {

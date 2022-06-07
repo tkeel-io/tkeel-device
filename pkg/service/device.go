@@ -11,8 +11,10 @@ import (
 	pbt "github.com/tkeel-io/tkeel-device/api/template/v1"
 
 	//go_struct "google.golang.org/protobuf/types/known/structpb"
+	"github.com/tkeel-io/tkeel-device/pkg/service/metrics"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/structpb"
+	"time"
 )
 
 type DeviceService struct {
@@ -21,9 +23,11 @@ type DeviceService struct {
 }
 
 func NewDeviceService() *DeviceService {
-	return &DeviceService{
+	ds := &DeviceService{
 		client: NewCoreClient(),
 	}
+	go ds.MetricsTimer()
+	return ds
 }
 
 func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRequest) (*pb.CreateDeviceResponse, error) {
@@ -66,6 +70,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	coreInfo.SysField.XEnable = true
 	coreInfo.SysField.XStatus = "offline"
 	coreInfo.SysField.XOwner = tm["owner"]
+	coreInfo.SysField.XTenantId = tm["tenantId"]
 	coreInfo.SysField.XSource = tm["source"]
 	coreInfo.SysField.XSpacePath = devId
 	coreInfo.SysField.XSubscribeAddr = ""
@@ -1256,6 +1261,33 @@ func (s *DeviceService) CoreSearchEntity(ctx context.Context, listEntityQuery *p
 	return listObject, nil
 }
 
+func (s *DeviceService) CoreSearchEntity2(listEntityQuery *pb.ListEntityQuery) (map[string]interface{}, error) {
+	//log.Debug("CoreSearchEntity2")
+
+	midUrl := "/search"
+	url := coreUrl + midUrl
+	//log.Debug("core url :", url)
+	//log.Debug("Query:", listEntityQuery)
+
+	//do it
+	filter, err1 := json.Marshal(listEntityQuery)
+	if err1 != nil {
+		return nil, err1
+	}
+	res, err2 := s.client.Post(url, filter)
+	if nil != err2 {
+		return nil, err2
+	}
+
+	listObject := make(map[string]interface{})
+	err3 := json.Unmarshal(res, &listObject)
+	if err3 != nil {
+		log.Error("error Unmarshal data from core")
+		return nil, err3
+	}
+	return listObject, nil
+}
+
 func (s *DeviceService) checkNameRepated(ctx context.Context, name string) error {
 	log.Debug("checkNameRepated")
 	if name == "" {
@@ -1306,4 +1338,121 @@ func (s *DeviceService) checkNameRepated(ctx context.Context, name string) error
 	} else {
 		return errors.New("have repeated")
 	}
+}
+
+func (s *DeviceService) MetricsSetDevNum(tenant string) error {
+	//log.Debug(tenant)
+	//create query
+	query := &pb.ListEntityQuery{
+		PageNum:      1,
+		PageSize:     0,
+		OrderBy:      "name",
+		IsDescending: false,
+		Query:        "",
+		Condition:    make([]*pb.Condition, 0),
+	}
+	condition1 := &pb.Condition{
+		Field:    "sysField._tenantId",
+		Operator: "$eq",
+		Value:    structpb.NewStringValue(tenant),
+	}
+	condition2 := &pb.Condition{
+		Field:    "type",
+		Operator: "$eq",
+		Value:    structpb.NewStringValue("device"),
+		//Value:    "device",
+	}
+	query.Condition = append(query.Condition, condition1)
+	query.Condition = append(query.Condition, condition2)
+	//search
+	listObject, err := s.CoreSearchEntity2(query)
+	if err != nil {
+		log.Error("error Core return ", err)
+		return err
+	}
+
+	//check
+	total, ok := listObject["total"]
+	if !ok {
+		log.Error("error  total field does not exist")
+		return errors.New("total field does not exist")
+	}
+
+	tl, ok1 := total.(float64)
+	if !ok1 {
+		return errors.New("total is not int type")
+	}
+	//check
+	//log.Debug(tl)
+	metrics.CollectorDeviceNumRequest.WithLabelValues(tenant).Set(tl)
+	return nil
+}
+
+func (s *DeviceService) MetricsSetTemplateNum(tenant string) error {
+	//log.Debug(tenant)
+	//create query
+	query := &pb.ListEntityQuery{
+		PageNum:      1,
+		PageSize:     0,
+		OrderBy:      "name",
+		IsDescending: false,
+		Query:        "",
+		Condition:    make([]*pb.Condition, 0),
+	}
+	condition1 := &pb.Condition{
+		Field:    "sysField._tenantId",
+		Operator: "$eq",
+		Value:    structpb.NewStringValue(tenant),
+	}
+	condition2 := &pb.Condition{
+		Field:    "type",
+		Operator: "$eq",
+		Value:    structpb.NewStringValue("template"),
+		//Value:    "device",
+	}
+	query.Condition = append(query.Condition, condition1)
+	query.Condition = append(query.Condition, condition2)
+	//search
+	listObject, err := s.CoreSearchEntity2(query)
+	if err != nil {
+		log.Error("error Core return ", err)
+		return err
+	}
+
+	//check
+	total, ok := listObject["total"]
+	if !ok {
+		log.Error("error  total field does not exist")
+		return errors.New("total field does not exist")
+	}
+
+	tl, ok1 := total.(float64)
+	if !ok1 {
+		return errors.New("total is not int type")
+	}
+	//set
+	//log.Debug(tl)
+	metrics.CollectorDeviceTemplateRequest.WithLabelValues(tenant).Set(tl)
+	return nil
+}
+
+func (s *DeviceService) MetricsTimer() {
+	for true {
+		log.Debug("MetricsTimer")
+		//get tenants list
+		tenants, err := s.client.GetTenantsList()
+		if err != nil {
+			log.Error(err)
+		}
+		log.Debug(tenants)
+		for _, v := range tenants {
+			//get device num
+			s.MetricsSetDevNum(v)
+			//get template num
+			s.MetricsSetTemplateNum(v)
+		}
+		//sleep
+		time.Sleep(time.Duration(10) * time.Second)
+	}
+	return
 }

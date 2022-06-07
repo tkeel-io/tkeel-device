@@ -59,6 +59,7 @@ func (s *GroupService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 		XCreatedAt: GetTime(),
 		XUpdatedAt: GetTime(),
 		XOwner:     tm["owner"],
+		XTenantId:  tm["tenantId"],
 		XSource:    tm["source"],
 		XSpacePath: entityId,
 	}
