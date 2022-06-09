@@ -1438,13 +1438,13 @@ func (s *DeviceService) MetricsSetTemplateNum(tenant string) error {
 
 func (s *DeviceService) MetricsTimer() {
 	for true {
-		log.Debug("MetricsTimer")
+		//log.Debug("MetricsTimer")
 		//get tenants list
 		tenants, err := s.client.GetTenantsList()
 		if err != nil {
 			log.Error(err)
 		}
-		log.Debug(tenants)
+		//log.Debug(tenants)
 		for _, v := range tenants {
 			//get device num
 			s.MetricsSetDevNum(v)

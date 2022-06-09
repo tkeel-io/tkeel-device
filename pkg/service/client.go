@@ -532,7 +532,7 @@ func (c *CoreClient) CreateDevDefaultGroup(tm map[string]string, id string) erro
 func (c *CoreClient) GetTenantsList() ([]string, error) {
 	tenantList := make([]string, 0)
 	url := fmt.Sprintf(authUrl+"/v1/tenants"+"?"+"page_num=%d&page_size=%d", 0, 10000)
-	log.Debug("GetTenantsList url", url)
+	//log.Debug("GetTenantsList url", url)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if nil != err {
