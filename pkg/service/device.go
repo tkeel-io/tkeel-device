@@ -1450,6 +1450,7 @@ func (s *DeviceService) MetricsTimer() {
 			s.MetricsSetDevNum(v)
 			//get template num
 			s.MetricsSetTemplateNum(v)
+			time.Sleep(time.Duration(100) * time.Millisecond)
 		}
 		//sleep
 		time.Sleep(time.Duration(10) * time.Second)
