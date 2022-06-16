@@ -81,6 +81,102 @@ service Device {
         }
     };
   };
+  rpc GetDeviceBasicInfo(GetDeviceBasicInfoRequest) returns (GetDeviceBasicInfoResponse) {
+    option (google.api.http) = {
+      get : "/devices/{id}/basicInfo"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "get device entity basicInfo";
+        operation_id: "GetDeviceBasicInfo";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
+  };
+  rpc GetDeviceSysInfo(GetDeviceSysInfoRequest) returns (GetDeviceSysInfoResponse) {
+    option (google.api.http) = {
+      get : "/devices/{id}/sysInfo"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "get device entity sysInfo";
+        operation_id: "GetDeviceSysInfo";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
+  };
+  rpc GetDeviceConnectInfo(GetDeviceConnectInfoRequest) returns (GetDeviceConnectInfoResponse) {
+    option (google.api.http) = {
+      get : "/devices/{id}/connectInfo"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "get device entity connectInfo";
+        operation_id: "GetDeviceConnectInfo";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
+  };
+  rpc GetDeviceRawData(GetDeviceRawDataRequest) returns (GetDeviceRawDataResponse) {
+    option (google.api.http) = {
+      get : "/devices/{id}/rawData"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "get device entity rawData";
+        operation_id: "GetDeviceRawData";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
+  };
+  rpc GetDeviceAttributeData(GetDeviceAttributeDataRequest) returns (GetDeviceAttributeDataResponse) {
+    option (google.api.http) = {
+      get : "/devices/{id}/attributeData"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "get device entity attributeData";
+        operation_id: "GetDeviceAttributeData";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
+  };
+  rpc GetDeviceTelemetryData(GetDeviceTelemetryDataRequest) returns (GetDeviceTelemetryDataResponse) {
+    option (google.api.http) = {
+      get : "/devices/{id}/telemetryData"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "get device entity telemetryData";
+        operation_id: "GetDeviceTelemetryData";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
+  };
   rpc SearchEntity(ListDeviceRequest) returns (ListDeviceResponse) {
     option (google.api.http) = {
       post : "/search"
@@ -418,6 +514,51 @@ message FaildDelDevice {
 message GetDeviceRequest { 
     string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
 }
+
+
+message GetDeviceBasicInfoRequest { 
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
+}
+message GetDeviceSysInfoRequest { 
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
+}
+message GetDeviceConnectInfoRequest { 
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
+}
+message GetDeviceRawDataRequest { 
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
+}
+message GetDeviceAttributeDataRequest { 
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
+}
+message GetDeviceTelemetryDataRequest { 
+    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备ID"}];
+}
+
+message GetDeviceBasicInfoResponse {
+    google.protobuf.Value basicInfoObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备基本信息对象"}];
+}
+message GetDeviceSysInfoResponse {
+    google.protobuf.Value sysInfoObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备系统信息对象"}];
+}
+message GetDeviceConnectInfoResponse {
+    google.protobuf.Value connectInfoObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备连接信息对象"}];
+}
+message GetDeviceRawDataResponse {
+    google.protobuf.Value rawDataObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备原始数据对象"}];
+}
+message GetDeviceAttributeDataResponse {
+    google.protobuf.Value attributeDataObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备属性数据对象"}];
+}
+message GetDeviceTelemetryDataResponse {
+    google.protobuf.Value telemetryDataObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备遥测数据对象"}];
+}
+
+
+
+
+
+
 message GetDeviceResponse {
     //api.core.v1.EntityResponse deviceObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备对象"}];
     google.protobuf.Value deviceObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备对象"}];

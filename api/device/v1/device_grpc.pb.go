@@ -23,6 +23,12 @@ type DeviceClient interface {
 	UpdateDevice(ctx context.Context, in *UpdateDeviceRequest, opts ...grpc.CallOption) (*UpdateDeviceResponse, error)
 	DeleteDevice(ctx context.Context, in *DeleteDeviceRequest, opts ...grpc.CallOption) (*DeleteDeviceResponse, error)
 	GetDevice(ctx context.Context, in *GetDeviceRequest, opts ...grpc.CallOption) (*GetDeviceResponse, error)
+	GetDeviceBasicInfo(ctx context.Context, in *GetDeviceBasicInfoRequest, opts ...grpc.CallOption) (*GetDeviceBasicInfoResponse, error)
+	GetDeviceSysInfo(ctx context.Context, in *GetDeviceSysInfoRequest, opts ...grpc.CallOption) (*GetDeviceSysInfoResponse, error)
+	GetDeviceConnectInfo(ctx context.Context, in *GetDeviceConnectInfoRequest, opts ...grpc.CallOption) (*GetDeviceConnectInfoResponse, error)
+	GetDeviceRawData(ctx context.Context, in *GetDeviceRawDataRequest, opts ...grpc.CallOption) (*GetDeviceRawDataResponse, error)
+	GetDeviceAttributeData(ctx context.Context, in *GetDeviceAttributeDataRequest, opts ...grpc.CallOption) (*GetDeviceAttributeDataResponse, error)
+	GetDeviceTelemetryData(ctx context.Context, in *GetDeviceTelemetryDataRequest, opts ...grpc.CallOption) (*GetDeviceTelemetryDataResponse, error)
 	SearchEntity(ctx context.Context, in *ListDeviceRequest, opts ...grpc.CallOption) (*ListDeviceResponse, error)
 	AddDeviceExtBusiness(ctx context.Context, in *AddDeviceExtBusinessRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateDeviceExtBusiness(ctx context.Context, in *UpdateDeviceExtBusinessRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -81,6 +87,60 @@ func (c *deviceClient) DeleteDevice(ctx context.Context, in *DeleteDeviceRequest
 func (c *deviceClient) GetDevice(ctx context.Context, in *GetDeviceRequest, opts ...grpc.CallOption) (*GetDeviceResponse, error) {
 	out := new(GetDeviceResponse)
 	err := c.cc.Invoke(ctx, "/api.device.v1.Device/GetDevice", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) GetDeviceBasicInfo(ctx context.Context, in *GetDeviceBasicInfoRequest, opts ...grpc.CallOption) (*GetDeviceBasicInfoResponse, error) {
+	out := new(GetDeviceBasicInfoResponse)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/GetDeviceBasicInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) GetDeviceSysInfo(ctx context.Context, in *GetDeviceSysInfoRequest, opts ...grpc.CallOption) (*GetDeviceSysInfoResponse, error) {
+	out := new(GetDeviceSysInfoResponse)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/GetDeviceSysInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) GetDeviceConnectInfo(ctx context.Context, in *GetDeviceConnectInfoRequest, opts ...grpc.CallOption) (*GetDeviceConnectInfoResponse, error) {
+	out := new(GetDeviceConnectInfoResponse)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/GetDeviceConnectInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) GetDeviceRawData(ctx context.Context, in *GetDeviceRawDataRequest, opts ...grpc.CallOption) (*GetDeviceRawDataResponse, error) {
+	out := new(GetDeviceRawDataResponse)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/GetDeviceRawData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) GetDeviceAttributeData(ctx context.Context, in *GetDeviceAttributeDataRequest, opts ...grpc.CallOption) (*GetDeviceAttributeDataResponse, error) {
+	out := new(GetDeviceAttributeDataResponse)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/GetDeviceAttributeData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deviceClient) GetDeviceTelemetryData(ctx context.Context, in *GetDeviceTelemetryDataRequest, opts ...grpc.CallOption) (*GetDeviceTelemetryDataResponse, error) {
+	out := new(GetDeviceTelemetryDataResponse)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/GetDeviceTelemetryData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -257,6 +317,12 @@ type DeviceServer interface {
 	UpdateDevice(context.Context, *UpdateDeviceRequest) (*UpdateDeviceResponse, error)
 	DeleteDevice(context.Context, *DeleteDeviceRequest) (*DeleteDeviceResponse, error)
 	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)
+	GetDeviceBasicInfo(context.Context, *GetDeviceBasicInfoRequest) (*GetDeviceBasicInfoResponse, error)
+	GetDeviceSysInfo(context.Context, *GetDeviceSysInfoRequest) (*GetDeviceSysInfoResponse, error)
+	GetDeviceConnectInfo(context.Context, *GetDeviceConnectInfoRequest) (*GetDeviceConnectInfoResponse, error)
+	GetDeviceRawData(context.Context, *GetDeviceRawDataRequest) (*GetDeviceRawDataResponse, error)
+	GetDeviceAttributeData(context.Context, *GetDeviceAttributeDataRequest) (*GetDeviceAttributeDataResponse, error)
+	GetDeviceTelemetryData(context.Context, *GetDeviceTelemetryDataRequest) (*GetDeviceTelemetryDataResponse, error)
 	SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
 	AddDeviceExtBusiness(context.Context, *AddDeviceExtBusinessRequest) (*emptypb.Empty, error)
 	UpdateDeviceExtBusiness(context.Context, *UpdateDeviceExtBusinessRequest) (*emptypb.Empty, error)
@@ -293,6 +359,24 @@ func (UnimplementedDeviceServer) DeleteDevice(context.Context, *DeleteDeviceRequ
 }
 func (UnimplementedDeviceServer) GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDevice not implemented")
+}
+func (UnimplementedDeviceServer) GetDeviceBasicInfo(context.Context, *GetDeviceBasicInfoRequest) (*GetDeviceBasicInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDeviceBasicInfo not implemented")
+}
+func (UnimplementedDeviceServer) GetDeviceSysInfo(context.Context, *GetDeviceSysInfoRequest) (*GetDeviceSysInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDeviceSysInfo not implemented")
+}
+func (UnimplementedDeviceServer) GetDeviceConnectInfo(context.Context, *GetDeviceConnectInfoRequest) (*GetDeviceConnectInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDeviceConnectInfo not implemented")
+}
+func (UnimplementedDeviceServer) GetDeviceRawData(context.Context, *GetDeviceRawDataRequest) (*GetDeviceRawDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDeviceRawData not implemented")
+}
+func (UnimplementedDeviceServer) GetDeviceAttributeData(context.Context, *GetDeviceAttributeDataRequest) (*GetDeviceAttributeDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDeviceAttributeData not implemented")
+}
+func (UnimplementedDeviceServer) GetDeviceTelemetryData(context.Context, *GetDeviceTelemetryDataRequest) (*GetDeviceTelemetryDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDeviceTelemetryData not implemented")
 }
 func (UnimplementedDeviceServer) SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchEntity not implemented")
@@ -429,6 +513,114 @@ func _Device_GetDevice_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DeviceServer).GetDevice(ctx, req.(*GetDeviceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_GetDeviceBasicInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDeviceBasicInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).GetDeviceBasicInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/GetDeviceBasicInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).GetDeviceBasicInfo(ctx, req.(*GetDeviceBasicInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_GetDeviceSysInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDeviceSysInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).GetDeviceSysInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/GetDeviceSysInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).GetDeviceSysInfo(ctx, req.(*GetDeviceSysInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_GetDeviceConnectInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDeviceConnectInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).GetDeviceConnectInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/GetDeviceConnectInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).GetDeviceConnectInfo(ctx, req.(*GetDeviceConnectInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_GetDeviceRawData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDeviceRawDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).GetDeviceRawData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/GetDeviceRawData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).GetDeviceRawData(ctx, req.(*GetDeviceRawDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_GetDeviceAttributeData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDeviceAttributeDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).GetDeviceAttributeData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/GetDeviceAttributeData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).GetDeviceAttributeData(ctx, req.(*GetDeviceAttributeDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Device_GetDeviceTelemetryData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDeviceTelemetryDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).GetDeviceTelemetryData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/GetDeviceTelemetryData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).GetDeviceTelemetryData(ctx, req.(*GetDeviceTelemetryDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -779,6 +971,30 @@ var Device_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetDevice",
 			Handler:    _Device_GetDevice_Handler,
+		},
+		{
+			MethodName: "GetDeviceBasicInfo",
+			Handler:    _Device_GetDeviceBasicInfo_Handler,
+		},
+		{
+			MethodName: "GetDeviceSysInfo",
+			Handler:    _Device_GetDeviceSysInfo_Handler,
+		},
+		{
+			MethodName: "GetDeviceConnectInfo",
+			Handler:    _Device_GetDeviceConnectInfo_Handler,
+		},
+		{
+			MethodName: "GetDeviceRawData",
+			Handler:    _Device_GetDeviceRawData_Handler,
+		},
+		{
+			MethodName: "GetDeviceAttributeData",
+			Handler:    _Device_GetDeviceAttributeData_Handler,
+		},
+		{
+			MethodName: "GetDeviceTelemetryData",
+			Handler:    _Device_GetDeviceTelemetryData_Handler,
 		},
 		{
 			MethodName: "SearchEntity",

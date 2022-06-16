@@ -1457,3 +1457,124 @@ func (s *DeviceService) MetricsTimer() {
 	}
 	return
 }
+
+func (s *DeviceService) GetDeviceBasicInfo(ctx context.Context, req *pb.GetDeviceBasicInfoRequest) (*pb.GetDeviceBasicInfoResponse, error) {
+	log.Debug("GetDeviceBasicInfo")
+	log.Debug("req:", req)
+
+	re, err := s.GetDeviceDetailInfo(ctx, req.Id, "properties", "basicInfo")
+	if nil != err {
+		return nil, err
+	}
+	out := &pb.GetDeviceBasicInfoResponse{
+		BasicInfoObject: re,
+	}
+
+	return out, nil
+}
+
+func (s *DeviceService) GetDeviceSysInfo(ctx context.Context, req *pb.GetDeviceSysInfoRequest) (*pb.GetDeviceSysInfoResponse, error) {
+	log.Debug("GetDeviceSysInfo")
+	log.Debug("req:", req)
+
+	re, err := s.GetDeviceDetailInfo(ctx, req.Id, "properties", "sysField")
+	if nil != err {
+		return nil, err
+	}
+	out := &pb.GetDeviceSysInfoResponse{
+		SysInfoObject: re,
+	}
+
+	return out, nil
+}
+
+func (s *DeviceService) GetDeviceConnectInfo(ctx context.Context, req *pb.GetDeviceConnectInfoRequest) (*pb.GetDeviceConnectInfoResponse, error) {
+	log.Debug("GetDeviceConnectInfo")
+	log.Debug("req:", req)
+
+	re, err := s.GetDeviceDetailInfo(ctx, req.Id, "properties", "connectInfo")
+	if nil != err {
+		return nil, err
+	}
+	out := &pb.GetDeviceConnectInfoResponse{
+		ConnectInfoObject: re,
+	}
+
+	return out, nil
+}
+
+func (s *DeviceService) GetDeviceRawData(ctx context.Context, req *pb.GetDeviceRawDataRequest) (*pb.GetDeviceRawDataResponse, error) {
+	log.Debug("GetDeviceRawData")
+	log.Debug("req:", req)
+
+	re, err := s.GetDeviceDetailInfo(ctx, req.Id, "properties", "rawData")
+	if nil != err {
+		return nil, err
+	}
+	out := &pb.GetDeviceRawDataResponse{
+		RawDataObject: re,
+	}
+
+	return out, nil
+}
+func (s *DeviceService) GetDeviceAttributeData(ctx context.Context, req *pb.GetDeviceAttributeDataRequest) (*pb.GetDeviceAttributeDataResponse, error) {
+	log.Debug("GetDeviceAttributeData")
+	log.Debug("req:", req)
+
+	re, err := s.GetDeviceDetailInfo(ctx, req.Id, "properties", "attributes")
+	if nil != err {
+		return nil, err
+	}
+	out := &pb.GetDeviceAttributeDataResponse{
+		AttributeDataObject: re,
+	}
+
+	return out, nil
+}
+func (s *DeviceService) GetDeviceTelemetryData(ctx context.Context, req *pb.GetDeviceTelemetryDataRequest) (*pb.GetDeviceTelemetryDataResponse, error) {
+	log.Debug("GetDeviceTelemetryData")
+	log.Debug("req:", req)
+
+	re, err := s.GetDeviceDetailInfo(ctx, req.Id, "properties", "telemetry")
+	if nil != err {
+		return nil, err
+	}
+	out := &pb.GetDeviceTelemetryDataResponse{
+		TelemetryDataObject: re,
+	}
+
+	return out, nil
+}
+
+func (s *DeviceService) GetDeviceDetailInfo(ctx context.Context, id string, classify string, pids string) (*structpb.Value, error) {
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+
+	//get core data
+	obj, err1 := s.client.GetCoreEntitySpecContent(tm, id, "device", classify, pids)
+	if nil != err1 {
+		return nil, err1
+	}
+	//cut out the excess
+	var infoObj map[string]interface{}
+	if prop, ok := obj["properties"]; ok {
+		if prop1, ok1 := prop.(map[string]interface{}); ok1 {
+			if info, ok2 := prop1[pids]; ok2 {
+				if info1, ok3 := info.(map[string]interface{}); ok3 {
+					infoObj = info1
+				}
+			}
+		}
+	}
+
+	//return
+	re, err2 := structpb.NewValue(infoObj)
+	if nil != err2 {
+		log.Error("convert tree failed ", err2)
+		return nil, err2
+	}
+
+	return re, nil
+}
