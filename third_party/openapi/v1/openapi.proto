@@ -118,8 +118,7 @@ message IdentifyResponse {
   repeated Permission permissions = 9; // plugins define permissions.
   bool disable_manual_activation =
       10; // plugins disable tenant manual activation.
-  bytes  profiles =11; // plugins controllable items eg:`[{  "key": "", "description": "","default": 0},{"key": "","description": "","default": "100:1;1000:60"}]`.
-}
+  map <string, ProfileSchema >  profiles = 11;}
 
 /**
  * The request value of the POST /v1/addons/identify,
@@ -182,5 +181,16 @@ message StatusResponse {
   Result res = 1;          // detail result
   PluginStatus status = 2; // plugin status.
 }
+
+message ProfileSchema {
+  string type = 1 ;
+  string title = 2 ;
+  string description =3 ;
+  int64 default = 4 ;
+  int64 multipleOf = 5 ;
+  int64 minimum = 6 ;
+  int64 maximum = 7 ;
+}
+
 
 
