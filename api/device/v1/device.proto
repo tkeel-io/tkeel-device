@@ -20,7 +20,7 @@ service Device {
       body : "devBasicInfo"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "create device entity";
+        summary: "创建设备";
         operation_id: "CreateDevice";
         tags: "device";
         responses: {
@@ -37,7 +37,7 @@ service Device {
       body : "devBasicInfo"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "update device entity";
+        summary: "更新设备";
         operation_id: "UpdateDevice";
         tags: "device";
         responses: {
@@ -54,7 +54,7 @@ service Device {
       body : "ids"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "delete device entity";
+        summary: "删除设备";
         operation_id: "DeleteDevice";
         tags: "device";
         responses: {
@@ -70,7 +70,7 @@ service Device {
       get : "/devices/{id}"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "get device entity";
+        summary: "获取设备所有详情";
         operation_id: "GetDevice";
         tags: "device";
         responses: {
@@ -86,7 +86,7 @@ service Device {
       get : "/devices/{id}/basicInfo"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "get device entity basicInfo";
+        summary: "获取设备基础信息";
         operation_id: "GetDeviceBasicInfo";
         tags: "device";
         responses: {
@@ -102,7 +102,7 @@ service Device {
       get : "/devices/{id}/sysInfo"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "get device entity sysInfo";
+        summary: "获取设备系统信息";
         operation_id: "GetDeviceSysInfo";
         tags: "device";
         responses: {
@@ -118,7 +118,7 @@ service Device {
       get : "/devices/{id}/connectInfo"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "get device entity connectInfo";
+        summary: "获取设备连接信息";
         operation_id: "GetDeviceConnectInfo";
         tags: "device";
         responses: {
@@ -134,7 +134,7 @@ service Device {
       get : "/devices/{id}/rawData"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "get device entity rawData";
+        summary: "获取设备原始数据";
         operation_id: "GetDeviceRawData";
         tags: "device";
         responses: {
@@ -150,7 +150,7 @@ service Device {
       get : "/devices/{id}/attributeData"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "get device entity attributeData";
+        summary: "获取设备属性数据";
         operation_id: "GetDeviceAttributeData";
         tags: "device";
         responses: {
@@ -166,7 +166,7 @@ service Device {
       get : "/devices/{id}/telemetryData"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "get device entity telemetryData";
+        summary: "获取设备遥测数据";
         operation_id: "GetDeviceTelemetryData";
         tags: "device";
         responses: {
@@ -183,7 +183,7 @@ service Device {
       body : "listEntityQuery"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "search entity";
+        summary: "搜索设备、设备组、设备模板等实体通用接口";
         operation_id: "SearchEntity";
         tags: "device";
         responses: {
@@ -200,7 +200,7 @@ rpc AddDeviceExtBusiness(AddDeviceExtBusinessRequest) returns (google.protobuf.E
       body : "extBusiness"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "add device extensions business";
+        summary: "添加设备扩展业务";
         operation_id: "AddDeviceExtBusiness";
         tags: "device";
         responses: {
@@ -217,7 +217,7 @@ rpc AddDeviceExtBusiness(AddDeviceExtBusinessRequest) returns (google.protobuf.E
       body : "extBusiness"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "update device extensions business";
+        summary: "更新设备扩展业务";
         operation_id: "UpdateDeviceExtBusiness";
         tags: "device";
         responses: {
@@ -234,7 +234,7 @@ rpc AddDeviceExtBusiness(AddDeviceExtBusinessRequest) returns (google.protobuf.E
       body : "keys"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "delete device extensions business";
+        summary: "删除设备扩展业务";
         operation_id: "DelDeviceExtBusiness";
         tags: "device";
         responses: {
@@ -252,7 +252,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "ext"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "add device extensions";
+        summary: "添加设备扩展信息kv";
         operation_id: "AddDeviceExt";
         tags: "device";
         responses: {
@@ -269,7 +269,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "keys"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "delete device extensions";
+        summary: "删除设备扩展信息Kv";
         operation_id: "DelDeviceExt";
         tags: "device";
         responses: {
@@ -286,7 +286,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "ext"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "update device extensions";
+        summary: "更新设备扩展信息kv";
         operation_id: "UpdateDeviceExt";
         tags: "device";
         responses: {
@@ -303,7 +303,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "expressions"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "Create data relation";
+        summary: "创建设备数据映射关系";
         operation_id: "CreateDeviceDataRelation";
         tags: "device";
         responses: {
@@ -320,7 +320,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "expressions"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "update data relation";
+        summary: "更新设备数据映射关系";
         operation_id: "UpdateDeviceDataRelation";
         tags: "device";
         responses: {
@@ -336,7 +336,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       get : "/devices/{id}/relation/{path}"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "get single relation";
+        summary: "获取单条path数据映射关系";
         operation_id: "GetDeviceDataRelation";
         tags: "device";
         responses: {
@@ -353,7 +353,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "paths"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "delete data relation";
+        summary: "删除设备数据映射关系";
         operation_id: "DeleteDeviceDataRelation";
         tags: "device";
         responses: {
@@ -369,7 +369,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       get : "/devices/{id}/relation"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "list data relation";
+        summary: "获取设备数据映射关系列表";
         operation_id: "ListDeviceDataRelation";
         tags: "device";
         responses: {
@@ -386,7 +386,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "relation"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "Create data relation auto";
+        summary: "自动创建设备数据映射关系";
         operation_id: "CreateDeviceDataRelationAuto";
         tags: "device";
         responses: {
@@ -403,7 +403,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "value"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "set device raw";
+        summary: "调用原始数据下行反控";
         operation_id: "SetDeviceRaw";
         tags: "device";
         responses: {
@@ -420,7 +420,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "content"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "set device attribte";
+        summary: "调用属性值设置";
         operation_id: "SetDeviceAttrubte";
         tags: "device";
         responses: {
@@ -437,7 +437,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "content"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "set device command";
+        summary: "调用命令";
         operation_id: "SetDeviceCommand";
         tags: "device";
         responses: {
@@ -454,7 +454,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "id"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "save device confAsSelfTemplate";
+        summary: "同步设备模板内容至设备引用模板";
         operation_id: "SetDeviceConfAsSelfTemplte";
         tags: "device";
         responses: {
@@ -471,7 +471,7 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
       body : "otherTemplateInfo"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-        summary: "save device confAsOtherTemplate";
+        summary: "设备模板内容另存为其他模板";
         operation_id: "SetDeviceConfAsOtherTemplte";
         tags: "device";
         responses: {

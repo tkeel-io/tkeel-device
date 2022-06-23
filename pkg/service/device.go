@@ -1435,7 +1435,53 @@ func (s *DeviceService) MetricsSetTemplateNum(tenant string) error {
 	metrics.CollectorDeviceTemplateRequest.WithLabelValues(tenant).Set(tl)
 	return nil
 }
+func (s *DeviceService) MetricsSetDevOnlineNum(tenant string) error {
+	//log.Debug(tenant)
+	//create query
+	query := &pb.ListEntityQuery{
+		PageNum:      1,
+		PageSize:     0,
+		OrderBy:      "name",
+		IsDescending: false,
+		Query:        "",
+		Condition:    make([]*pb.Condition, 0),
+	}
+	condition1 := &pb.Condition{
+		Field:    "sysField._tenantId",
+		Operator: "$eq",
+		Value:    structpb.NewStringValue(tenant),
+	}
+	condition2 := &pb.Condition{
+		Field:    "connectInfo._online",
+		Operator: "$eq",
+		Value:    structpb.NewBoolValue(true),
+		//Value:    "device",
+	}
+	query.Condition = append(query.Condition, condition1)
+	query.Condition = append(query.Condition, condition2)
+	//search
+	listObject, err := s.CoreSearchEntity2(query)
+	if err != nil {
+		log.Error("error Core return ", err)
+		return err
+	}
 
+	//check
+	total, ok := listObject["total"]
+	if !ok {
+		log.Error("error  total field does not exist")
+		return errors.New("total field does not exist")
+	}
+
+	tl, ok1 := total.(float64)
+	if !ok1 {
+		return errors.New("total is not int type")
+	}
+	//set
+	//log.Debug(tl)
+	metrics.CollectorDeviceOnlineRequest.WithLabelValues(tenant).Set(tl)
+	return nil
+}
 func (s *DeviceService) MetricsTimer() {
 	for true {
 		//log.Debug("MetricsTimer")
@@ -1450,6 +1496,8 @@ func (s *DeviceService) MetricsTimer() {
 			s.MetricsSetDevNum(v)
 			//get template num
 			s.MetricsSetTemplateNum(v)
+			//get online num
+			s.MetricsSetDevOnlineNum(v)
 			time.Sleep(time.Duration(100) * time.Millisecond)
 		}
 		//sleep

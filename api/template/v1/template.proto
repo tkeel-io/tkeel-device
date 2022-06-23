@@ -21,7 +21,7 @@ service Template {
 			body : "basicInfo"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "create Template";
+            summary: "创建模板对象";
             operation_id: "CreateTemplate";
             tags: "template";
             responses: {
@@ -38,7 +38,7 @@ service Template {
 			body : "basicInfo"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "update Template";
+            summary: "更新模板对象";
             operation_id: "UpdateTemplate";
             tags: "template";
             responses: {
@@ -55,7 +55,7 @@ service Template {
             body : "ids"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "delete Template";
+            summary: "删除模板对象";
             operation_id: "DeleteTemplate";
             tags: "template";
             responses: {
@@ -71,7 +71,7 @@ service Template {
 			get : "/templates/{uid}"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "get Template";
+            summary: "获取模板对象";
             operation_id: "GetTemplate";
             tags: "template";
             responses: {
@@ -90,7 +90,7 @@ service Template {
 			body : "attr"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "add Template attribute";
+            summary: "添加模板属性定义";
             operation_id: "AddTemplateAttribute";
             tags: "template";
             responses: {
@@ -107,7 +107,7 @@ service Template {
 			body : "attr"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "update Template attribute";
+            summary: "更新模板属性定义";
             operation_id: "UpdateTemplateAttribute";
             tags: "template";
             responses: {
@@ -124,7 +124,7 @@ service Template {
             body : "ids"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "delete Template attribute";
+            summary: "删除模板属性定义";
             operation_id: "DeleteTemplateAttribute";
             tags: "template";
             responses: {
@@ -140,7 +140,7 @@ service Template {
 			get : "/templates/{uid}/attribute/{id}"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "get Template attribute";
+            summary: "获取单条模板属性定义";
             operation_id: "GetTemplateAttribute";
             tags: "template";
             responses: {
@@ -156,7 +156,7 @@ service Template {
 			get : "/templates/{uid}/attribute"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "list Template attribute";
+            summary: "获取模板属性定义列表";
             operation_id: "ListTemplateAttribute";
             tags: "template";
             responses: {
@@ -175,7 +175,7 @@ service Template {
 			body : "tele"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "add Template telemetry";
+            summary: "添加模板遥测定义";
             operation_id: "AddTemplateTelemetry";
             tags: "template";
             responses: {
@@ -192,7 +192,7 @@ service Template {
 			body : "tele"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "update Template telemetry";
+            summary: "更新模板遥测定义";
             operation_id: "UpdateTemplateTelemetry";
             tags: "template";
             responses: {
@@ -209,7 +209,7 @@ service Template {
             body : "ids"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "delete Template telemetry";
+            summary: "删除模板遥测定义";
             operation_id: "DeleteTemplateTelemetry";
             tags: "template";
             responses: {
@@ -225,7 +225,7 @@ service Template {
 			get : "/templates/{uid}/telemetry/{id}"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "get Template telemetry";
+            summary: "获取模板单条遥测定义";
             operation_id: "GetTemplateTelemetry";
             tags: "template";
             responses: {
@@ -241,7 +241,7 @@ service Template {
 			get : "/templates/{uid}/telemetry"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "list Template telemetry";
+            summary: "获取模板遥测定义列表";
             operation_id: "ListTemplateTelemetry";
             tags: "template";
             responses: {
@@ -258,7 +258,7 @@ service Template {
 			body : "kvs"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "add template telemetry ext";
+            summary: "添加模板遥测扩展配置";
             operation_id: "AddTemplateTelemetryExt";
             tags: "template";
             responses: {
@@ -275,7 +275,7 @@ service Template {
 			body : "kvs"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "update template telemetry ext";
+            summary: "更新模板遥测扩展配置";
             operation_id: "UpdateTemplateTelemetryExt";
             tags: "template";
             responses: {
@@ -292,7 +292,7 @@ service Template {
             body: "keys"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "delete template telemetry ext";
+            summary: "删除模板遥测扩展配置";
             operation_id: "DeleteTemplateTelemetryExt";
             tags: "template";
             responses: {
@@ -311,7 +311,7 @@ service Template {
 			body : "cmd"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "add template command";
+            summary: "添加模板命令定义";
             operation_id: "AddTemplateCommand";
             tags: "template";
             responses: {
@@ -328,7 +328,7 @@ service Template {
 			body : "cmd"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "update template command";
+            summary: "更新模板命令定义";
             operation_id: "UpdateTemplateCommand";
             tags: "template";
             responses: {
@@ -345,7 +345,7 @@ service Template {
             body : "ids"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "delete template command";
+            summary: "删除模板命令定义";
             operation_id: "DeleteTemplateCommand";
             tags: "template";
             responses: {
@@ -361,7 +361,7 @@ service Template {
 			get : "/templates/{uid}/command/{id}"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "get Template command";
+            summary: "获取模板单条命令定义";
             operation_id: "GetTemplateCommand";
             tags: "template";
             responses: {
@@ -377,7 +377,7 @@ service Template {
 			get : "/templates/{uid}/command"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-            summary: "list template command";
+            summary: "获取模板命令定义列表";
             operation_id: "ListTemplateCommand";
             tags: "template";
             responses: {

@@ -24,7 +24,7 @@
   "paths": {
     "/devices": {
       "post": {
-        "summary": "create device entity",
+        "summary": "创建设备",
         "operationId": "CreateDevice",
         "responses": {
           "200": {
@@ -59,7 +59,7 @@
     },
     "/devices/delete": {
       "post": {
-        "summary": "delete device entity",
+        "summary": "删除设备",
         "operationId": "DeleteDevice",
         "responses": {
           "200": {
@@ -94,7 +94,7 @@
     },
     "/devices/{id}": {
       "get": {
-        "summary": "get device entity",
+        "summary": "获取设备所有详情",
         "operationId": "GetDevice",
         "responses": {
           "200": {
@@ -124,7 +124,7 @@
         ]
       },
       "put": {
-        "summary": "update device entity",
+        "summary": "更新设备",
         "operationId": "UpdateDevice",
         "responses": {
           "200": {
@@ -166,7 +166,7 @@
     },
     "/devices/{id}/attribute/set": {
       "post": {
-        "summary": "set device attribte",
+        "summary": "调用属性值设置",
         "operationId": "SetDeviceAttrubte",
         "responses": {
           "200": {
@@ -208,7 +208,7 @@
     },
     "/devices/{id}/attributeData": {
       "get": {
-        "summary": "get device entity attributeData",
+        "summary": "获取设备属性数据",
         "operationId": "GetDeviceAttributeData",
         "responses": {
           "200": {
@@ -240,7 +240,7 @@
     },
     "/devices/{id}/basicInfo": {
       "get": {
-        "summary": "get device entity basicInfo",
+        "summary": "获取设备基础信息",
         "operationId": "GetDeviceBasicInfo",
         "responses": {
           "200": {
@@ -272,7 +272,7 @@
     },
     "/devices/{id}/command/set": {
       "post": {
-        "summary": "set device command",
+        "summary": "调用命令",
         "operationId": "SetDeviceCommand",
         "responses": {
           "200": {
@@ -314,7 +314,7 @@
     },
     "/devices/{id}/configs/saveAsOtherTemplate": {
       "post": {
-        "summary": "save device confAsOtherTemplate",
+        "summary": "设备模板内容另存为其他模板",
         "operationId": "SetDeviceConfAsOtherTemplte",
         "responses": {
           "200": {
@@ -356,7 +356,7 @@
     },
     "/devices/{id}/configs/saveAsSelfTemplate": {
       "post": {
-        "summary": "save device confAsSelfTemplate",
+        "summary": "同步设备模板内容至设备引用模板",
         "operationId": "SetDeviceConfAsSelfTemplte",
         "responses": {
           "200": {
@@ -398,7 +398,7 @@
     },
     "/devices/{id}/connectInfo": {
       "get": {
-        "summary": "get device entity connectInfo",
+        "summary": "获取设备连接信息",
         "operationId": "GetDeviceConnectInfo",
         "responses": {
           "200": {
@@ -430,7 +430,7 @@
     },
     "/devices/{id}/ext": {
       "post": {
-        "summary": "add device extensions",
+        "summary": "添加设备扩展信息kv",
         "operationId": "AddDeviceExt",
         "responses": {
           "200": {
@@ -470,7 +470,7 @@
         ]
       },
       "put": {
-        "summary": "update device extensions",
+        "summary": "更新设备扩展信息kv",
         "operationId": "UpdateDeviceExt",
         "responses": {
           "200": {
@@ -512,7 +512,7 @@
     },
     "/devices/{id}/ext/delete": {
       "post": {
-        "summary": "delete device extensions",
+        "summary": "删除设备扩展信息Kv",
         "operationId": "DelDeviceExt",
         "responses": {
           "200": {
@@ -554,7 +554,7 @@
     },
     "/devices/{id}/extBusiness": {
       "post": {
-        "summary": "add device extensions business",
+        "summary": "添加设备扩展业务",
         "operationId": "AddDeviceExtBusiness",
         "responses": {
           "200": {
@@ -594,7 +594,7 @@
         ]
       },
       "put": {
-        "summary": "update device extensions business",
+        "summary": "更新设备扩展业务",
         "operationId": "UpdateDeviceExtBusiness",
         "responses": {
           "200": {
@@ -636,7 +636,7 @@
     },
     "/devices/{id}/extBusiness/delete": {
       "post": {
-        "summary": "delete device extensions business",
+        "summary": "删除设备扩展业务",
         "operationId": "DelDeviceExtBusiness",
         "responses": {
           "200": {
@@ -678,7 +678,7 @@
     },
     "/devices/{id}/raw/set": {
       "post": {
-        "summary": "set device raw",
+        "summary": "调用原始数据下行反控",
         "operationId": "SetDeviceRaw",
         "responses": {
           "200": {
@@ -720,7 +720,7 @@
     },
     "/devices/{id}/rawData": {
       "get": {
-        "summary": "get device entity rawData",
+        "summary": "获取设备原始数据",
         "operationId": "GetDeviceRawData",
         "responses": {
           "200": {
@@ -752,7 +752,7 @@
     },
     "/devices/{id}/relation": {
       "get": {
-        "summary": "list data relation",
+        "summary": "获取设备数据映射关系列表",
         "operationId": "ListDeviceDataRelation",
         "responses": {
           "200": {
@@ -782,7 +782,7 @@
         ]
       },
       "post": {
-        "summary": "Create data relation",
+        "summary": "创建设备数据映射关系",
         "operationId": "CreateDeviceDataRelation",
         "responses": {
           "200": {
@@ -822,7 +822,7 @@
         ]
       },
       "put": {
-        "summary": "update data relation",
+        "summary": "更新设备数据映射关系",
         "operationId": "UpdateDeviceDataRelation",
         "responses": {
           "200": {
@@ -864,7 +864,7 @@
     },
     "/devices/{id}/relation/auto": {
       "post": {
-        "summary": "Create data relation auto",
+        "summary": "自动创建设备数据映射关系",
         "operationId": "CreateDeviceDataRelationAuto",
         "responses": {
           "200": {
@@ -906,7 +906,7 @@
     },
     "/devices/{id}/relation/delete": {
       "post": {
-        "summary": "delete data relation",
+        "summary": "删除设备数据映射关系",
         "operationId": "DeleteDeviceDataRelation",
         "responses": {
           "200": {
@@ -948,7 +948,7 @@
     },
     "/devices/{id}/relation/{path}": {
       "get": {
-        "summary": "get single relation",
+        "summary": "获取单条path数据映射关系",
         "operationId": "GetDeviceDataRelation",
         "responses": {
           "200": {
@@ -987,7 +987,7 @@
     },
     "/devices/{id}/sysInfo": {
       "get": {
-        "summary": "get device entity sysInfo",
+        "summary": "获取设备系统信息",
         "operationId": "GetDeviceSysInfo",
         "responses": {
           "200": {
@@ -1019,7 +1019,7 @@
     },
     "/devices/{id}/telemetryData": {
       "get": {
-        "summary": "get device entity telemetryData",
+        "summary": "获取设备遥测数据",
         "operationId": "GetDeviceTelemetryData",
         "responses": {
           "200": {
@@ -1051,7 +1051,7 @@
     },
     "/groups": {
       "post": {
-        "summary": "create entity group",
+        "summary": "创建设备组",
         "operationId": "CreateGroup",
         "responses": {
           "200": {
@@ -1086,7 +1086,7 @@
     },
     "/groups/delete": {
       "post": {
-        "summary": "delete entity group",
+        "summary": "删除设备组",
         "operationId": "DeleteGroup",
         "responses": {
           "200": {
@@ -1121,7 +1121,7 @@
     },
     "/groups/tree": {
       "post": {
-        "summary": "get group tree",
+        "summary": "获取设备组树状结构",
         "operationId": "GetGroupTree",
         "responses": {
           "200": {
@@ -1154,7 +1154,7 @@
     },
     "/groups/{id}": {
       "get": {
-        "summary": "get entity group",
+        "summary": "获取设备组详情",
         "operationId": "GetGroup",
         "responses": {
           "200": {
@@ -1184,7 +1184,7 @@
         ]
       },
       "put": {
-        "summary": "update entity group",
+        "summary": "更新设备组",
         "operationId": "UpdateGroup",
         "responses": {
           "200": {
@@ -1226,7 +1226,7 @@
     },
     "/groups/{id}/ext": {
       "post": {
-        "summary": "add group extensions",
+        "summary": "添加设备组扩展信息kv",
         "operationId": "AddGroupExt",
         "responses": {
           "200": {
@@ -1266,7 +1266,7 @@
         ]
       },
       "put": {
-        "summary": "update group extensions",
+        "summary": "更新设备组扩展信息KV",
         "operationId": "UpdateGroupExt",
         "responses": {
           "200": {
@@ -1308,7 +1308,7 @@
     },
     "/groups/{id}/ext/delete": {
       "post": {
-        "summary": "delete group extensions",
+        "summary": "删除设备组扩展信息KV",
         "operationId": "DelGroupExt",
         "responses": {
           "200": {
@@ -1350,7 +1350,7 @@
     },
     "/search": {
       "post": {
-        "summary": "search entity",
+        "summary": "搜索设备、设备组、设备模板等实体通用接口",
         "operationId": "SearchEntity",
         "responses": {
           "200": {
@@ -1385,7 +1385,7 @@
     },
     "/templates": {
       "post": {
-        "summary": "create Template",
+        "summary": "创建模板对象",
         "operationId": "CreateTemplate",
         "responses": {
           "200": {
@@ -1420,7 +1420,7 @@
     },
     "/templates/delete": {
       "post": {
-        "summary": "delete Template",
+        "summary": "删除模板对象",
         "operationId": "DeleteTemplate",
         "responses": {
           "200": {
@@ -1455,7 +1455,7 @@
     },
     "/templates/{uid}": {
       "get": {
-        "summary": "get Template",
+        "summary": "获取模板对象",
         "operationId": "GetTemplate",
         "responses": {
           "200": {
@@ -1485,7 +1485,7 @@
         ]
       },
       "put": {
-        "summary": "update Template",
+        "summary": "更新模板对象",
         "operationId": "UpdateTemplate",
         "responses": {
           "200": {
@@ -1527,7 +1527,7 @@
     },
     "/templates/{uid}/attribute": {
       "get": {
-        "summary": "list Template attribute",
+        "summary": "获取模板属性定义列表",
         "operationId": "ListTemplateAttribute",
         "responses": {
           "200": {
@@ -1557,7 +1557,7 @@
         ]
       },
       "post": {
-        "summary": "add Template attribute",
+        "summary": "添加模板属性定义",
         "operationId": "AddTemplateAttribute",
         "responses": {
           "200": {
@@ -1597,7 +1597,7 @@
         ]
       },
       "put": {
-        "summary": "update Template attribute",
+        "summary": "更新模板属性定义",
         "operationId": "UpdateTemplateAttribute",
         "responses": {
           "200": {
@@ -1639,7 +1639,7 @@
     },
     "/templates/{uid}/attribute/delete": {
       "post": {
-        "summary": "delete Template attribute",
+        "summary": "删除模板属性定义",
         "operationId": "DeleteTemplateAttribute",
         "responses": {
           "200": {
@@ -1681,7 +1681,7 @@
     },
     "/templates/{uid}/attribute/{id}": {
       "get": {
-        "summary": "get Template attribute",
+        "summary": "获取单条模板属性定义",
         "operationId": "GetTemplateAttribute",
         "responses": {
           "200": {
@@ -1720,7 +1720,7 @@
     },
     "/templates/{uid}/command": {
       "get": {
-        "summary": "list template command",
+        "summary": "获取模板命令定义列表",
         "operationId": "ListTemplateCommand",
         "responses": {
           "200": {
@@ -1750,7 +1750,7 @@
         ]
       },
       "post": {
-        "summary": "add template command",
+        "summary": "添加模板命令定义",
         "operationId": "AddTemplateCommand",
         "responses": {
           "200": {
@@ -1790,7 +1790,7 @@
         ]
       },
       "put": {
-        "summary": "update template command",
+        "summary": "更新模板命令定义",
         "operationId": "UpdateTemplateCommand",
         "responses": {
           "200": {
@@ -1832,7 +1832,7 @@
     },
     "/templates/{uid}/command/delete": {
       "post": {
-        "summary": "delete template command",
+        "summary": "删除模板命令定义",
         "operationId": "DeleteTemplateCommand",
         "responses": {
           "200": {
@@ -1874,7 +1874,7 @@
     },
     "/templates/{uid}/command/{id}": {
       "get": {
-        "summary": "get Template command",
+        "summary": "获取模板单条命令定义",
         "operationId": "GetTemplateCommand",
         "responses": {
           "200": {
@@ -1913,7 +1913,7 @@
     },
     "/templates/{uid}/telemetry": {
       "get": {
-        "summary": "list Template telemetry",
+        "summary": "获取模板遥测定义列表",
         "operationId": "ListTemplateTelemetry",
         "responses": {
           "200": {
@@ -1943,7 +1943,7 @@
         ]
       },
       "post": {
-        "summary": "add Template telemetry",
+        "summary": "添加模板遥测定义",
         "operationId": "AddTemplateTelemetry",
         "responses": {
           "200": {
@@ -1983,7 +1983,7 @@
         ]
       },
       "put": {
-        "summary": "update Template telemetry",
+        "summary": "更新模板遥测定义",
         "operationId": "UpdateTemplateTelemetry",
         "responses": {
           "200": {
@@ -2025,7 +2025,7 @@
     },
     "/templates/{uid}/telemetry/delete": {
       "post": {
-        "summary": "delete Template telemetry",
+        "summary": "删除模板遥测定义",
         "operationId": "DeleteTemplateTelemetry",
         "responses": {
           "200": {
@@ -2067,7 +2067,7 @@
     },
     "/templates/{uid}/telemetry/{id}": {
       "get": {
-        "summary": "get Template telemetry",
+        "summary": "获取模板单条遥测定义",
         "operationId": "GetTemplateTelemetry",
         "responses": {
           "200": {
@@ -2106,7 +2106,7 @@
     },
     "/templates/{uid}/telemetry/{id}/ext": {
       "post": {
-        "summary": "add template telemetry ext",
+        "summary": "添加模板遥测扩展配置",
         "operationId": "AddTemplateTelemetryExt",
         "responses": {
           "200": {
@@ -2153,7 +2153,7 @@
         ]
       },
       "put": {
-        "summary": "update template telemetry ext",
+        "summary": "更新模板遥测扩展配置",
         "operationId": "UpdateTemplateTelemetryExt",
         "responses": {
           "200": {
@@ -2202,7 +2202,7 @@
     },
     "/templates/{uid}/telemetry/{id}/ext/delete": {
       "post": {
-        "summary": "delete template telemetry ext",
+        "summary": "删除模板遥测扩展配置",
         "operationId": "DeleteTemplateTelemetryExt",
         "responses": {
           "200": {
