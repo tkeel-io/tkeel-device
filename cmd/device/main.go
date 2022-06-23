@@ -72,7 +72,7 @@ func main() {
 		Template_v1.RegisterTemplateHTTPServer(httpSrv.Container, TemplateSrv)
 		Template_v1.RegisterTemplateServer(grpcSrv.GetServe(), TemplateSrv)
 
-		metricsSrv := service.NewMetricsService(metrics.CollectorDeviceNumRequest, metrics.CollectorDeviceTemplateRequest)
+		metricsSrv := service.NewMetricsService(metrics.CollectorDeviceNumRequest, metrics.CollectorDeviceTemplateRequest, metrics.CollectorDeviceOnlineRequest)
 		Metrics_v1.RegisterMetricsHTTPServer(httpSrv.Container, metricsSrv)
 	}
 
