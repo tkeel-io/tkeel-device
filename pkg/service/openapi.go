@@ -30,33 +30,15 @@ func (s *OpenapiService) AddonsIdentify(ctx context.Context, in *openapi_v1.Addo
 
 // Identify implements Identify.OpenapiServer.
 func (s *OpenapiService) Identify(ctx context.Context, in *emptypb.Empty) (*openapi_v1.IdentifyResponse, error) {
-	//device max
-	//devMax := make(map[string]interface{})
-	//devMax["key"] = "device_created_max"
-	//devMax["description"] = "创建设备最大数"
-	//devMax["value"] = 10000
-	////tempalte max
-	//templateMax := make(map[string]interface{})
-	//templateMax["key"] = "device_template_max"
-	//templateMax["description"] = "创建设备模板最大数"
-	//templateMax["value"] = 10000
-	//
-	//profileArray := make([]interface{}, 2)
-	//profileArray = append(profileArray, devMax)
-	//profileArray = append(profileArray, templateMax)
-	//
-	//profilesBytes, _ := json.Marshal(profileArray)
-	//if nil != err {
-	//}
 	profiles := map[string]*openapi_v1.ProfileSchema{
-		"device_created_max":  {Type: "number", Title: "创建设备最大数", Default: 10000, MultipleOf: 1, Maximum: 10000, Minimum: 0},
-		"device_template_max": {Type: "number", Title: "创建设备模板最大数", Default: 10000, MultipleOf: 1, Maximum: 10000, Minimum: 0},
+		"device_created_max":  &openapi_v1.ProfileSchema{Type: "number", Title: "创建设备最大数", Default: 10000, MultipleOf: 1, Maximum: 10000, Minimum: 0},
+		"device_template_max": &openapi_v1.ProfileSchema{Type: "number", Title: "创建设备模板最大数", Default: 10000, MultipleOf: 1, Maximum: 10000, Minimum: 0},
 	}
 
 	return &openapi_v1.IdentifyResponse{
 		Res:                     util.GetV1ResultOK(),
 		PluginId:                "tkeel-device",
-		Version:                 "v0.4.1",
+		Version:                 "v0.4.2",
 		TkeelVersion:            "v0.4.0",
 		DisableManualActivation: true,
 		Profiles:                profiles,

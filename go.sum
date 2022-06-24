@@ -260,6 +260,8 @@ github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220623072943-cffa523e6e36 h
 github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220623072943-cffa523e6e36/go.mod h1:tjJgHPar2pFjydhnOCLspww8tSOvcKch241PeP9OL8E=
 github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220623110105-ecb2454d2948 h1:WX4DO4yO63t1mPNeTRURNoC8RoIypK9FDQYEzi7G5B4=
 github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220623110105-ecb2454d2948/go.mod h1:tjJgHPar2pFjydhnOCLspww8tSOvcKch241PeP9OL8E=
+github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220624023618-32db91cf0860 h1:k8EFmOucfdYpdz6EuD9q+wOOdkGMNzx9rApTPrksiBY=
+github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220624023618-32db91cf0860/go.mod h1:tjJgHPar2pFjydhnOCLspww8tSOvcKch241PeP9OL8E=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

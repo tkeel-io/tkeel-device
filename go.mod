@@ -7,7 +7,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/prometheus/client_golang v1.12.2
 	github.com/tkeel-io/kit v0.0.0-20220522082406-248e4772e711
-	github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220623110105-ecb2454d2948
+	github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220624023618-32db91cf0860
 	google.golang.org/genproto v0.0.0-20220621134657-43db42f103f7
 	google.golang.org/grpc v1.47.0
 	google.golang.org/protobuf v1.28.0
