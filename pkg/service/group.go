@@ -498,7 +498,7 @@ func (s *GroupService) checkChild(ctx context.Context, id string) error {
 		return errors.New("total is not int type")
 	}
 
-	if tl == 1 { //self
+	if tl == 1 || tl == 0 { //self
 		return nil
 	} else {
 		return errors.New("have SubNode")
