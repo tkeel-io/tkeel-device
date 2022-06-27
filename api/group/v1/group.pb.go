@@ -30,7 +30,7 @@ type CreateGroupRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Group *GroupEntity `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
+	Group *GroupEntity `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
 }
 
 func (x *CreateGroupRequest) Reset() {
@@ -77,8 +77,8 @@ type UpdateGroupRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id    string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	Group *GroupEntity `protobuf:"bytes,2,opt,name=group,proto3" json:"group"`
+	Id    string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Group *GroupEntity `protobuf:"bytes,2,opt,name=group,proto3" json:"group,omitempty"`
 }
 
 func (x *UpdateGroupRequest) Reset() {
@@ -132,7 +132,7 @@ type DeleteGroupRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Ids *Ids `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids"`
+	Ids *Ids `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
 }
 
 func (x *DeleteGroupRequest) Reset() {
@@ -179,7 +179,7 @@ type DeleteGroupResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	FaildDelGroup []*FaildDelGroup `protobuf:"bytes,1,rep,name=faildDelGroup,proto3" json:"faildDelGroup"`
+	FaildDelGroup []*FaildDelGroup `protobuf:"bytes,1,rep,name=faildDelGroup,proto3" json:"faildDelGroup,omitempty"`
 }
 
 func (x *DeleteGroupResponse) Reset() {
@@ -226,8 +226,8 @@ type FaildDelGroup struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	Reason string `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason"`
+	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Reason string `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
 }
 
 func (x *FaildDelGroup) Reset() {
@@ -281,7 +281,7 @@ type GetGroupRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (x *GetGroupRequest) Reset() {
@@ -328,7 +328,7 @@ type GetGroupTreeRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ListEntityQuery *ListEntityQuery `protobuf:"bytes,1,opt,name=listEntityQuery,proto3" json:"listEntityQuery"`
+	ListEntityQuery *ListEntityQuery `protobuf:"bytes,1,opt,name=listEntityQuery,proto3" json:"listEntityQuery,omitempty"`
 }
 
 func (x *GetGroupTreeRequest) Reset() {
@@ -375,8 +375,8 @@ type AddGroupExtRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id  string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	Kvs *structpb.Value `protobuf:"bytes,2,opt,name=kvs,proto3" json:"kvs"`
+	Id  string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Kvs *structpb.Value `protobuf:"bytes,2,opt,name=kvs,proto3" json:"kvs,omitempty"`
 }
 
 func (x *AddGroupExtRequest) Reset() {
@@ -430,8 +430,8 @@ type UpdateGroupExtRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id  string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	Kvs *structpb.Value `protobuf:"bytes,2,opt,name=kvs,proto3" json:"kvs"`
+	Id  string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Kvs *structpb.Value `protobuf:"bytes,2,opt,name=kvs,proto3" json:"kvs,omitempty"`
 }
 
 func (x *UpdateGroupExtRequest) Reset() {
@@ -485,8 +485,8 @@ type DelGroupExtRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Keys *Keys  `protobuf:"bytes,1,opt,name=keys,proto3" json:"keys"`
-	Id   string `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
+	Keys *Keys  `protobuf:"bytes,1,opt,name=keys,proto3" json:"keys,omitempty"`
+	Id   string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (x *DelGroupExtRequest) Reset() {
@@ -541,8 +541,8 @@ type GroupEntityCoreInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Group    *GroupEntity         `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	SysField *GroupEntitySysField `protobuf:"bytes,3,opt,name=sysField,proto3" json:"sysField"` //GroupEntitySubEntityIds subIds = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组子设备信息"}];
+	Group    *GroupEntity         `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	SysField *GroupEntitySysField `protobuf:"bytes,3,opt,name=sysField,proto3" json:"sysField,omitempty"` //GroupEntitySubEntityIds subIds = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组子设备信息"}];
 }
 
 func (x *GroupEntityCoreInfo) Reset() {
@@ -596,7 +596,7 @@ type UpdateGroupEntityCoreInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Group *GroupEntity `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
+	Group *GroupEntity `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
 }
 
 func (x *UpdateGroupEntityCoreInfo) Reset() {
@@ -644,7 +644,7 @@ type CreateGroupResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
-	GroupObject *structpb.Value `protobuf:"bytes,1,opt,name=groupObject,proto3" json:"groupObject"`
+	GroupObject *structpb.Value `protobuf:"bytes,1,opt,name=groupObject,proto3" json:"groupObject,omitempty"`
 }
 
 func (x *CreateGroupResponse) Reset() {
@@ -692,7 +692,7 @@ type UpdateGroupResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
-	GroupObject *structpb.Value `protobuf:"bytes,1,opt,name=groupObject,proto3" json:"groupObject"`
+	GroupObject *structpb.Value `protobuf:"bytes,1,opt,name=groupObject,proto3" json:"groupObject,omitempty"`
 }
 
 func (x *UpdateGroupResponse) Reset() {
@@ -740,7 +740,7 @@ type GetGroupResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse groupObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备组信息"}];
-	GroupObject *structpb.Value `protobuf:"bytes,1,opt,name=groupObject,proto3" json:"groupObject"`
+	GroupObject *structpb.Value `protobuf:"bytes,1,opt,name=groupObject,proto3" json:"groupObject,omitempty"`
 }
 
 func (x *GetGroupResponse) Reset() {
@@ -787,7 +787,7 @@ type GetGroupTreeResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	GroupTree *structpb.Value `protobuf:"bytes,1,opt,name=GroupTree,proto3" json:"GroupTree"`
+	GroupTree *structpb.Value `protobuf:"bytes,1,opt,name=GroupTree,proto3" json:"GroupTree,omitempty"`
 }
 
 func (x *GetGroupTreeResponse) Reset() {
@@ -834,12 +834,12 @@ type GroupEntity struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name        string          `protobuf:"bytes,1,opt,name=name,proto3" json:"name"`
-	CustomId    string          `protobuf:"bytes,2,opt,name=customId,proto3" json:"customId"`
-	Description string          `protobuf:"bytes,3,opt,name=description,proto3" json:"description"`
-	ParentId    string          `protobuf:"bytes,4,opt,name=parentId,proto3" json:"parentId"`
-	ParentName  string          `protobuf:"bytes,5,opt,name=parentName,proto3" json:"parentName"`
-	Ext         *structpb.Value `protobuf:"bytes,6,opt,name=ext,proto3" json:"ext"`
+	Name        string          `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	CustomId    string          `protobuf:"bytes,2,opt,name=customId,proto3" json:"customId,omitempty"`
+	Description string          `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	ParentId    string          `protobuf:"bytes,4,opt,name=parentId,proto3" json:"parentId,omitempty"`
+	ParentName  string          `protobuf:"bytes,5,opt,name=parentName,proto3" json:"parentName,omitempty"`
+	Ext         *structpb.Value `protobuf:"bytes,6,opt,name=ext,proto3" json:"ext,omitempty"`
 }
 
 func (x *GroupEntity) Reset() {
@@ -921,7 +921,7 @@ type GroupEntitySubEntityIds struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SubEntityId map[string]string `protobuf:"bytes,1,rep,name=subEntityId,proto3" json:"subEntityId" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	SubEntityId map[string]string `protobuf:"bytes,1,rep,name=subEntityId,proto3" json:"subEntityId,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *GroupEntitySubEntityIds) Reset() {
@@ -968,13 +968,13 @@ type GroupEntitySysField struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	XId        string `protobuf:"bytes,1,opt,name=_id,json=Id,proto3" json:"_id"`
-	XCreatedAt int64  `protobuf:"varint,2,opt,name=_createdAt,json=CreatedAt,proto3" json:"_createdAt"`
-	XUpdatedAt int64  `protobuf:"varint,3,opt,name=_updatedAt,json=UpdatedAt,proto3" json:"_updatedAt"`
-	XOwner     string `protobuf:"bytes,4,opt,name=_owner,json=Owner,proto3" json:"_owner"`
-	XSource    string `protobuf:"bytes,5,opt,name=_source,json=Source,proto3" json:"_source"`
-	XSpacePath string `protobuf:"bytes,6,opt,name=_spacePath,json=SpacePath,proto3" json:"_spacePath"`
-	XTenantId  string `protobuf:"bytes,7,opt,name=_tenantId,json=TenantId,proto3" json:"_tenantId"`
+	XId        string `protobuf:"bytes,1,opt,name=_id,json=Id,proto3" json:"_id,omitempty"`
+	XCreatedAt int64  `protobuf:"varint,2,opt,name=_createdAt,json=CreatedAt,proto3" json:"_createdAt,omitempty"`
+	XUpdatedAt int64  `protobuf:"varint,3,opt,name=_updatedAt,json=UpdatedAt,proto3" json:"_updatedAt,omitempty"`
+	XOwner     string `protobuf:"bytes,4,opt,name=_owner,json=Owner,proto3" json:"_owner,omitempty"`
+	XSource    string `protobuf:"bytes,5,opt,name=_source,json=Source,proto3" json:"_source,omitempty"`
+	XSpacePath string `protobuf:"bytes,6,opt,name=_spacePath,json=SpacePath,proto3" json:"_spacePath,omitempty"`
+	XTenantId  string `protobuf:"bytes,7,opt,name=_tenantId,json=TenantId,proto3" json:"_tenantId,omitempty"`
 }
 
 func (x *GroupEntitySysField) Reset() {
@@ -1063,12 +1063,12 @@ type ListEntityQuery struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PageNum      int32        `protobuf:"varint,1,opt,name=page_num,json=pageNum,proto3" json:"page_num"`
-	PageSize     int32        `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size"`
-	OrderBy      string       `protobuf:"bytes,3,opt,name=order_by,json=orderBy,proto3" json:"order_by"`
-	IsDescending bool         `protobuf:"varint,4,opt,name=is_descending,json=isDescending,proto3" json:"is_descending"`
-	Query        string       `protobuf:"bytes,5,opt,name=query,proto3" json:"query"`
-	Condition    []*Condition `protobuf:"bytes,6,rep,name=condition,proto3" json:"condition"`
+	PageNum      int32        `protobuf:"varint,1,opt,name=page_num,json=pageNum,proto3" json:"page_num,omitempty"`
+	PageSize     int32        `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	OrderBy      string       `protobuf:"bytes,3,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
+	IsDescending bool         `protobuf:"varint,4,opt,name=is_descending,json=isDescending,proto3" json:"is_descending,omitempty"`
+	Query        string       `protobuf:"bytes,5,opt,name=query,proto3" json:"query,omitempty"`
+	Condition    []*Condition `protobuf:"bytes,6,rep,name=condition,proto3" json:"condition,omitempty"`
 }
 
 func (x *ListEntityQuery) Reset() {
@@ -1150,9 +1150,9 @@ type Condition struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Field    string `protobuf:"bytes,1,opt,name=field,proto3" json:"field"`
-	Value    string `protobuf:"bytes,2,opt,name=value,proto3" json:"value"`
-	Operator string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator"`
+	Field    string `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
+	Value    string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Operator string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
 func (x *Condition) Reset() {
@@ -1213,7 +1213,7 @@ type Ids struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Ids []string `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids"`
+	Ids []string `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids,omitempty"`
 }
 
 func (x *Ids) Reset() {
@@ -1260,7 +1260,7 @@ type Keys struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Keys []string `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys"`
+	Keys []string `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys,omitempty"`
 }
 
 func (x *Keys) Reset() {

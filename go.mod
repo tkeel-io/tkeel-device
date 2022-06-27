@@ -5,8 +5,9 @@ go 1.17
 require (
 	github.com/emicklei/go-restful v2.15.0+incompatible
 	github.com/google/uuid v1.3.0
+	github.com/prometheus/client_golang v1.12.2
 	github.com/tkeel-io/kit v0.0.0-20220522082406-248e4772e711
-	github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220622042521-3c3f36f394cf
+	github.com/tkeel-io/tkeel-interface/openapi v0.0.0-20220624023618-32db91cf0860
 	google.golang.org/genproto v0.0.0-20220621134657-43db42f103f7
 	google.golang.org/grpc v1.47.0
 	google.golang.org/protobuf v1.28.0
@@ -15,10 +16,7 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
-	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/golang/glog v1.0.0 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
-	github.com/prometheus/client_golang v1.12.2 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
@@ -37,5 +35,4 @@ require (
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

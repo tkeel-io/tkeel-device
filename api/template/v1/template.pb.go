@@ -30,9 +30,9 @@ type TemplateBasicInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name"`
-	CustomId    string `protobuf:"bytes,2,opt,name=customId,proto3" json:"customId"`
-	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description"`
+	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	CustomId    string `protobuf:"bytes,2,opt,name=customId,proto3" json:"customId,omitempty"`
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
 }
 
 func (x *TemplateBasicInfo) Reset() {
@@ -93,11 +93,11 @@ type PropConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name        string          `protobuf:"bytes,1,opt,name=name,proto3" json:"name"`
-	Id          string          `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
-	Type        string          `protobuf:"bytes,3,opt,name=type,proto3" json:"type"`
-	Define      *structpb.Value `protobuf:"bytes,4,opt,name=define,proto3" json:"define"`
-	Description string          `protobuf:"bytes,5,opt,name=description,proto3" json:"description"`
+	Name        string          `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Id          string          `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Type        string          `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
+	Define      *structpb.Value `protobuf:"bytes,4,opt,name=define,proto3" json:"define,omitempty"`
+	Description string          `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
 }
 
 func (x *PropConfig) Reset() {
@@ -172,7 +172,7 @@ type Ids struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Ids []string `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids"`
+	Ids []string `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids,omitempty"`
 }
 
 func (x *Ids) Reset() {
@@ -219,7 +219,7 @@ type Keys struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Keys []string `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys"`
+	Keys []string `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys,omitempty"`
 }
 
 func (x *Keys) Reset() {
@@ -267,7 +267,7 @@ type CreateTemplateRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BasicInfo *TemplateBasicInfo `protobuf:"bytes,1,opt,name=basicInfo,proto3" json:"basicInfo"`
+	BasicInfo *TemplateBasicInfo `protobuf:"bytes,1,opt,name=basicInfo,proto3" json:"basicInfo,omitempty"`
 }
 
 func (x *CreateTemplateRequest) Reset() {
@@ -315,7 +315,7 @@ type CreateTemplateResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
-	TemplateObject *structpb.Value `protobuf:"bytes,1,opt,name=templateObject,proto3" json:"templateObject"`
+	TemplateObject *structpb.Value `protobuf:"bytes,1,opt,name=templateObject,proto3" json:"templateObject,omitempty"`
 }
 
 func (x *CreateTemplateResponse) Reset() {
@@ -362,8 +362,8 @@ type UpdateTemplateRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BasicInfo *TemplateBasicInfo `protobuf:"bytes,1,opt,name=basicInfo,proto3" json:"basicInfo"`
-	Uid       string             `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid"`
+	BasicInfo *TemplateBasicInfo `protobuf:"bytes,1,opt,name=basicInfo,proto3" json:"basicInfo,omitempty"`
+	Uid       string             `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *UpdateTemplateRequest) Reset() {
@@ -418,7 +418,7 @@ type UpdateTemplateResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
-	TemplateObject *structpb.Value `protobuf:"bytes,1,opt,name=templateObject,proto3" json:"templateObject"`
+	TemplateObject *structpb.Value `protobuf:"bytes,1,opt,name=templateObject,proto3" json:"templateObject,omitempty"`
 }
 
 func (x *UpdateTemplateResponse) Reset() {
@@ -465,7 +465,7 @@ type DeleteTemplateRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Ids *Ids `protobuf:"bytes,2,opt,name=ids,proto3" json:"ids"`
+	Ids *Ids `protobuf:"bytes,2,opt,name=ids,proto3" json:"ids,omitempty"`
 }
 
 func (x *DeleteTemplateRequest) Reset() {
@@ -512,7 +512,7 @@ type DeleteTemplateResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	FaildDelTemplate []*FaildDelTemplate `protobuf:"bytes,1,rep,name=faildDelTemplate,proto3" json:"faildDelTemplate"`
+	FaildDelTemplate []*FaildDelTemplate `protobuf:"bytes,1,rep,name=faildDelTemplate,proto3" json:"faildDelTemplate,omitempty"`
 }
 
 func (x *DeleteTemplateResponse) Reset() {
@@ -559,8 +559,8 @@ type FaildDelTemplate struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	Reason string `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason"`
+	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Reason string `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
 }
 
 func (x *FaildDelTemplate) Reset() {
@@ -614,7 +614,7 @@ type GetTemplateRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *GetTemplateRequest) Reset() {
@@ -661,7 +661,7 @@ type GetTemplateResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	TemplateObject *structpb.Value `protobuf:"bytes,1,opt,name=templateObject,proto3" json:"templateObject"` //api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
+	TemplateObject *structpb.Value `protobuf:"bytes,1,opt,name=templateObject,proto3" json:"templateObject,omitempty"` //api.core.v1.EntityResponse templateObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板对象"}];
 }
 
 func (x *GetTemplateResponse) Reset() {
@@ -710,8 +710,8 @@ type AddTemplateAttributeRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	//PropConfig attr  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性对象"}];
-	Attr *structpb.Value `protobuf:"bytes,2,opt,name=attr,proto3" json:"attr"`
-	Uid  string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
+	Attr *structpb.Value `protobuf:"bytes,2,opt,name=attr,proto3" json:"attr,omitempty"`
+	Uid  string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *AddTemplateAttributeRequest) Reset() {
@@ -766,8 +766,8 @@ type UpdateTemplateAttributeRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	//PropConfig attr  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性对象"}];
-	Attr *structpb.Value `protobuf:"bytes,2,opt,name=attr,proto3" json:"attr"`
-	Uid  string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
+	Attr *structpb.Value `protobuf:"bytes,2,opt,name=attr,proto3" json:"attr,omitempty"`
+	Uid  string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *UpdateTemplateAttributeRequest) Reset() {
@@ -821,8 +821,8 @@ type DeleteTemplateAttributeRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
-	Ids *Ids   `protobuf:"bytes,2,opt,name=ids,proto3" json:"ids"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Ids *Ids   `protobuf:"bytes,2,opt,name=ids,proto3" json:"ids,omitempty"`
 }
 
 func (x *DeleteTemplateAttributeRequest) Reset() {
@@ -876,8 +876,8 @@ type GetTemplateAttributeRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
-	Id  string `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Id  string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (x *GetTemplateAttributeRequest) Reset() {
@@ -932,7 +932,7 @@ type GetTemplateAttributeResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse templateAttrSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个属性对象"}];
-	TemplateAttrSingleObject *structpb.Value `protobuf:"bytes,1,opt,name=templateAttrSingleObject,proto3" json:"templateAttrSingleObject"`
+	TemplateAttrSingleObject *structpb.Value `protobuf:"bytes,1,opt,name=templateAttrSingleObject,proto3" json:"templateAttrSingleObject,omitempty"`
 }
 
 func (x *GetTemplateAttributeResponse) Reset() {
@@ -979,7 +979,7 @@ type ListTemplateAttributeRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *ListTemplateAttributeRequest) Reset() {
@@ -1028,7 +1028,7 @@ type ListTemplateAttributeResponse struct {
 
 	//repeated Attribute attributes = 3;
 	//api.core.v1.EntityResponse templateAttrObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "属性列表对象"}];
-	TemplateAttrObject *structpb.Value `protobuf:"bytes,1,opt,name=templateAttrObject,proto3" json:"templateAttrObject"`
+	TemplateAttrObject *structpb.Value `protobuf:"bytes,1,opt,name=templateAttrObject,proto3" json:"templateAttrObject,omitempty"`
 }
 
 func (x *ListTemplateAttributeResponse) Reset() {
@@ -1077,8 +1077,8 @@ type AddTemplateTelemetryRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	//PropConfig tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
-	Tele *structpb.Value `protobuf:"bytes,2,opt,name=tele,proto3" json:"tele"`
-	Uid  string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
+	Tele *structpb.Value `protobuf:"bytes,2,opt,name=tele,proto3" json:"tele,omitempty"`
+	Uid  string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *AddTemplateTelemetryRequest) Reset() {
@@ -1133,8 +1133,8 @@ type UpdateTemplateTelemetryRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	//PropConfig tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
-	Tele *structpb.Value `protobuf:"bytes,2,opt,name=tele,proto3" json:"tele"`
-	Uid  string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
+	Tele *structpb.Value `protobuf:"bytes,2,opt,name=tele,proto3" json:"tele,omitempty"`
+	Uid  string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *UpdateTemplateTelemetryRequest) Reset() {
@@ -1188,8 +1188,8 @@ type DeleteTemplateTelemetryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
-	Ids *Ids   `protobuf:"bytes,2,opt,name=ids,proto3" json:"ids"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Ids *Ids   `protobuf:"bytes,2,opt,name=ids,proto3" json:"ids,omitempty"`
 }
 
 func (x *DeleteTemplateTelemetryRequest) Reset() {
@@ -1243,8 +1243,8 @@ type GetTemplateTelemetryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
-	Id  string `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Id  string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (x *GetTemplateTelemetryRequest) Reset() {
@@ -1299,7 +1299,7 @@ type GetTemplateTelemetryResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse templateTeleSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个遥测对象"}];
-	TemplateTeleSingleObject *structpb.Value `protobuf:"bytes,1,opt,name=templateTeleSingleObject,proto3" json:"templateTeleSingleObject"`
+	TemplateTeleSingleObject *structpb.Value `protobuf:"bytes,1,opt,name=templateTeleSingleObject,proto3" json:"templateTeleSingleObject,omitempty"`
 }
 
 func (x *GetTemplateTelemetryResponse) Reset() {
@@ -1346,7 +1346,7 @@ type ListTemplateTelemetryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *ListTemplateTelemetryRequest) Reset() {
@@ -1394,7 +1394,7 @@ type ListTemplateTelemetryResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse templateTeleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测列表对象"}];
-	TemplateTeleObject *structpb.Value `protobuf:"bytes,1,opt,name=templateTeleObject,proto3" json:"templateTeleObject"`
+	TemplateTeleObject *structpb.Value `protobuf:"bytes,1,opt,name=templateTeleObject,proto3" json:"templateTeleObject,omitempty"`
 }
 
 func (x *ListTemplateTelemetryResponse) Reset() {
@@ -1441,9 +1441,9 @@ type AddTemplateTelemetryExtRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
-	Id  string          `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
-	Kvs *structpb.Value `protobuf:"bytes,3,opt,name=kvs,proto3" json:"kvs"`
+	Uid string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Id  string          `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Kvs *structpb.Value `protobuf:"bytes,3,opt,name=kvs,proto3" json:"kvs,omitempty"`
 }
 
 func (x *AddTemplateTelemetryExtRequest) Reset() {
@@ -1504,9 +1504,9 @@ type UpdateTemplateTelemetryExtRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
-	Id  string          `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
-	Kvs *structpb.Value `protobuf:"bytes,3,opt,name=kvs,proto3" json:"kvs"`
+	Uid string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Id  string          `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Kvs *structpb.Value `protobuf:"bytes,3,opt,name=kvs,proto3" json:"kvs,omitempty"`
 }
 
 func (x *UpdateTemplateTelemetryExtRequest) Reset() {
@@ -1567,9 +1567,9 @@ type DeleteTemplateTelemetryExtRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid  string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
-	Id   string `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
-	Keys *Keys  `protobuf:"bytes,3,opt,name=keys,proto3" json:"keys"`
+	Uid  string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Id   string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Keys *Keys  `protobuf:"bytes,3,opt,name=keys,proto3" json:"keys,omitempty"`
 }
 
 func (x *DeleteTemplateTelemetryExtRequest) Reset() {
@@ -1632,8 +1632,8 @@ type AddTemplateCommandRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	//PropConfig cmd  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令"}];
-	Cmd *structpb.Value `protobuf:"bytes,2,opt,name=cmd,proto3" json:"cmd"`
-	Uid string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
+	Cmd *structpb.Value `protobuf:"bytes,2,opt,name=cmd,proto3" json:"cmd,omitempty"`
+	Uid string          `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *AddTemplateCommandRequest) Reset() {
@@ -1688,9 +1688,9 @@ type UpdateTemplateCommandRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	//PropConfig cmd  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令"}];
-	Cmd *structpb.Value `protobuf:"bytes,2,opt,name=cmd,proto3" json:"cmd"`
+	Cmd *structpb.Value `protobuf:"bytes,2,opt,name=cmd,proto3" json:"cmd,omitempty"`
 	//google.protobuf.Value cmd  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令"}];
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *UpdateTemplateCommandRequest) Reset() {
@@ -1744,8 +1744,8 @@ type DeleteTemplateCommandRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
-	Ids *Ids   `protobuf:"bytes,2,opt,name=ids,proto3" json:"ids"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Ids *Ids   `protobuf:"bytes,2,opt,name=ids,proto3" json:"ids,omitempty"`
 }
 
 func (x *DeleteTemplateCommandRequest) Reset() {
@@ -1799,8 +1799,8 @@ type GetTemplateCommandRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
-	Id  string `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Id  string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (x *GetTemplateCommandRequest) Reset() {
@@ -1855,7 +1855,7 @@ type GetTemplateCommandResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse templateCmdSingleObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "单个命令对象"}];
-	TemplateCmdSingleObject *structpb.Value `protobuf:"bytes,1,opt,name=templateCmdSingleObject,proto3" json:"templateCmdSingleObject"`
+	TemplateCmdSingleObject *structpb.Value `protobuf:"bytes,1,opt,name=templateCmdSingleObject,proto3" json:"templateCmdSingleObject,omitempty"`
 }
 
 func (x *GetTemplateCommandResponse) Reset() {
@@ -1902,7 +1902,7 @@ type ListTemplateCommandRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *ListTemplateCommandRequest) Reset() {
@@ -1950,7 +1950,7 @@ type ListTemplateCommandResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse templateCmdObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "命令列表对象"}];
-	TemplateCmdObject *structpb.Value `protobuf:"bytes,1,opt,name=templateCmdObject,proto3" json:"templateCmdObject"`
+	TemplateCmdObject *structpb.Value `protobuf:"bytes,1,opt,name=templateCmdObject,proto3" json:"templateCmdObject,omitempty"`
 }
 
 func (x *ListTemplateCommandResponse) Reset() {
@@ -1998,8 +1998,8 @@ type TemplateEntityCoreInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BasicInfo *TemplateBasicInfo      `protobuf:"bytes,1,opt,name=basicInfo,proto3" json:"basicInfo"`
-	SysField  *TemplateEntitySysField `protobuf:"bytes,2,opt,name=sysField,proto3" json:"sysField"`
+	BasicInfo *TemplateBasicInfo      `protobuf:"bytes,1,opt,name=basicInfo,proto3" json:"basicInfo,omitempty"`
+	SysField  *TemplateEntitySysField `protobuf:"bytes,2,opt,name=sysField,proto3" json:"sysField,omitempty"`
 }
 
 func (x *TemplateEntityCoreInfo) Reset() {
@@ -2053,7 +2053,7 @@ type UpdateTemplateEntityCoreInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BasicInfo *TemplateBasicInfo `protobuf:"bytes,1,opt,name=basicInfo,proto3" json:"basicInfo"`
+	BasicInfo *TemplateBasicInfo `protobuf:"bytes,1,opt,name=basicInfo,proto3" json:"basicInfo,omitempty"`
 }
 
 func (x *UpdateTemplateEntityCoreInfo) Reset() {
@@ -2100,12 +2100,12 @@ type TemplateEntitySysField struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	XId        string `protobuf:"bytes,1,opt,name=_id,json=Id,proto3" json:"_id"`
-	XCreatedAt int64  `protobuf:"varint,2,opt,name=_createdAt,json=CreatedAt,proto3" json:"_createdAt"`
-	XUpdatedAt int64  `protobuf:"varint,3,opt,name=_updatedAt,json=UpdatedAt,proto3" json:"_updatedAt"`
-	XOwner     string `protobuf:"bytes,4,opt,name=_owner,json=Owner,proto3" json:"_owner"`
-	XSource    string `protobuf:"bytes,5,opt,name=_source,json=Source,proto3" json:"_source"`
-	XTenantId  string `protobuf:"bytes,6,opt,name=_tenantId,json=TenantId,proto3" json:"_tenantId"`
+	XId        string `protobuf:"bytes,1,opt,name=_id,json=Id,proto3" json:"_id,omitempty"`
+	XCreatedAt int64  `protobuf:"varint,2,opt,name=_createdAt,json=CreatedAt,proto3" json:"_createdAt,omitempty"`
+	XUpdatedAt int64  `protobuf:"varint,3,opt,name=_updatedAt,json=UpdatedAt,proto3" json:"_updatedAt,omitempty"`
+	XOwner     string `protobuf:"bytes,4,opt,name=_owner,json=Owner,proto3" json:"_owner,omitempty"`
+	XSource    string `protobuf:"bytes,5,opt,name=_source,json=Source,proto3" json:"_source,omitempty"`
+	XTenantId  string `protobuf:"bytes,6,opt,name=_tenantId,json=TenantId,proto3" json:"_tenantId,omitempty"`
 }
 
 func (x *TemplateEntitySysField) Reset() {
@@ -2187,12 +2187,12 @@ type ListEntityQuery struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PageNum      int32        `protobuf:"varint,1,opt,name=page_num,json=pageNum,proto3" json:"page_num"`
-	PageSize     int32        `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size"`
-	OrderBy      string       `protobuf:"bytes,3,opt,name=order_by,json=orderBy,proto3" json:"order_by"`
-	IsDescending bool         `protobuf:"varint,4,opt,name=is_descending,json=isDescending,proto3" json:"is_descending"`
-	Query        string       `protobuf:"bytes,5,opt,name=query,proto3" json:"query"`
-	Condition    []*Condition `protobuf:"bytes,6,rep,name=condition,proto3" json:"condition"`
+	PageNum      int32        `protobuf:"varint,1,opt,name=page_num,json=pageNum,proto3" json:"page_num,omitempty"`
+	PageSize     int32        `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	OrderBy      string       `protobuf:"bytes,3,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
+	IsDescending bool         `protobuf:"varint,4,opt,name=is_descending,json=isDescending,proto3" json:"is_descending,omitempty"`
+	Query        string       `protobuf:"bytes,5,opt,name=query,proto3" json:"query,omitempty"`
+	Condition    []*Condition `protobuf:"bytes,6,rep,name=condition,proto3" json:"condition,omitempty"`
 }
 
 func (x *ListEntityQuery) Reset() {
@@ -2274,9 +2274,9 @@ type Condition struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Field    string `protobuf:"bytes,1,opt,name=field,proto3" json:"field"`
-	Value    string `protobuf:"bytes,2,opt,name=value,proto3" json:"value"`
-	Operator string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator"`
+	Field    string `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
+	Value    string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Operator string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
 func (x *Condition) Reset() {

@@ -175,9 +175,9 @@ endif
 #	docker push tkeelio/tkeel-device:0.2.0
 
 docker-build: build
-	docker build -t tkeelio/tkeel-device:0.4.4 .
+	docker build -t tkeelio/tkeel-device:dev .
 docker-push:
-	docker push tkeelio/tkeel-device:0.4.4
+	docker push tkeelio/tkeel-device:dev
 ################################################################################
 # Target: lint                                                                 #
 ################################################################################
