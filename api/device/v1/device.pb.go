@@ -30,7 +30,7 @@ type CreateDeviceRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DevBasicInfo *DeviceEntityBasicInfo `protobuf:"bytes,1,opt,name=devBasicInfo,proto3" json:"devBasicInfo,omitempty"`
+	DevBasicInfo *DeviceEntityBasicInfo `protobuf:"bytes,1,opt,name=devBasicInfo,proto3" json:"devBasicInfo"`
 }
 
 func (x *CreateDeviceRequest) Reset() {
@@ -78,7 +78,7 @@ type CreateDeviceResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse deviceObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备对象"}];
-	DeviceObject *structpb.Value `protobuf:"bytes,1,opt,name=deviceObject,proto3" json:"deviceObject,omitempty"`
+	DeviceObject *structpb.Value `protobuf:"bytes,1,opt,name=deviceObject,proto3" json:"deviceObject"`
 }
 
 func (x *CreateDeviceResponse) Reset() {
@@ -125,8 +125,8 @@ type UpdateDeviceRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id           string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	DevBasicInfo *DeviceEntityBasicInfo `protobuf:"bytes,2,opt,name=devBasicInfo,proto3" json:"devBasicInfo,omitempty"`
+	Id           string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	DevBasicInfo *DeviceEntityBasicInfo `protobuf:"bytes,2,opt,name=devBasicInfo,proto3" json:"devBasicInfo"`
 }
 
 func (x *UpdateDeviceRequest) Reset() {
@@ -181,7 +181,7 @@ type UpdateDeviceResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse deviceObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备对象"}];
-	DeviceObject *structpb.Value `protobuf:"bytes,1,opt,name=deviceObject,proto3" json:"deviceObject,omitempty"`
+	DeviceObject *structpb.Value `protobuf:"bytes,1,opt,name=deviceObject,proto3" json:"deviceObject"`
 }
 
 func (x *UpdateDeviceResponse) Reset() {
@@ -228,7 +228,7 @@ type DeleteDeviceRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Ids *Ids `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	Ids *Ids `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids"`
 }
 
 func (x *DeleteDeviceRequest) Reset() {
@@ -275,7 +275,7 @@ type DeleteDeviceResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	FaildDelDevice []*FaildDelDevice `protobuf:"bytes,1,rep,name=faildDelDevice,proto3" json:"faildDelDevice,omitempty"`
+	FaildDelDevice []*FaildDelDevice `protobuf:"bytes,1,rep,name=faildDelDevice,proto3" json:"faildDelDevice"`
 }
 
 func (x *DeleteDeviceResponse) Reset() {
@@ -322,8 +322,8 @@ type FaildDelDevice struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Reason string `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
+	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Reason string `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason"`
 }
 
 func (x *FaildDelDevice) Reset() {
@@ -377,7 +377,7 @@ type GetDeviceRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *GetDeviceRequest) Reset() {
@@ -424,7 +424,7 @@ type GetDeviceBasicInfoRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *GetDeviceBasicInfoRequest) Reset() {
@@ -471,7 +471,7 @@ type GetDeviceSysInfoRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *GetDeviceSysInfoRequest) Reset() {
@@ -518,7 +518,7 @@ type GetDeviceConnectInfoRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *GetDeviceConnectInfoRequest) Reset() {
@@ -565,7 +565,7 @@ type GetDeviceRawDataRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *GetDeviceRawDataRequest) Reset() {
@@ -612,7 +612,7 @@ type GetDeviceAttributeDataRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *GetDeviceAttributeDataRequest) Reset() {
@@ -659,7 +659,7 @@ type GetDeviceTelemetryDataRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *GetDeviceTelemetryDataRequest) Reset() {
@@ -706,7 +706,7 @@ type GetDeviceBasicInfoResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BasicInfoObject *structpb.Value `protobuf:"bytes,1,opt,name=basicInfoObject,proto3" json:"basicInfoObject,omitempty"`
+	BasicInfoObject *structpb.Value `protobuf:"bytes,1,opt,name=basicInfoObject,proto3" json:"basicInfoObject"`
 }
 
 func (x *GetDeviceBasicInfoResponse) Reset() {
@@ -753,7 +753,7 @@ type GetDeviceSysInfoResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SysInfoObject *structpb.Value `protobuf:"bytes,1,opt,name=sysInfoObject,proto3" json:"sysInfoObject,omitempty"`
+	SysInfoObject *structpb.Value `protobuf:"bytes,1,opt,name=sysInfoObject,proto3" json:"sysInfoObject"`
 }
 
 func (x *GetDeviceSysInfoResponse) Reset() {
@@ -800,7 +800,7 @@ type GetDeviceConnectInfoResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ConnectInfoObject *structpb.Value `protobuf:"bytes,1,opt,name=connectInfoObject,proto3" json:"connectInfoObject,omitempty"`
+	ConnectInfoObject *structpb.Value `protobuf:"bytes,1,opt,name=connectInfoObject,proto3" json:"connectInfoObject"`
 }
 
 func (x *GetDeviceConnectInfoResponse) Reset() {
@@ -847,7 +847,7 @@ type GetDeviceRawDataResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RawDataObject *structpb.Value `protobuf:"bytes,1,opt,name=rawDataObject,proto3" json:"rawDataObject,omitempty"`
+	RawDataObject *structpb.Value `protobuf:"bytes,1,opt,name=rawDataObject,proto3" json:"rawDataObject"`
 }
 
 func (x *GetDeviceRawDataResponse) Reset() {
@@ -894,7 +894,7 @@ type GetDeviceAttributeDataResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AttributeDataObject *structpb.Value `protobuf:"bytes,1,opt,name=attributeDataObject,proto3" json:"attributeDataObject,omitempty"`
+	AttributeDataObject *structpb.Value `protobuf:"bytes,1,opt,name=attributeDataObject,proto3" json:"attributeDataObject"`
 }
 
 func (x *GetDeviceAttributeDataResponse) Reset() {
@@ -941,7 +941,7 @@ type GetDeviceTelemetryDataResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	TelemetryDataObject *structpb.Value `protobuf:"bytes,1,opt,name=telemetryDataObject,proto3" json:"telemetryDataObject,omitempty"`
+	TelemetryDataObject *structpb.Value `protobuf:"bytes,1,opt,name=telemetryDataObject,proto3" json:"telemetryDataObject"`
 }
 
 func (x *GetDeviceTelemetryDataResponse) Reset() {
@@ -989,7 +989,7 @@ type GetDeviceResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.EntityResponse deviceObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备对象"}];
-	DeviceObject *structpb.Value `protobuf:"bytes,1,opt,name=deviceObject,proto3" json:"deviceObject,omitempty"`
+	DeviceObject *structpb.Value `protobuf:"bytes,1,opt,name=deviceObject,proto3" json:"deviceObject"`
 }
 
 func (x *GetDeviceResponse) Reset() {
@@ -1036,7 +1036,7 @@ type ListDeviceRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ListEntityQuery *ListEntityQuery `protobuf:"bytes,1,opt,name=listEntityQuery,proto3" json:"listEntityQuery,omitempty"`
+	ListEntityQuery *ListEntityQuery `protobuf:"bytes,1,opt,name=listEntityQuery,proto3" json:"listEntityQuery"`
 }
 
 func (x *ListDeviceRequest) Reset() {
@@ -1084,7 +1084,7 @@ type ListDeviceResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	//api.core.v1.ListEntityResponse listDeviceObject = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "设备列表对象"}];
-	ListDeviceObject *structpb.Value `protobuf:"bytes,1,opt,name=listDeviceObject,proto3" json:"listDeviceObject,omitempty"`
+	ListDeviceObject *structpb.Value `protobuf:"bytes,1,opt,name=listDeviceObject,proto3" json:"listDeviceObject"`
 }
 
 func (x *ListDeviceResponse) Reset() {
@@ -1131,8 +1131,8 @@ type EnableDeviceRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Enable *Enable `protobuf:"bytes,1,opt,name=enable,proto3" json:"enable,omitempty"`
-	Id     string  `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Enable *Enable `protobuf:"bytes,1,opt,name=enable,proto3" json:"enable"`
+	Id     string  `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
 }
 
 func (x *EnableDeviceRequest) Reset() {
@@ -1186,8 +1186,8 @@ type AddDeviceExtBusinessRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	ExtBusiness *structpb.Value `protobuf:"bytes,2,opt,name=extBusiness,proto3" json:"extBusiness,omitempty"`
+	Id          string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	ExtBusiness *structpb.Value `protobuf:"bytes,2,opt,name=extBusiness,proto3" json:"extBusiness"`
 }
 
 func (x *AddDeviceExtBusinessRequest) Reset() {
@@ -1241,8 +1241,8 @@ type AddDeviceExtRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id  string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Ext *structpb.Value `protobuf:"bytes,2,opt,name=ext,proto3" json:"ext,omitempty"`
+	Id  string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Ext *structpb.Value `protobuf:"bytes,2,opt,name=ext,proto3" json:"ext"`
 }
 
 func (x *AddDeviceExtRequest) Reset() {
@@ -1296,8 +1296,8 @@ type DeleteDeviceExtRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Keys *Keys  `protobuf:"bytes,1,opt,name=keys,proto3" json:"keys,omitempty"`
-	Id   string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Keys *Keys  `protobuf:"bytes,1,opt,name=keys,proto3" json:"keys"`
+	Id   string `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
 }
 
 func (x *DeleteDeviceExtRequest) Reset() {
@@ -1351,8 +1351,8 @@ type DeleteDeviceExtBusinessRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Keys *Keys  `protobuf:"bytes,1,opt,name=keys,proto3" json:"keys,omitempty"`
-	Id   string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Keys *Keys  `protobuf:"bytes,1,opt,name=keys,proto3" json:"keys"`
+	Id   string `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
 }
 
 func (x *DeleteDeviceExtBusinessRequest) Reset() {
@@ -1406,8 +1406,8 @@ type UpdateDeviceExtBusinessRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	ExtBusiness *structpb.Value `protobuf:"bytes,2,opt,name=extBusiness,proto3" json:"extBusiness,omitempty"`
+	Id          string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	ExtBusiness *structpb.Value `protobuf:"bytes,2,opt,name=extBusiness,proto3" json:"extBusiness"`
 }
 
 func (x *UpdateDeviceExtBusinessRequest) Reset() {
@@ -1461,8 +1461,8 @@ type UpdateDeviceExtRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id  string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Ext *structpb.Value `protobuf:"bytes,2,opt,name=ext,proto3" json:"ext,omitempty"`
+	Id  string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Ext *structpb.Value `protobuf:"bytes,2,opt,name=ext,proto3" json:"ext"`
 }
 
 func (x *UpdateDeviceExtRequest) Reset() {
@@ -1516,8 +1516,8 @@ type CreateDeviceDataRelationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string                `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Expressions *ListEntityExpression `protobuf:"bytes,2,opt,name=expressions,proto3" json:"expressions,omitempty"`
+	Id          string                `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Expressions *ListEntityExpression `protobuf:"bytes,2,opt,name=expressions,proto3" json:"expressions"`
 }
 
 func (x *CreateDeviceDataRelationRequest) Reset() {
@@ -1571,8 +1571,8 @@ type UpdateDeviceDataRelationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string                `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Expressions *ListEntityExpression `protobuf:"bytes,2,opt,name=expressions,proto3" json:"expressions,omitempty"`
+	Id          string                `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Expressions *ListEntityExpression `protobuf:"bytes,2,opt,name=expressions,proto3" json:"expressions"`
 }
 
 func (x *UpdateDeviceDataRelationRequest) Reset() {
@@ -1626,8 +1626,8 @@ type GetDeviceDataRelationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id   string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	Id   string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path"`
 }
 
 func (x *GetDeviceDataRelationRequest) Reset() {
@@ -1681,7 +1681,7 @@ type GetDeviceDataRelationResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Expressions *structpb.Value `protobuf:"bytes,1,opt,name=expressions,proto3" json:"expressions,omitempty"`
+	Expressions *structpb.Value `protobuf:"bytes,1,opt,name=expressions,proto3" json:"expressions"`
 }
 
 func (x *GetDeviceDataRelationResponse) Reset() {
@@ -1728,8 +1728,8 @@ type DeleteDeviceDataRelationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Paths *Paths `protobuf:"bytes,2,opt,name=paths,proto3" json:"paths,omitempty"`
+	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Paths *Paths `protobuf:"bytes,2,opt,name=paths,proto3" json:"paths"`
 }
 
 func (x *DeleteDeviceDataRelationRequest) Reset() {
@@ -1783,7 +1783,7 @@ type ListDeviceDataRelationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *ListDeviceDataRelationRequest) Reset() {
@@ -1830,7 +1830,7 @@ type ListDeviceDataRelationResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ExpressionObject *structpb.Value `protobuf:"bytes,1,opt,name=expressionObject,proto3" json:"expressionObject,omitempty"`
+	ExpressionObject *structpb.Value `protobuf:"bytes,1,opt,name=expressionObject,proto3" json:"expressionObject"`
 }
 
 func (x *ListDeviceDataRelationResponse) Reset() {
@@ -1877,8 +1877,8 @@ type CreateDeviceDataRelationAutoRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id       string    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Relation *Relation `protobuf:"bytes,2,opt,name=relation,proto3" json:"relation,omitempty"`
+	Id       string    `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Relation *Relation `protobuf:"bytes,2,opt,name=relation,proto3" json:"relation"`
 }
 
 func (x *CreateDeviceDataRelationAutoRequest) Reset() {
@@ -1932,7 +1932,7 @@ type CreateDeviceDataRelationAutoResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ExpressionObject *structpb.Value `protobuf:"bytes,1,opt,name=expressionObject,proto3" json:"expressionObject,omitempty"`
+	ExpressionObject *structpb.Value `protobuf:"bytes,1,opt,name=expressionObject,proto3" json:"expressionObject"`
 }
 
 func (x *CreateDeviceDataRelationAutoResponse) Reset() {
@@ -1979,8 +1979,8 @@ type SetDeviceRawRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id    string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Value *structpb.Value `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Id    string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Value *structpb.Value `protobuf:"bytes,2,opt,name=value,proto3" json:"value"`
 }
 
 func (x *SetDeviceRawRequest) Reset() {
@@ -2034,8 +2034,8 @@ type SetDeviceAttributeRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id      string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Content *SetContent `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+	Id      string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Content *SetContent `protobuf:"bytes,2,opt,name=content,proto3" json:"content"`
 }
 
 func (x *SetDeviceAttributeRequest) Reset() {
@@ -2089,8 +2089,8 @@ type SetDeviceCommandRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id      string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Content *SetContent `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+	Id      string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Content *SetContent `protobuf:"bytes,2,opt,name=content,proto3" json:"content"`
 }
 
 func (x *SetDeviceCommandRequest) Reset() {
@@ -2144,7 +2144,7 @@ type SaveDeviceConfAsSelfTemplteRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *SaveDeviceConfAsSelfTemplteRequest) Reset() {
@@ -2191,8 +2191,8 @@ type SaveDeviceConfAsOtherTemplateRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                string             `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	OtherTemplateInfo *TemplateBasicInfo `protobuf:"bytes,2,opt,name=otherTemplateInfo,proto3" json:"otherTemplateInfo,omitempty"`
+	Id                string             `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	OtherTemplateInfo *TemplateBasicInfo `protobuf:"bytes,2,opt,name=otherTemplateInfo,proto3" json:"otherTemplateInfo"`
 }
 
 func (x *SaveDeviceConfAsOtherTemplateRequest) Reset() {
@@ -2247,9 +2247,9 @@ type DeviceEntityCoreInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BasicInfo   *DeviceEntityBasicInfo   `protobuf:"bytes,1,opt,name=basicInfo,proto3" json:"basicInfo,omitempty"`
-	SysField    *DeviceEntitySysField    `protobuf:"bytes,2,opt,name=sysField,proto3" json:"sysField,omitempty"`
-	ConnectInfo *DeviceEntityConnectInfo `protobuf:"bytes,3,opt,name=connectInfo,proto3" json:"connectInfo,omitempty"`
+	BasicInfo   *DeviceEntityBasicInfo   `protobuf:"bytes,1,opt,name=basicInfo,proto3" json:"basicInfo"`
+	SysField    *DeviceEntitySysField    `protobuf:"bytes,2,opt,name=sysField,proto3" json:"sysField"`
+	ConnectInfo *DeviceEntityConnectInfo `protobuf:"bytes,3,opt,name=connectInfo,proto3" json:"connectInfo"`
 }
 
 func (x *DeviceEntityCoreInfo) Reset() {
@@ -2310,9 +2310,9 @@ type UpdateDeviceEntityCoreInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	TemplateId  string                 `protobuf:"bytes,1,opt,name=template_id,json=templateId,proto3" json:"template_id,omitempty"`
-	Description string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	BasicInfo   *DeviceEntityBasicInfo `protobuf:"bytes,3,opt,name=basicInfo,proto3" json:"basicInfo,omitempty"`
+	TemplateId  string                 `protobuf:"bytes,1,opt,name=template_id,json=templateId,proto3" json:"template_id"`
+	Description string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description"`
+	BasicInfo   *DeviceEntityBasicInfo `protobuf:"bytes,3,opt,name=basicInfo,proto3" json:"basicInfo"`
 }
 
 func (x *UpdateDeviceEntityCoreInfo) Reset() {
@@ -2376,17 +2376,17 @@ type DeviceEntityBasicInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name             string          `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	CustomId         string          `protobuf:"bytes,11,opt,name=customId,proto3" json:"customId,omitempty"`
-	Description      string          `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	ParentId         string          `protobuf:"bytes,3,opt,name=parentId,proto3" json:"parentId,omitempty"`
-	ParentName       string          `protobuf:"bytes,4,opt,name=parentName,proto3" json:"parentName,omitempty"`
-	DirectConnection bool            `protobuf:"varint,5,opt,name=directConnection,proto3" json:"directConnection,omitempty"`
-	TemplateId       string          `protobuf:"bytes,6,opt,name=templateId,proto3" json:"templateId,omitempty"`
-	TemplateName     string          `protobuf:"bytes,7,opt,name=templateName,proto3" json:"templateName,omitempty"`
-	SelfLearn        bool            `protobuf:"varint,8,opt,name=selfLearn,proto3" json:"selfLearn,omitempty"`
-	Ext              *structpb.Value `protobuf:"bytes,9,opt,name=ext,proto3" json:"ext,omitempty"`
-	ExtBusiness      *structpb.Value `protobuf:"bytes,10,opt,name=extBusiness,proto3" json:"extBusiness,omitempty"`
+	Name             string          `protobuf:"bytes,1,opt,name=name,proto3" json:"name"`
+	CustomId         string          `protobuf:"bytes,11,opt,name=customId,proto3" json:"customId"`
+	Description      string          `protobuf:"bytes,2,opt,name=description,proto3" json:"description"`
+	ParentId         string          `protobuf:"bytes,3,opt,name=parentId,proto3" json:"parentId"`
+	ParentName       string          `protobuf:"bytes,4,opt,name=parentName,proto3" json:"parentName"`
+	DirectConnection bool            `protobuf:"varint,5,opt,name=directConnection,proto3" json:"directConnection"`
+	TemplateId       string          `protobuf:"bytes,6,opt,name=templateId,proto3" json:"templateId"`
+	TemplateName     string          `protobuf:"bytes,7,opt,name=templateName,proto3" json:"templateName"`
+	SelfLearn        bool            `protobuf:"varint,8,opt,name=selfLearn,proto3" json:"selfLearn"`
+	Ext              *structpb.Value `protobuf:"bytes,9,opt,name=ext,proto3" json:"ext"`
+	ExtBusiness      *structpb.Value `protobuf:"bytes,10,opt,name=extBusiness,proto3" json:"extBusiness"`
 }
 
 func (x *DeviceEntityBasicInfo) Reset() {
@@ -2503,8 +2503,8 @@ type TemplateBasicInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name"`
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description"`
 }
 
 func (x *TemplateBasicInfo) Reset() {
@@ -2559,17 +2559,17 @@ type DeviceEntitySysField struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	XId            string `protobuf:"bytes,1,opt,name=_id,json=Id,proto3" json:"_id,omitempty"`
-	XCreatedAt     int64  `protobuf:"varint,2,opt,name=_createdAt,json=CreatedAt,proto3" json:"_createdAt,omitempty"`
-	XUpdatedAt     int64  `protobuf:"varint,3,opt,name=_updatedAt,json=UpdatedAt,proto3" json:"_updatedAt,omitempty"`
-	XStatus        string `protobuf:"bytes,4,opt,name=_status,json=Status,proto3" json:"_status,omitempty"`
-	XEnable        bool   `protobuf:"varint,5,opt,name=_enable,json=Enable,proto3" json:"_enable,omitempty"`
-	XToken         string `protobuf:"bytes,6,opt,name=_token,json=Token,proto3" json:"_token,omitempty"`
-	XOwner         string `protobuf:"bytes,7,opt,name=_owner,json=Owner,proto3" json:"_owner,omitempty"`
-	XSource        string `protobuf:"bytes,8,opt,name=_source,json=Source,proto3" json:"_source,omitempty"`
-	XSpacePath     string `protobuf:"bytes,9,opt,name=_spacePath,json=SpacePath,proto3" json:"_spacePath,omitempty"`
-	XSubscribeAddr string `protobuf:"bytes,10,opt,name=_subscribeAddr,json=SubscribeAddr,proto3" json:"_subscribeAddr,omitempty"`
-	XTenantId      string `protobuf:"bytes,11,opt,name=_tenantId,json=TenantId,proto3" json:"_tenantId,omitempty"`
+	XId            string `protobuf:"bytes,1,opt,name=_id,json=Id,proto3" json:"_id"`
+	XCreatedAt     int64  `protobuf:"varint,2,opt,name=_createdAt,json=CreatedAt,proto3" json:"_createdAt"`
+	XUpdatedAt     int64  `protobuf:"varint,3,opt,name=_updatedAt,json=UpdatedAt,proto3" json:"_updatedAt"`
+	XStatus        string `protobuf:"bytes,4,opt,name=_status,json=Status,proto3" json:"_status"`
+	XEnable        bool   `protobuf:"varint,5,opt,name=_enable,json=Enable,proto3" json:"_enable"`
+	XToken         string `protobuf:"bytes,6,opt,name=_token,json=Token,proto3" json:"_token"`
+	XOwner         string `protobuf:"bytes,7,opt,name=_owner,json=Owner,proto3" json:"_owner"`
+	XSource        string `protobuf:"bytes,8,opt,name=_source,json=Source,proto3" json:"_source"`
+	XSpacePath     string `protobuf:"bytes,9,opt,name=_spacePath,json=SpacePath,proto3" json:"_spacePath"`
+	XSubscribeAddr string `protobuf:"bytes,10,opt,name=_subscribeAddr,json=SubscribeAddr,proto3" json:"_subscribeAddr"`
+	XTenantId      string `protobuf:"bytes,11,opt,name=_tenantId,json=TenantId,proto3" json:"_tenantId"`
 }
 
 func (x *DeviceEntitySysField) Reset() {
@@ -2687,12 +2687,12 @@ type DeviceEntityConnectInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	XClientId string `protobuf:"bytes,1,opt,name=_clientId,json=ClientId,proto3" json:"_clientId,omitempty"`
-	XOnline   bool   `protobuf:"varint,2,opt,name=_online,json=Online,proto3" json:"_online,omitempty"`
-	XUserName string `protobuf:"bytes,3,opt,name=_userName,json=UserName,proto3" json:"_userName,omitempty"`
-	XPeerHost string `protobuf:"bytes,4,opt,name=_peerHost,json=PeerHost,proto3" json:"_peerHost,omitempty"`
-	XSockPort string `protobuf:"bytes,5,opt,name=_sockPort,json=SockPort,proto3" json:"_sockPort,omitempty"`
-	XProtocol string `protobuf:"bytes,6,opt,name=_protocol,json=Protocol,proto3" json:"_protocol,omitempty"`
+	XClientId string `protobuf:"bytes,1,opt,name=_clientId,json=ClientId,proto3" json:"_clientId"`
+	XOnline   bool   `protobuf:"varint,2,opt,name=_online,json=Online,proto3" json:"_online"`
+	XUserName string `protobuf:"bytes,3,opt,name=_userName,json=UserName,proto3" json:"_userName"`
+	XPeerHost string `protobuf:"bytes,4,opt,name=_peerHost,json=PeerHost,proto3" json:"_peerHost"`
+	XSockPort string `protobuf:"bytes,5,opt,name=_sockPort,json=SockPort,proto3" json:"_sockPort"`
+	XProtocol string `protobuf:"bytes,6,opt,name=_protocol,json=Protocol,proto3" json:"_protocol"`
 }
 
 func (x *DeviceEntityConnectInfo) Reset() {
@@ -2776,12 +2776,12 @@ type ListEntityQuery struct {
 
 	//Filter filter = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "限制"}];
 	//Page page = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "分页"}];
-	PageNum      int32        `protobuf:"varint,1,opt,name=page_num,json=pageNum,proto3" json:"page_num,omitempty"`
-	PageSize     int32        `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	OrderBy      string       `protobuf:"bytes,3,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
-	IsDescending bool         `protobuf:"varint,4,opt,name=is_descending,json=isDescending,proto3" json:"is_descending,omitempty"`
-	Query        string       `protobuf:"bytes,5,opt,name=query,proto3" json:"query,omitempty"`
-	Condition    []*Condition `protobuf:"bytes,6,rep,name=condition,proto3" json:"condition,omitempty"`
+	PageNum      int32        `protobuf:"varint,1,opt,name=page_num,json=pageNum,proto3" json:"page_num"`
+	PageSize     int32        `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size"`
+	OrderBy      string       `protobuf:"bytes,3,opt,name=order_by,json=orderBy,proto3" json:"order_by"`
+	IsDescending bool         `protobuf:"varint,4,opt,name=is_descending,json=isDescending,proto3" json:"is_descending"`
+	Query        string       `protobuf:"bytes,5,opt,name=query,proto3" json:"query"`
+	Condition    []*Condition `protobuf:"bytes,6,rep,name=condition,proto3" json:"condition"`
 }
 
 func (x *ListEntityQuery) Reset() {
@@ -2863,10 +2863,10 @@ type Condition struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Field string          `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
-	Value *structpb.Value `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Field string          `protobuf:"bytes,1,opt,name=field,proto3" json:"field"`
+	Value *structpb.Value `protobuf:"bytes,2,opt,name=value,proto3" json:"value"`
 	//string value = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "值"}];
-	Operator string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator,omitempty"`
+	Operator string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator"`
 }
 
 func (x *Condition) Reset() {
@@ -2927,7 +2927,7 @@ type Ids struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Ids []string `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids,omitempty"`
+	Ids []string `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids"`
 }
 
 func (x *Ids) Reset() {
@@ -2974,7 +2974,7 @@ type Keys struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Keys []string `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys,omitempty"`
+	Keys []string `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys"`
 }
 
 func (x *Keys) Reset() {
@@ -3021,7 +3021,7 @@ type Paths struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Paths []string `protobuf:"bytes,1,rep,name=paths,proto3" json:"paths,omitempty"`
+	Paths []string `protobuf:"bytes,1,rep,name=paths,proto3" json:"paths"`
 }
 
 func (x *Paths) Reset() {
@@ -3068,8 +3068,8 @@ type Ext struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Key   string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Value string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Key   string `protobuf:"bytes,1,opt,name=key,proto3" json:"key"`
+	Value string `protobuf:"bytes,2,opt,name=value,proto3" json:"value"`
 }
 
 func (x *Ext) Reset() {
@@ -3123,7 +3123,7 @@ type Enable struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Enable bool `protobuf:"varint,1,opt,name=enable,proto3" json:"enable,omitempty"`
+	Enable bool `protobuf:"varint,1,opt,name=enable,proto3" json:"enable"`
 }
 
 func (x *Enable) Reset() {
@@ -3170,7 +3170,7 @@ type ListEntityExpression struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Expressions []*Expression `protobuf:"bytes,1,rep,name=expressions,proto3" json:"expressions,omitempty"`
+	Expressions []*Expression `protobuf:"bytes,1,rep,name=expressions,proto3" json:"expressions"`
 }
 
 func (x *ListEntityExpression) Reset() {
@@ -3217,10 +3217,10 @@ type Expression struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Path        string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
-	Expression  string `protobuf:"bytes,2,opt,name=expression,proto3" json:"expression,omitempty"`
-	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Name        string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Path        string `protobuf:"bytes,1,opt,name=path,proto3" json:"path"`
+	Expression  string `protobuf:"bytes,2,opt,name=expression,proto3" json:"expression"`
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description"`
+	Name        string `protobuf:"bytes,4,opt,name=name,proto3" json:"name"`
 }
 
 func (x *Expression) Reset() {
@@ -3288,12 +3288,12 @@ type Relation struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	CurName      string `protobuf:"bytes,1,opt,name=curName,proto3" json:"curName,omitempty"`
-	Direction    string `protobuf:"bytes,2,opt,name=direction,proto3" json:"direction,omitempty"`
-	RelationType string `protobuf:"bytes,3,opt,name=relationType,proto3" json:"relationType,omitempty"`
-	TargetName   string `protobuf:"bytes,4,opt,name=targetName,proto3" json:"targetName,omitempty"`
-	TargetId     string `protobuf:"bytes,5,opt,name=targetId,proto3" json:"targetId,omitempty"`
-	TargetType   string `protobuf:"bytes,6,opt,name=targetType,proto3" json:"targetType,omitempty"` //string operation = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "binding or unbinding"}];
+	CurName      string `protobuf:"bytes,1,opt,name=curName,proto3" json:"curName"`
+	Direction    string `protobuf:"bytes,2,opt,name=direction,proto3" json:"direction"`
+	RelationType string `protobuf:"bytes,3,opt,name=relationType,proto3" json:"relationType"`
+	TargetName   string `protobuf:"bytes,4,opt,name=targetName,proto3" json:"targetName"`
+	TargetId     string `protobuf:"bytes,5,opt,name=targetId,proto3" json:"targetId"`
+	TargetType   string `protobuf:"bytes,6,opt,name=targetType,proto3" json:"targetType"` //string operation = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "binding or unbinding"}];
 }
 
 func (x *Relation) Reset() {
@@ -3375,8 +3375,8 @@ type SetContent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id    string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Value *structpb.Value `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Id    string          `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Value *structpb.Value `protobuf:"bytes,2,opt,name=value,proto3" json:"value"`
 }
 
 func (x *SetContent) Reset() {
@@ -3430,7 +3430,7 @@ type CreateTemplateResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	TemplateObject *structpb.Value `protobuf:"bytes,1,opt,name=templateObject,proto3" json:"templateObject,omitempty"`
+	TemplateObject *structpb.Value `protobuf:"bytes,1,opt,name=templateObject,proto3" json:"templateObject"`
 }
 
 func (x *CreateTemplateResponse) Reset() {
