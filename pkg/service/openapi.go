@@ -2,8 +2,10 @@ package service
 
 import (
 	"context"
+	"github.com/tkeel-io/tkeel-device/pkg/service/openapi"
 
 	v1 "github.com/tkeel-io/tkeel-device/api/openapi/v1"
+	pb "github.com/tkeel-io/tkeel-device/api/template/v1"
 	"github.com/tkeel-io/tkeel-device/pkg/util"
 	openapi_v1 "github.com/tkeel-io/tkeel-interface/openapi/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -23,6 +25,15 @@ func NewOpenapiService() *OpenapiService {
 
 // AddonsIdentify implements AddonsIdentify.OpenapiServer.
 func (s *OpenapiService) AddonsIdentify(ctx context.Context, in *openapi_v1.AddonsIdentifyRequest) (*openapi_v1.AddonsIdentifyResponse, error) {
+	var endpoint string
+	openapiCli := openapi.NewDaprClient("3500", "mock", "mock")
+	pluginId := in.GetPlugin().GetId()
+	for _, addon := range in.ImplementedAddons {
+		if addon.GetAddonsPoint() == openapi.DEVICE_SCHEMA_CHANGE {
+			endpoint = addon.GetImplementedEndpoint()
+			openapiCli.CallAddons(ctx,pluginId,endpoint,&pb.UpdateTemplateResponse{})
+		}
+	}
 	return &openapi_v1.AddonsIdentifyResponse{
 		Res: util.GetV1ResultBadRequest("not declare addons"),
 	}, nil
@@ -43,6 +54,12 @@ func (s *OpenapiService) Identify(ctx context.Context, in *emptypb.Empty) (*open
 		DisableManualActivation: true,
 		Profiles:                profiles,
 		//Profiles : profileArray,
+		AddonsPoint: []*openapi_v1.AddonsPoint{
+			&openapi_v1.AddonsPoint{
+				Name: openapi.DEVICE_SCHEMA_CHANGE,
+				Desc: "when device schema change.",
+			},
+		},
 	}, nil
 }
 
