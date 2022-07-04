@@ -10,8 +10,12 @@ import (
 	"github.com/google/uuid"
 	"github.com/tkeel-io/kit/log"
 	transportHTTP "github.com/tkeel-io/kit/transport/http"
+	"github.com/tkeel-io/tdtl"
+
 	//"github.com/tkeel-io/tdtl"
 	pbg "github.com/tkeel-io/tkeel-device/api/group/v1"
+	"github.com/tkeel-io/tkeel-device/pkg/service/openapi"
+	pb_auth "github.com/tkeel-io/tkeel/api/authentication/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"io/ioutil"
 	"net/http"
@@ -98,6 +102,45 @@ func (c *CoreClient) GetTokenMap(ctx context.Context) (map[string]string, error)
 		"source":    "device",
 		"userToken": userToken,
 		"tenantId":  tokenMap["tenant_id"].(string),
+	}
+	return urlMap, nil
+}
+
+//get token
+func (c *CoreClient) GetUser(ctx context.Context) (*pb_auth.AuthenticateResponse, error) {
+	header := transportHTTP.HeaderFromContext(ctx)
+	token, ok := header[tokenKey]
+	if !ok && len(token) < 1 {
+		return nil, errors.New("invalid authorization")
+	}
+	if token[0] == "" {
+		return nil, errors.New("empty authorization token")
+	}
+	userToken := token[0]
+
+	// only use the first one
+	url := authUrl + "/v1/oauth/authenticate"
+	req, err := http.NewRequest("GET", url, nil)
+	if nil != err {
+		return nil, err
+	}
+	req.Header.Add(tokenKey, userToken)
+	resp, err := http.DefaultClient.Do(req)
+
+	cc := tdtl.New(resp)
+	user_id := cc.Get("user_id").String()
+	tenant_id := cc.Get("tenant_id").String()
+	role := cc.Get("role").String()
+	destination := cc.Get("destination").String()
+	method := cc.Get("method").String()
+
+	// save token, map[entity_id:406c79543e0245a994a742e69ce48e71 entity_type:device tenant_id: token_id:de25624a-1d0a-4ab0-b1f1-5b0db5a12c30 user_id:abc]
+	urlMap := &pb_auth.AuthenticateResponse{
+		UserId:      user_id,
+		TenantId:    tenant_id,
+		Role:        role,
+		Method:      method,
+		Destination: destination,
 	}
 	return urlMap, nil
 }
@@ -567,4 +610,15 @@ func (c *CoreClient) GetTenantsList() ([]string, error) {
 		}
 	}
 	return tenantList, nil
+}
+
+var _defaultCli = NewCoreClient()
+
+func NewDaprClientFromContext(ctx context.Context, daprHTTPPort string) (*openapi.DaprClient, error) {
+	tm, err := _defaultCli.GetUser(ctx)
+	if nil != err {
+		return nil, err
+	}
+	cli := openapi.NewDaprClient("3500", tm.TenantId, tm.UserId)
+	return cli, nil
 }

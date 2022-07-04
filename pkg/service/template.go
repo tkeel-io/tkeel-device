@@ -170,6 +170,17 @@ func (s *TemplateService) UpdateTemplate(ctx context.Context, req *pb.UpdateTemp
 	out := &pb.UpdateTemplateResponse{
 		TemplateObject: re,
 	}
+
+	//addons
+	openapiCli, err := NewDaprClientFromContext(ctx, "3500")
+	if nil != err {
+		return nil, err
+	}
+	err = openapiCli.SchemaChangeAddons(ctx, out)
+	if nil != err {
+		log.L().Error("call addons error")
+	}
+
 	return out, nil
 }
 
