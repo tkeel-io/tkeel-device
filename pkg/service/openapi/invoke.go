@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/tkeel-io/kit/log"
+	transportHTTP "github.com/tkeel-io/kit/transport/http"
 	pb "github.com/tkeel-io/tkeel-device/api/template/v1"
 	structpb "google.golang.org/protobuf/types/known/structpb"
 	"net/http"
@@ -42,11 +43,16 @@ func (c *DaprClient) CallAddons(ctx context.Context, sendToPluginID, methodEndpo
 		ID:         sendToPluginID,
 		Method:     methodEndpoint,
 		Verb:       http.MethodPost,
-		Header:     c.header.Clone(),
+		Header:     transportHTTP.HeaderFromContext(ctx).Clone(),
 		QueryValue: nil,
 		Body:       nil,
 	}, templateData, resp)
 	if err != nil {
+		log.Error(fmt.Sprintf("CallAddons: ID:%v\n methodEndpoint:%v\n templateData:%v\n",
+			sendToPluginID,
+			methodEndpoint,
+			templateData))
+		log.Error(err)
 		return errors.Wrapf(err, "dapr invoke plugin(%s) identify", sendToPluginID)
 	}
 	log.Info(fmt.Sprintf("CallAddons: ID:%v\n methodEndpoint:%v\n templateData:%v\n byt:%v\n",
