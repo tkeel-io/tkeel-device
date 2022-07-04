@@ -11,10 +11,11 @@ import (
 	pbt "github.com/tkeel-io/tkeel-device/api/template/v1"
 
 	//go_struct "google.golang.org/protobuf/types/known/structpb"
+	"time"
+
 	"github.com/tkeel-io/tkeel-device/pkg/service/metrics"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/structpb"
-	"time"
 )
 
 type DeviceService struct {
@@ -248,6 +249,14 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 	}
 	ids := req.Ids.GetIds()
 	for _, id := range ids {
+		// delete subscribe entities
+		urlSub := s.client.GetDeleleEntityFromSubUrl(id)
+		_, _ = s.client.DeleteWithCtx(ctx, urlSub)
+
+		// delete rule devices
+		urlRule := s.client.GetDeleleEntityFromRuleUrl(id)
+		_, _ = s.client.DeleteWithCtx(ctx,urlRule)
+
 		midUrl := "/" + id
 		url := s.client.GetCoreUrl(midUrl, tm, "device")
 		log.Debug("get url:", url)
