@@ -482,6 +482,23 @@ rpc AddDeviceExt(AddDeviceExtRequest) returns (google.protobuf.Empty) {
         }
     };
   };
+  rpc SaveDeviceConfAsTemplteAndRef(SaveDeviceConfAsOtherTemplateRequest)returns (CreateTemplateResponse){
+    option (google.api.http) = {
+      post : "/devices/{id}/configs/saveAsTemplateAndRef"
+      body : "otherTemplateInfo"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "设备模板内容保存为模板并引用";
+        operation_id: "SaveDeviceConfAsTemplteAndRef";
+        tags: "device";
+        responses: {
+            key: "200"
+            value: {
+                description: "OK";
+            }
+        }
+    };
+  };
 }  
 
 // user to device
