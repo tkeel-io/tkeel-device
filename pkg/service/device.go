@@ -14,10 +14,11 @@ import (
 	pbt "github.com/tkeel-io/tkeel-device/api/template/v1"
 
 	//go_struct "google.golang.org/protobuf/types/known/structpb"
+	"time"
+
 	"github.com/tkeel-io/tkeel-device/pkg/service/metrics"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/structpb"
-	"time"
 )
 
 type DeviceService struct {
@@ -256,6 +257,14 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 	}
 	ids := req.Ids.GetIds()
 	for _, id := range ids {
+		// delete subscribe entities
+		urlSub := s.client.GetDeleleEntityFromSubUrl(id)
+		_, _ = s.client.DeleteWithCtx(ctx, urlSub)
+
+		// delete rule devices
+		urlRule := s.client.GetDeleleEntityFromRuleUrl(id)
+		_, _ = s.client.DeleteWithCtx(ctx,urlRule)
+
 		midUrl := "/" + id
 		url := s.client.GetCoreUrl(midUrl, tm, "device")
 		log.Debug("get url:", url)
@@ -1046,49 +1055,8 @@ func (s *DeviceService) SaveDeviceConfAsSelfTemplte(ctx context.Context, req *pb
 
 	// if tmeplateId  NON exist
 	if templateId == "" {
-		//log.Error("error templateId non exist")
-		//return nil, errors.New("error templateId non exist")
-		log.Info("template non exist")
-		//get dev name
-		devNameObject, errd := s.client.GetCoreEntitySpecContent(tm, req.Id, "device", "properties", "basicInfo.name")
-		if nil != errd {
-			return nil, errd
-		}
-		templateName := req.Id + "_selfLearnTemplate"
-		if prop, ok := devNameObject["properties"]; ok {
-			if prop1, ok1 := prop.(map[string]interface{}); ok1 {
-				if id, ok2 := prop1["basicInfo.name"]; ok2 {
-					if idstr, ok3 := id.(string); ok3 {
-						templateName = idstr + "_selfLearnTemplate"
-					}
-				}
-			}
-		}
-		// create tempalte entity
-		templateInfo := &pb.TemplateBasicInfo{
-			Name:        templateName,
-			Description: "selfLean sync Save",
-		}
-		log.Info("new templateinfo", templateInfo)
-		_, errx, templateId := s.SaveConfAsOtherTemplte(ctx, tm, configs, templateInfo)
-		if errx != nil {
-			log.Error("error SaveConfAsOtherTemplte ")
-			return nil, errors.New("error SaveConfAsOtherTemplte")
-		}
-
-		//update    dev entity
-		ma := make(map[string]interface{})
-		ma["sysField._updatedAt"] = GetTime()
-		ma["basicInfo.templateId"] = templateId
-		ma["basicInfo.templateName"] = templateName
-		_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "", "replace", "/patch")
-		if nil != err3 {
-			log.Error("error patch dev entity", err3)
-			return nil, err3
-		}
-		return &emptypb.Empty{}, nil
+		return nil, errors.New("templateID non exist")
 	} else {
-
 		log.Debug(templateId)
 
 		//patch
@@ -1136,6 +1104,54 @@ func (s *DeviceService) SaveDeviceConfAsOtherTemplte(ctx context.Context, req *p
 		log.Error("SaveConfAsOtherTemplte failed ", err2)
 		return nil, err2
 	}
+	//return
+	re, err7 := structpb.NewValue(templateObject)
+	if nil != err7 {
+		log.Error("convert tree failed ", err7)
+		return nil, err7
+	}
+	out := &pb.CreateTemplateResponse{
+		TemplateObject: re,
+	}
+
+	return out, nil
+}
+
+func (s *DeviceService) SaveDeviceConfAsTemplteAndRef(ctx context.Context, req *pb.SaveDeviceConfAsOtherTemplateRequest) (*pb.CreateTemplateResponse, error) {
+	log.Debug("SaveDeviceConfAsTemplteAndRef")
+	log.Debug("req:", req)
+
+	tm, err := s.client.GetTokenMap(ctx)
+	if nil != err {
+		return nil, err
+	}
+	//get configs
+	configObject, err1 := s.client.GetCoreEntitySpecContent(tm, req.Id, "device", "configs", "")
+	if nil != err1 {
+		return nil, err1
+	}
+	configs, ok := configObject["configs"]
+	if !ok {
+		log.Error("error config non exist")
+		return nil, errors.New("error config non exist")
+	}
+
+	templateObject, err2, templateId := s.SaveConfAsOtherTemplte(ctx, tm, configs, req.OtherTemplateInfo)
+	if nil != err2 {
+		log.Error("SaveConfAsOtherTemplte failed ", err2)
+		return nil, err2
+	}
+	//ref
+	ma := make(map[string]interface{})
+	ma["sysField._updatedAt"] = GetTime()
+	ma["basicInfo.templateId"] = templateId
+	ma["basicInfo.templateName"] = req.OtherTemplateInfo.Name
+	_, err3 := s.client.CorePatchMethod(ctx, req.GetId(), ma, "", "replace", "/patch")
+	if nil != err3 {
+		log.Error("error patch dev entity", err3)
+		return nil, err3
+	}
+
 	//return
 	re, err7 := structpb.NewValue(templateObject)
 	if nil != err7 {

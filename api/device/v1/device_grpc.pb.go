@@ -47,6 +47,7 @@ type DeviceClient interface {
 	SetDeviceCommand(ctx context.Context, in *SetDeviceCommandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SaveDeviceConfAsSelfTemplte(ctx context.Context, in *SaveDeviceConfAsSelfTemplteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SaveDeviceConfAsOtherTemplte(ctx context.Context, in *SaveDeviceConfAsOtherTemplateRequest, opts ...grpc.CallOption) (*CreateTemplateResponse, error)
+	SaveDeviceConfAsTemplteAndRef(ctx context.Context, in *SaveDeviceConfAsOtherTemplateRequest, opts ...grpc.CallOption) (*CreateTemplateResponse, error)
 }
 
 type deviceClient struct {
@@ -309,6 +310,15 @@ func (c *deviceClient) SaveDeviceConfAsOtherTemplte(ctx context.Context, in *Sav
 	return out, nil
 }
 
+func (c *deviceClient) SaveDeviceConfAsTemplteAndRef(ctx context.Context, in *SaveDeviceConfAsOtherTemplateRequest, opts ...grpc.CallOption) (*CreateTemplateResponse, error) {
+	out := new(CreateTemplateResponse)
+	err := c.cc.Invoke(ctx, "/api.device.v1.Device/SaveDeviceConfAsTemplteAndRef", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DeviceServer is the server API for Device service.
 // All implementations must embed UnimplementedDeviceServer
 // for forward compatibility
@@ -341,6 +351,7 @@ type DeviceServer interface {
 	SetDeviceCommand(context.Context, *SetDeviceCommandRequest) (*emptypb.Empty, error)
 	SaveDeviceConfAsSelfTemplte(context.Context, *SaveDeviceConfAsSelfTemplteRequest) (*emptypb.Empty, error)
 	SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*CreateTemplateResponse, error)
+	SaveDeviceConfAsTemplteAndRef(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*CreateTemplateResponse, error)
 	mustEmbedUnimplementedDeviceServer()
 }
 
@@ -431,6 +442,9 @@ func (UnimplementedDeviceServer) SaveDeviceConfAsSelfTemplte(context.Context, *S
 }
 func (UnimplementedDeviceServer) SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*CreateTemplateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveDeviceConfAsOtherTemplte not implemented")
+}
+func (UnimplementedDeviceServer) SaveDeviceConfAsTemplteAndRef(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*CreateTemplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveDeviceConfAsTemplteAndRef not implemented")
 }
 func (UnimplementedDeviceServer) mustEmbedUnimplementedDeviceServer() {}
 
@@ -949,6 +963,24 @@ func _Device_SaveDeviceConfAsOtherTemplte_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Device_SaveDeviceConfAsTemplteAndRef_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveDeviceConfAsOtherTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServer).SaveDeviceConfAsTemplteAndRef(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.device.v1.Device/SaveDeviceConfAsTemplteAndRef",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServer).SaveDeviceConfAsTemplteAndRef(ctx, req.(*SaveDeviceConfAsOtherTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Device_ServiceDesc is the grpc.ServiceDesc for Device service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1067,6 +1099,10 @@ var Device_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SaveDeviceConfAsOtherTemplte",
 			Handler:    _Device_SaveDeviceConfAsOtherTemplte_Handler,
+		},
+		{
+			MethodName: "SaveDeviceConfAsTemplteAndRef",
+			Handler:    _Device_SaveDeviceConfAsTemplteAndRef_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
