@@ -4,6 +4,7 @@ metadata:
   name: {{ include "tkeel-device.fullname" . }}
   labels:
     {{- include "tkeel-device.labels" . | nindent 4 }}
+    tkeel.io/prometheus: 'true'
 spec:
   type: {{ .Values.service.type }}
   ports:

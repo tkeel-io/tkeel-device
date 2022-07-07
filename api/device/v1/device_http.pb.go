@@ -48,6 +48,7 @@ type DeviceHTTPServer interface {
 	ListDeviceDataRelation(context.Context, *ListDeviceDataRelationRequest) (*ListDeviceDataRelationResponse, error)
 	SaveDeviceConfAsOtherTemplte(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*CreateTemplateResponse, error)
 	SaveDeviceConfAsSelfTemplte(context.Context, *SaveDeviceConfAsSelfTemplteRequest) (*emptypb.Empty, error)
+	SaveDeviceConfAsTemplteAndRef(context.Context, *SaveDeviceConfAsOtherTemplateRequest) (*CreateTemplateResponse, error)
 	SearchEntity(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
 	SetDeviceAttribte(context.Context, *SetDeviceAttributeRequest) (*emptypb.Empty, error)
 	SetDeviceCommand(context.Context, *SetDeviceCommandRequest) (*emptypb.Empty, error)
@@ -1331,6 +1332,72 @@ func (h *DeviceHTTPHandler) SaveDeviceConfAsSelfTemplte(req *go_restful.Request,
 	}
 }
 
+func (h *DeviceHTTPHandler) SaveDeviceConfAsTemplteAndRef(req *go_restful.Request, resp *go_restful.Response) {
+	in := SaveDeviceConfAsOtherTemplateRequest{}
+	if err := transportHTTP.GetBody(req, &in.OtherTemplateInfo); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	if err := transportHTTP.GetQuery(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	if err := transportHTTP.GetPathValue(req, &in); err != nil {
+		resp.WriteHeaderAndJson(http.StatusBadRequest,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+
+	ctx := transportHTTP.ContextWithHeader(req.Request.Context(), req.Request.Header)
+
+	out, err := h.srv.SaveDeviceConfAsTemplteAndRef(ctx, &in)
+	if err != nil {
+		tErr := errors.FromError(err)
+		httpCode := errors.GRPCToHTTPStatusCode(tErr.GRPCStatus().Code())
+		if httpCode == http.StatusMovedPermanently {
+			resp.Header().Set("Location", tErr.Message)
+		}
+		resp.WriteHeaderAndJson(httpCode,
+			result.Set(tErr.Reason, tErr.Message, out), "application/json")
+		return
+	}
+	anyOut, err := anypb.New(out)
+	if err != nil {
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+
+	outB, err := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
+	}.Marshal(&result.Http{
+		Code: errors.Success.Reason,
+		Msg:  "",
+		Data: anyOut,
+	})
+	if err != nil {
+		resp.WriteHeaderAndJson(http.StatusInternalServerError,
+			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
+		return
+	}
+	resp.AddHeader(go_restful.HEADER_ContentType, "application/json")
+
+	var remain int
+	for {
+		outB = outB[remain:]
+		remain, err = resp.Write(outB)
+		if err != nil {
+			return
+		}
+		if remain == 0 {
+			break
+		}
+	}
+}
+
 func (h *DeviceHTTPHandler) SearchEntity(req *go_restful.Request, resp *go_restful.Response) {
 	in := ListDeviceRequest{}
 	if err := transportHTTP.GetBody(req, &in.ListEntityQuery); err != nil {
@@ -1926,4 +1993,6 @@ func RegisterDeviceHTTPServer(container *go_restful.Container, srv DeviceHTTPSer
 		To(handler.SaveDeviceConfAsSelfTemplte))
 	ws.Route(ws.POST("/devices/{id}/configs/saveAsOtherTemplate").
 		To(handler.SaveDeviceConfAsOtherTemplte))
+	ws.Route(ws.POST("/devices/{id}/configs/saveAsTemplateAndRef").
+		To(handler.SaveDeviceConfAsTemplteAndRef))
 }

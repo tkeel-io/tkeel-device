@@ -38,7 +38,8 @@ func (s *OpenapiService) AddonsIdentify(ctx context.Context, in *openapi_v1.Addo
 		}
 	}
 	return &openapi_v1.AddonsIdentifyResponse{
-		Res: util.GetV1ResultBadRequest("not declare addons"),
+		//Res: util.GetV1ResultBadRequest("not declare addons"),
+		Res: util.GetV1ResultOK(),
 	}, nil
 }
 

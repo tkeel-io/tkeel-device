@@ -84,11 +84,11 @@ func (c *DaprClient) CallAddons(ctx context.Context, sendToPluginID, methodEndpo
 		Body:       body,
 	}, nil, resp)
 	if err != nil {
-		log.Error(fmt.Sprintf("CallAddons:\nID:%v \nmethodEndpoint:%v \nbody:%v\n",
+		log.Error(fmt.Sprintf("CallAddons:\nID:%v \nmethodEndpoint:%v \nbody:%v \nerr: %v\n",
 			sendToPluginID,
 			methodEndpoint,
-			string(body)))
-		log.Error(err)
+			string(body),
+      err)
 		return errors.Wrapf(err, "dapr invoke plugin(%s) identify", sendToPluginID)
 	}
 	log.Info(fmt.Sprintf("CallAddons:\nID:%v \nmethodEndpoint:%v \nbyt:%v \nbody:%v\n",
