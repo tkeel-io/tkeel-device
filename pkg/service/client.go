@@ -11,6 +11,7 @@ import (
 	"github.com/tkeel-io/kit/log"
 	transportHTTP "github.com/tkeel-io/kit/transport/http"
 	"github.com/tkeel-io/tdtl"
+	"github.com/tkeel-io/tkeel/pkg/client/dapr"
 
 	//"github.com/tkeel-io/tdtl"
 	pbg "github.com/tkeel-io/tkeel-device/api/group/v1"
@@ -621,4 +622,9 @@ func NewDaprClientFromContext(ctx context.Context, daprHTTPPort string) (*openap
 	}
 	cli := openapi.NewDaprClient("3500", tm.TenantId, tm.UserId)
 	return cli, nil
+}
+
+func NewDaprClientDefault(client *dapr.HTTPClient) *openapi.DaprClient {
+	cli := openapi.NewDaprClientWithConn(client, http.Header{})
+	return cli
 }

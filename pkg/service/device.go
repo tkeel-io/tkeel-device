@@ -5,6 +5,9 @@ import (
 	json "encoding/json"
 	"errors"
 	"fmt"
+	"github.com/tkeel-io/tkeel-device/pkg/service/openapi"
+	"github.com/tkeel-io/tkeel/pkg/client/dapr"
+	"strings"
 
 	"github.com/tkeel-io/kit/log"
 	pb "github.com/tkeel-io/tkeel-device/api/device/v1"
@@ -19,7 +22,8 @@ import (
 
 type DeviceService struct {
 	pb.UnimplementedDeviceServer
-	client *CoreClient
+	client     *CoreClient
+	daprClient *dapr.HTTPClient
 }
 
 func NewDeviceService() *DeviceService {
@@ -28,6 +32,10 @@ func NewDeviceService() *DeviceService {
 	}
 	go ds.MetricsTimer()
 	return ds
+}
+
+func (s *DeviceService) Init() {
+	s.daprClient = dapr.NewHTTPClient("3500")
 }
 
 func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRequest) (*pb.CreateDeviceResponse, error) {
@@ -262,6 +270,13 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 			log.Error("error core return error", id)
 			continue
 		}
+	}
+
+	// addons
+	openapiCli := NewDaprClientDefault(s.daprClient)
+	if err = openapiCli.SchemaChangeAddons(ctx, tm["tenantId"],
+		strings.Join(req.GetIds().GetIds(), ","), openapi.EventDeviceDelete, nil); err != nil {
+		log.L().Error("call addons error")
 	}
 	return out, nil
 }

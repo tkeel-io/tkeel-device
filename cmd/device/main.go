@@ -54,32 +54,32 @@ func main() {
 		serverList...,
 	)
 
-	{ //User service
+	//User service
 
-		OpenapiSrv := service.NewOpenapiService()
-		openapi.RegisterOpenapiHTTPServer(httpSrv.Container, OpenapiSrv)
-		openapi.RegisterOpenapiServer(grpcSrv.GetServe(), OpenapiSrv)
+	OpenapiSrv := service.NewOpenapiService()
+	openapi.RegisterOpenapiHTTPServer(httpSrv.Container, OpenapiSrv)
+	openapi.RegisterOpenapiServer(grpcSrv.GetServe(), OpenapiSrv)
 
-		DeviceSrv := service.NewDeviceService()
-		Device_v1.RegisterDeviceHTTPServer(httpSrv.Container, DeviceSrv)
-		Device_v1.RegisterDeviceServer(grpcSrv.GetServe(), DeviceSrv)
+	DeviceSrv := service.NewDeviceService()
+	Device_v1.RegisterDeviceHTTPServer(httpSrv.Container, DeviceSrv)
+	Device_v1.RegisterDeviceServer(grpcSrv.GetServe(), DeviceSrv)
 
-		GroupSrv := service.NewGroupService()
-		Group_v1.RegisterGroupHTTPServer(httpSrv.Container, GroupSrv)
-		Group_v1.RegisterGroupServer(grpcSrv.GetServe(), GroupSrv)
+	GroupSrv := service.NewGroupService()
+	Group_v1.RegisterGroupHTTPServer(httpSrv.Container, GroupSrv)
+	Group_v1.RegisterGroupServer(grpcSrv.GetServe(), GroupSrv)
 
-		TemplateSrv := service.NewTemplateService()
-		Template_v1.RegisterTemplateHTTPServer(httpSrv.Container, TemplateSrv)
-		Template_v1.RegisterTemplateServer(grpcSrv.GetServe(), TemplateSrv)
+	TemplateSrv := service.NewTemplateService()
+	Template_v1.RegisterTemplateHTTPServer(httpSrv.Container, TemplateSrv)
+	Template_v1.RegisterTemplateServer(grpcSrv.GetServe(), TemplateSrv)
 
-		metricsSrv := service.NewMetricsService(metrics.CollectorDeviceNumRequest, metrics.CollectorDeviceTemplateRequest, metrics.CollectorDeviceOnlineRequest)
-		Metrics_v1.RegisterMetricsHTTPServer(httpSrv.Container, metricsSrv)
-	}
+	metricsSrv := service.NewMetricsService(metrics.CollectorDeviceNumRequest, metrics.CollectorDeviceTemplateRequest, metrics.CollectorDeviceOnlineRequest)
+	Metrics_v1.RegisterMetricsHTTPServer(httpSrv.Container, metricsSrv)
 
 	if err := app.Run(context.TODO()); err != nil {
 		panic(err)
 	}
-
+	DeviceSrv.Init()
+	TemplateSrv.Init()
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGTERM, os.Interrupt)
 	<-stop

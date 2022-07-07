@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"github.com/tkeel-io/tkeel-device/pkg/service/openapi"
 
 	v1 "github.com/tkeel-io/tkeel-device/api/openapi/v1"
@@ -26,12 +27,14 @@ func NewOpenapiService() *OpenapiService {
 // AddonsIdentify implements AddonsIdentify.OpenapiServer.
 func (s *OpenapiService) AddonsIdentify(ctx context.Context, in *openapi_v1.AddonsIdentifyRequest) (*openapi_v1.AddonsIdentifyResponse, error) {
 	var endpoint string
-	openapiCli := openapi.NewDaprClient("3500", "mock", "mock")
+	openapiCli := openapi.NewDaprClient("3500", "_systenant", "_user_tKeel_system")
 	pluginId := in.GetPlugin().GetId()
 	for _, addon := range in.ImplementedAddons {
 		if addon.GetAddonsPoint() == openapi.DEVICE_SCHEMA_CHANGE {
+			sendToPluginID := "keel"
 			endpoint = addon.GetImplementedEndpoint()
-			openapiCli.CallAddons(ctx,pluginId,endpoint,&pb.UpdateTemplateResponse{})
+			method := fmt.Sprintf("/apis/%s/%s", pluginId, endpoint)
+			openapiCli.CallAddons(ctx, sendToPluginID, method, nil, &pb.UpdateTemplateResponse{})
 		}
 	}
 	return &openapi_v1.AddonsIdentifyResponse{
