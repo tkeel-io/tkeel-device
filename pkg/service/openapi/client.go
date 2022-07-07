@@ -19,10 +19,10 @@ package openapi
 import (
 	"context"
 	pb "github.com/tkeel-io/tkeel-device/api/template/v1"
+	"github.com/tkeel-io/tkeel/pkg/model"
 	"net/http"
 
 	"github.com/tkeel-io/tkeel/pkg/client/dapr"
-	"github.com/tkeel-io/tkeel/pkg/model"
 )
 
 var (
@@ -30,8 +30,36 @@ var (
 	tokenKey             = "Authorization"
 )
 
+type EventType int
+
+// addons schema type
+const (
+	SchemaUnknown   = "unknown"
+	SchemaTemp      = "temp"
+	SchemaDevice    = "device"
+	SchemaTelemetry = "telemetry"
+)
+
+// addons schema event type
+const (
+	EventUnknown = iota
+	EventTemplateDelete
+	EventDeviceDelete
+	EventTelemetryDelete
+	EventTelemetryEdit
+)
+
+// addons schema op
+const (
+	OpDefault = iota
+	OpDelete
+	OpEdit
+)
+
+type Option func(m *map[string]interface{})
+
 type Client interface {
-	SchemaChangeAddons(ctx context.Context, resp *pb.UpdateTemplateResponse) error
+	SchemaChangeAddons(ctx context.Context, tenantId string, objectId string, eventType EventType, resp *pb.UpdateTemplateResponse) error
 }
 
 var _ Client = (*DaprClient)(nil)
@@ -47,8 +75,12 @@ func NewDaprClient(daprHTTPPort string, Tenant, User string) *DaprClient {
 	user.User = User
 	header := http.Header{}
 	header.Set(model.XtKeelAuthHeader, user.Base64Encode())
+	return NewDaprClientWithConn(dapr.NewHTTPClient(daprHTTPPort), header)
+}
+
+func NewDaprClientWithConn(client *dapr.HTTPClient, header http.Header) *DaprClient {
 	return &DaprClient{
 		header: header,
-		c:      dapr.NewHTTPClient(daprHTTPPort),
+		c:      client,
 	}
 }

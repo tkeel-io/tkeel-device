@@ -18,25 +18,61 @@ package openapi
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"github.com/pkg/errors"
 	"github.com/tkeel-io/kit/log"
 	transportHTTP "github.com/tkeel-io/kit/transport/http"
 	pb "github.com/tkeel-io/tkeel-device/api/template/v1"
-	structpb "google.golang.org/protobuf/types/known/structpb"
-	"net/http"
-
-	"github.com/pkg/errors"
 	"github.com/tkeel-io/tkeel/pkg/client"
 	"github.com/tkeel-io/tkeel/pkg/client/dapr"
+	structpb "google.golang.org/protobuf/types/known/structpb"
+	"net/http"
 )
 
-func (c *DaprClient) SchemaChangeAddons(ctx context.Context, templateData *pb.UpdateTemplateResponse) error {
+func (c *DaprClient) SchemaChangeAddons(ctx context.Context, tenantId string, objectId string, eventType EventType, templateData *pb.UpdateTemplateResponse) error {
 	sendToPluginID := "keel"
-	methodEndpoint := fmt.Sprintf("apis/addons/%s", DEVICE_SCHEMA_CHANGE)
-	return c.CallAddons(ctx, sendToPluginID, methodEndpoint, templateData)
+	methodEndpoint := fmt.Sprintf("/apis/addons/%s", DEVICE_SCHEMA_CHANGE)
+	body := map[string]interface{}{
+		"objectId": objectId,
+		"tenantId": tenantId,
+	}
+
+	optionTable := map[EventType]Option{
+		EventTemplateDelete: func(m *map[string]interface{}) {
+			(*m)["type"] = SchemaTemp
+			(*m)["status"] = OpDelete
+		},
+		EventDeviceDelete: func(m *map[string]interface{}) {
+			(*m)["type"] = SchemaDevice
+			(*m)["status"] = OpDelete
+		},
+		EventTelemetryDelete: func(m *map[string]interface{}) {
+			(*m)["type"] = SchemaTelemetry
+			(*m)["status"] = OpDelete
+		},
+		EventTelemetryEdit: func(m *map[string]interface{}) {
+			(*m)["type"] = SchemaTelemetry
+			(*m)["status"] = OpEdit
+		},
+		EventUnknown: func(m *map[string]interface{}) {
+			(*m)["type"] = SchemaUnknown
+			(*m)["status"] = OpDefault
+		},
+	}
+	if option, ok := optionTable[eventType]; ok {
+		option(&body)
+	} else {
+		optionTable[EventUnknown](&body)
+	}
+	bodyVal, err := json.Marshal(body)
+	if err != nil {
+		return err
+	}
+	return c.CallAddons(ctx, sendToPluginID, methodEndpoint, bodyVal, templateData)
 }
 
-func (c *DaprClient) CallAddons(ctx context.Context, sendToPluginID, methodEndpoint string, templateData *pb.UpdateTemplateResponse) error {
+func (c *DaprClient) CallAddons(ctx context.Context, sendToPluginID, methodEndpoint string, body []byte, templateData *pb.UpdateTemplateResponse) error {
 	resp := &structpb.Value{}
 	// return fmt.Sprintf(daprInvokeURLTemplate, c.httpAddr, req.ID, req.Method)
 	byt, err := client.InvokeJSON(ctx, c.c, &dapr.AppRequest{
@@ -45,20 +81,19 @@ func (c *DaprClient) CallAddons(ctx context.Context, sendToPluginID, methodEndpo
 		Verb:       http.MethodPost,
 		Header:     transportHTTP.HeaderFromContext(ctx).Clone(),
 		QueryValue: nil,
-		Body:       nil,
-	}, templateData, resp)
+		Body:       body,
+	}, nil, resp)
 	if err != nil {
-		log.Error(fmt.Sprintf("CallAddons: ID:%v\n methodEndpoint:%v\n templateData:%v\n",
+		log.Error(fmt.Sprintf("CallAddons:\nID:%v \nmethodEndpoint:%v \nbody:%v \nerr: %v\n",
 			sendToPluginID,
 			methodEndpoint,
-			templateData))
-		log.Error(err)
+			string(body), err))
 		return errors.Wrapf(err, "dapr invoke plugin(%s) identify", sendToPluginID)
 	}
-	log.Info(fmt.Sprintf("CallAddons: ID:%v\n methodEndpoint:%v\n templateData:%v\n byt:%v\n",
+	log.Info(fmt.Sprintf("CallAddons:\nID:%v \nmethodEndpoint:%v \nbyt:%v \nbody:%v\n",
 		sendToPluginID,
 		methodEndpoint,
-		templateData,
-		string(byt)))
+		string(byt),
+		string(body)))
 	return nil
 }

@@ -7,19 +7,27 @@ import (
 	"fmt"
 	"github.com/tkeel-io/kit/log"
 	pb "github.com/tkeel-io/tkeel-device/api/template/v1"
+	"github.com/tkeel-io/tkeel-device/pkg/service/openapi"
+	"github.com/tkeel-io/tkeel/pkg/client/dapr"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/structpb"
+	"strings"
 )
 
 type TemplateService struct {
 	pb.UnimplementedTemplateServer
 	httpClient *CoreClient
+	daprClient *dapr.HTTPClient
 }
 
 func NewTemplateService() *TemplateService {
 	return &TemplateService{
 		httpClient: NewCoreClient(),
 	}
+}
+
+func (s *TemplateService) Init() {
+	s.daprClient = dapr.NewHTTPClient("3500")
 }
 
 type Config struct {
@@ -172,11 +180,8 @@ func (s *TemplateService) UpdateTemplate(ctx context.Context, req *pb.UpdateTemp
 	}
 
 	//addons
-	openapiCli, err := NewDaprClientFromContext(ctx, "3500")
-	if nil != err {
-		return nil, err
-	}
-	err = openapiCli.SchemaChangeAddons(ctx, out)
+	openapiCli := NewDaprClientDefault(s.daprClient)
+	err = openapiCli.SchemaChangeAddons(ctx, tm["tenantId"], req.GetUid(), openapi.EventUnknown, out)
 	if nil != err {
 		log.L().Error("call addons error")
 	}
@@ -230,7 +235,13 @@ func (s *TemplateService) DeleteTemplate(ctx context.Context, req *pb.DeleteTemp
 			continue
 		}
 	}
-	//fmt response
+
+	// addons
+	openapiCli := NewDaprClientDefault(s.daprClient)
+	if err = openapiCli.SchemaChangeAddons(ctx, tm["tenantId"],
+		strings.Join(req.GetIds().GetIds(), ","), openapi.EventTemplateDelete, nil); err != nil {
+		log.L().Error("call addons error")
+	}
 	return out, nil
 }
 
@@ -391,7 +402,20 @@ func (s *TemplateService) AddTemplateTelemetry(ctx context.Context, req *pb.AddT
 	log.Debug("AddTemplateTelemetry")
 	log.Debug("req:", req)
 
-	return s.opTemplatePropConfig(ctx, req.GetUid(), req.Tele, "telemetry.", "replace", "/configs/patch")
+	resp, err := s.opTemplatePropConfig(ctx, req.GetUid(), req.Tele, "telemetry.", "replace", "/configs/patch")
+	if err != nil {
+		return resp, err
+	}
+
+	// addons
+	if tm, err := s.httpClient.GetTokenMap(ctx); err == nil {
+		openapiCli := NewDaprClientDefault(s.daprClient)
+		if err = openapiCli.SchemaChangeAddons(ctx, tm["tenantId"],
+			req.GetUid(), openapi.EventTelemetryEdit, nil); err != nil {
+			log.L().Error("call addons error")
+		}
+	}
+	return resp, nil
 }
 
 func (s *TemplateService) UpdateTemplateTelemetry(ctx context.Context, req *pb.UpdateTemplateTelemetryRequest) (*emptypb.Empty, error) {
@@ -411,7 +435,19 @@ func (s *TemplateService) DeleteTemplateTelemetry(ctx context.Context, req *pb.D
 		attrMap[id] = "del"
 	}
 	//do it
-	return s.httpClient.CorePatchMethod(ctx, req.GetUid(), attrMap, "telemetry.", "remove", "/configs/patch")
+	resp, err := s.httpClient.CorePatchMethod(ctx, req.GetUid(), attrMap, "telemetry.", "remove", "/configs/patch")
+	if err != nil {
+		return resp, err
+	}
+	// addons
+	if tm, err := s.httpClient.GetTokenMap(ctx); err == nil {
+		openapiCli := NewDaprClientDefault(s.daprClient)
+		if err = openapiCli.SchemaChangeAddons(ctx, tm["tenantId"],
+			req.GetUid(), openapi.EventTelemetryDelete, nil); err != nil {
+			log.L().Error("call addons error")
+		}
+	}
+	return resp, nil
 }
 func (s *TemplateService) GetTemplateTelemetry(ctx context.Context, req *pb.GetTemplateTelemetryRequest) (*pb.GetTemplateTelemetryResponse, error) {
 	log.Debug("GetTemplateTelemetry")
