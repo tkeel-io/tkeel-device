@@ -263,7 +263,7 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 
 		// delete rule devices
 		urlRule := s.client.GetDeleleEntityFromRuleUrl(id)
-		_, _ = s.client.DeleteWithCtx(ctx,urlRule)
+		_, _ = s.client.DeleteWithCtx(ctx, urlRule)
 
 		midUrl := "/" + id
 		url := s.client.GetCoreUrl(midUrl, tm, "device")
@@ -284,7 +284,7 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 	// addons
 	openapiCli := NewDaprClientDefault(s.daprClient)
 	if err = openapiCli.SchemaChangeAddons(ctx, tm["tenantId"],
-		strings.Join(req.GetIds().GetIds(), ","), openapi.EventDeviceDelete, nil); err != nil {
+		strings.Join(req.GetIds().GetIds(), ","), "", "", openapi.EventDeviceDelete, nil); err != nil {
 		log.L().Error("call addons error")
 	}
 	return out, nil

@@ -56,10 +56,16 @@ const (
 	OpEdit
 )
 
+// telemetry source
+const (
+	SourceTemplate = "temp"
+	SourceDevice   = "device"
+)
+
 type Option func(m *map[string]interface{})
 
 type Client interface {
-	SchemaChangeAddons(ctx context.Context, tenantId string, objectId string, eventType EventType, resp *pb.UpdateTemplateResponse) error
+	SchemaChangeAddons(ctx context.Context, tenantId string, deviceId string, tempId string, telemetryId string, eventType EventType, resp *pb.UpdateTemplateResponse) error
 }
 
 var _ Client = (*DaprClient)(nil)

@@ -30,12 +30,14 @@ import (
 	"net/http"
 )
 
-func (c *DaprClient) SchemaChangeAddons(ctx context.Context, tenantId string, objectId string, eventType EventType, templateData *pb.UpdateTemplateResponse) error {
+func (c *DaprClient) SchemaChangeAddons(ctx context.Context, tenantId string, deviceId string, tempId string, telemetryId string, eventType EventType, templateData *pb.UpdateTemplateResponse) error {
 	sendToPluginID := "keel"
 	methodEndpoint := fmt.Sprintf("/apis/addons/%s", DEVICE_SCHEMA_CHANGE)
 	body := map[string]interface{}{
-		"objectId": objectId,
-		"tenantId": tenantId,
+		"tempId":      tempId,
+		"deviceId":    deviceId,
+		"telemetryId": telemetryId,
+		"tenantId":    tenantId,
 	}
 
 	optionTable := map[EventType]Option{
