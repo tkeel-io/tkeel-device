@@ -139,6 +139,11 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 		log.Error("error addSpacePath mapper", err6)
 		return nil, err6
 	}
+	err61 := s.client.setTemplateNameMapper(tm, devId, req.DevBasicInfo.TemplateId, "device")
+	if nil != err61 {
+		log.Error("error addTemplateName mapper", err61)
+		return nil, err61
+	}
 
 	// 8 return
 	re, err7 := structpb.NewValue(deviceObject)
@@ -1126,6 +1131,12 @@ func (s *DeviceService) SaveDeviceConfAsTemplteAndRef(ctx context.Context, req *
 	if nil != err3 {
 		log.Error("error patch dev entity", err3)
 		return nil, err3
+	}
+	// set templateName mapper
+	err61 := s.client.setTemplateNameMapper(tm, req.GetId(), templateId, "device")
+	if nil != err61 {
+		log.Error("error addTemplateName mapper", err61)
+		return nil, err61
 	}
 
 	//return

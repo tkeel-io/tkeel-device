@@ -442,6 +442,40 @@ func (c *CoreClient) setSpacePathMapper(tm map[string]string, Id string, pId str
 
 	return nil
 }
+func (c *CoreClient) setTemplateNameMapper(tm map[string]string, Id string, tId string, entityType string) error {
+
+	log.Debug("setTemplateNameMapper")
+	//check templateId
+	log.Debug("tId = ", tId)
+	if tId == "" {
+		return nil
+	}
+
+	//get url
+	midUrl := "/" + Id + "/mappers"
+	url := c.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("mapper url = ", url)
+
+	//fmt request
+	data := make(map[string]string)
+	data["name"] = "mapper_templateName_path"
+	data["tql"] = "insert into " + Id + " select " + tId + ".basicInfo.templateName + '/" + Id + "'  as " + "basicInfo.templateName"
+	log.Debug("data = ", data)
+
+	send, err := json.Marshal(data)
+	if nil != err {
+		return err
+	}
+
+	// do it
+	_, err1 := c.Post(url, send)
+	if nil != err1 {
+		log.Error("error core return")
+		return err1
+	}
+
+	return nil
+}
 
 func (c *CoreClient) CorePatchMethod(ctx context.Context, entityId string, kv map[string]interface{}, path string, operator string, pathClassify string) (*emptypb.Empty, error) {
 	log.Debug("CoreConfigPatchMethod")
