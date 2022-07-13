@@ -5,21 +5,26 @@ import (
 	json "encoding/json"
 	"errors"
 	"fmt"
+	"github.com/tkeel-io/tkeel-device/pkg/service/openapi"
+	"github.com/tkeel-io/tkeel/pkg/client/dapr"
+	"strings"
 
 	"github.com/tkeel-io/kit/log"
 	pb "github.com/tkeel-io/tkeel-device/api/device/v1"
 	pbt "github.com/tkeel-io/tkeel-device/api/template/v1"
 
 	//go_struct "google.golang.org/protobuf/types/known/structpb"
+	"time"
+
 	"github.com/tkeel-io/tkeel-device/pkg/service/metrics"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/structpb"
-	"time"
 )
 
 type DeviceService struct {
 	pb.UnimplementedDeviceServer
-	client *CoreClient
+	client     *CoreClient
+	daprClient *dapr.HTTPClient
 }
 
 func NewDeviceService() *DeviceService {
@@ -28,6 +33,10 @@ func NewDeviceService() *DeviceService {
 	}
 	go ds.MetricsTimer()
 	return ds
+}
+
+func (s *DeviceService) Init() {
+	s.daprClient = dapr.NewHTTPClient("3500")
 }
 
 func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRequest) (*pb.CreateDeviceResponse, error) {
@@ -253,6 +262,14 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 	}
 	ids := req.Ids.GetIds()
 	for _, id := range ids {
+		// delete subscribe entities
+		urlSub := s.client.GetDeleleEntityFromSubUrl(id)
+		_, _ = s.client.DeleteWithCtx(ctx, urlSub)
+
+		// delete rule devices
+		urlRule := s.client.GetDeleleEntityFromRuleUrl(id)
+		_, _ = s.client.DeleteWithCtx(ctx,urlRule)
+
 		midUrl := "/" + id
 		url := s.client.GetCoreUrl(midUrl, tm, "device")
 		log.Debug("get url:", url)
@@ -267,6 +284,13 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 			log.Error("error core return error", id)
 			continue
 		}
+	}
+
+	// addons
+	openapiCli := NewDaprClientDefault(s.daprClient)
+	if err = openapiCli.SchemaChangeAddons(ctx, tm["tenantId"],
+		strings.Join(req.GetIds().GetIds(), ","), openapi.EventDeviceDelete, nil); err != nil {
+		log.L().Error("call addons error")
 	}
 	return out, nil
 }

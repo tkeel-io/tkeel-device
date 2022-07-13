@@ -7,25 +7,30 @@ import (
 	json "encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/tkeel-io/kit/log"
 	transportHTTP "github.com/tkeel-io/kit/transport/http"
 	"github.com/tkeel-io/tdtl"
+	"github.com/tkeel-io/tkeel/pkg/client/dapr"
 
 	//"github.com/tkeel-io/tdtl"
-	pbg "github.com/tkeel-io/tkeel-device/api/group/v1"
-	"github.com/tkeel-io/tkeel-device/pkg/service/openapi"
-	pb_auth "github.com/tkeel-io/tkeel/api/authentication/v1"
-	"google.golang.org/protobuf/types/known/emptypb"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"time"
+
+	pbg "github.com/tkeel-io/tkeel-device/api/group/v1"
+	"github.com/tkeel-io/tkeel-device/pkg/service/openapi"
+	pb_auth "github.com/tkeel-io/tkeel/api/authentication/v1"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 const (
 	coreUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/core/v1/entities"
 	authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
+	subUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/core-broker/v1/entities/%s"
+	ruleUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/rule-manager/v1/devices/%s"
 
 	//coreUrl string = "http://192.168.100.5:31874/v1/entities"
 	//authUrl string = "http://192.168.100.5:30707/apis/security"
@@ -58,6 +63,16 @@ func NewCoreClient() *CoreClient {
 func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string, entityType string) string {
 	url := fmt.Sprintf(coreUrl+midUrl+"?"+"type=%s&owner=%s&source=%s", entityType, mapUrl["owner"], mapUrl["source"])
 	return url
+}
+
+// get subscribe delete entity url
+func (c *CoreClient) GetDeleleEntityFromSubUrl(entityId string) string {
+	return fmt.Sprintf(subUrl, entityId )
+}
+
+// get rule delete entity url
+func (c *CoreClient) GetDeleleEntityFromRuleUrl(entityId string) string {
+	return fmt.Sprintf(ruleUrl, entityId )
 }
 
 //get token
@@ -231,6 +246,25 @@ func (c *CoreClient) Delete(url string) ([]byte, error) {
 
 	req.Header.Add("Content-Type", "application/json")
 	AddDefaultAuthHeader(req)
+
+	resp, err := http.DefaultClient.Do(req)
+	//return c.ParseResp(resp, err)
+	dt, err1 := c.ParseResp(resp, err)
+	if err1 != nil {
+		return nil, err1
+	}
+	dataByte, err2 := json.Marshal(dt)
+	if nil != err2 {
+		return nil, err2
+	}
+	return dataByte, nil
+}
+
+func (c *CoreClient) DeleteWithCtx(ctx context.Context, url string) ([]byte, error) {
+	req, _ := http.NewRequest("DELETE", url, nil)
+	header := transportHTTP.HeaderFromContext(ctx)
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add(tkeelAuthHeader, header.Get(tkeelAuthHeader))
 
 	resp, err := http.DefaultClient.Do(req)
 	//return c.ParseResp(resp, err)
@@ -655,4 +689,9 @@ func NewDaprClientFromContext(ctx context.Context, daprHTTPPort string) (*openap
 	}
 	cli := openapi.NewDaprClient("3500", tm.TenantId, tm.UserId)
 	return cli, nil
+}
+
+func NewDaprClientDefault(client *dapr.HTTPClient) *openapi.DaprClient {
+	cli := openapi.NewDaprClientWithConn(client, http.Header{})
+	return cli
 }
