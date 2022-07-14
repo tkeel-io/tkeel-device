@@ -44,7 +44,7 @@ func (s *DeviceService) CreateDevice(ctx context.Context, req *pb.CreateDeviceRe
 	log.Debug("req:", req.DevBasicInfo)
 
 	//0. check device name repeated
-	errRepeated := s.checkNameRepated(ctx, req.DevBasicInfo.Name)
+	errRepeated := s.checkNameRepated(ctx, req.DevBasicInfo.Name, "device")
 	if nil != errRepeated {
 		log.Debug("err:", errRepeated)
 		return nil, errRepeated
@@ -268,7 +268,7 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 
 		// delete rule devices
 		urlRule := s.client.GetDeleleEntityFromRuleUrl(id)
-		_, _ = s.client.DeleteWithCtx(ctx,urlRule)
+		_, _ = s.client.DeleteWithCtx(ctx, urlRule)
 
 		midUrl := "/" + id
 		url := s.client.GetCoreUrl(midUrl, tm, "device")
@@ -1135,6 +1135,17 @@ func (s *DeviceService) SaveDeviceConfAsTemplteAndRef(ctx context.Context, req *
 	if nil != err1 {
 		return nil, err1
 	}
+
+	entityType, okt := configObject["type"]
+	if !okt {
+		log.Error("error entityType non exist")
+		return nil, errors.New("error entityType non exist")
+	}
+	if entityType.(string) != "device" {
+		log.Error("error entityType")
+		return nil, errors.New("error entityType")
+	}
+
 	configs, ok := configObject["configs"]
 	if !ok {
 		log.Error("error config non exist")
@@ -1177,7 +1188,7 @@ func (s *DeviceService) SaveDeviceConfAsTemplteAndRef(ctx context.Context, req *
 }
 
 func (s *DeviceService) SaveConfAsOtherTemplte(ctx context.Context, tm map[string]string, configs interface{}, otherTemplateInfo *pb.TemplateBasicInfo) (map[string]interface{}, error, string) {
-	errRepeated := s.checkNameRepated(ctx, otherTemplateInfo.Name)
+	errRepeated := s.checkNameRepated(ctx, otherTemplateInfo.Name, "template")
 	if nil != errRepeated {
 		log.Debug("err:", errRepeated)
 		return nil, errRepeated, ""
@@ -1330,7 +1341,7 @@ func (s *DeviceService) CoreSearchEntity2(listEntityQuery *pb.ListEntityQuery) (
 	return listObject, nil
 }
 
-func (s *DeviceService) checkNameRepated(ctx context.Context, name string) error {
+func (s *DeviceService) checkNameRepated(ctx context.Context, name string, entityType string) error {
 	log.Debug("checkNameRepated")
 	if name == "" {
 		return errors.New("name cannot be empty")
@@ -1352,7 +1363,7 @@ func (s *DeviceService) checkNameRepated(ctx context.Context, name string) error
 	condition2 := &pb.Condition{
 		Field:    "type",
 		Operator: "$eq",
-		Value:    structpb.NewStringValue("device"),
+		Value:    structpb.NewStringValue(entityType),
 		//Value:    "device",
 	}
 	query.Condition = append(query.Condition, condition1)

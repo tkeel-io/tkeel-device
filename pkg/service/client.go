@@ -29,7 +29,7 @@ import (
 const (
 	coreUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/core/v1/entities"
 	authUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/security"
-	subUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/core-broker/v1/entities/%s"
+	subUrl  string = "http://localhost:3500/v1.0/invoke/keel/method/apis/core-broker/v1/entities/%s"
 	ruleUrl string = "http://localhost:3500/v1.0/invoke/keel/method/apis/rule-manager/v1/devices/%s"
 
 	//coreUrl string = "http://192.168.100.5:31874/v1/entities"
@@ -67,12 +67,12 @@ func (c *CoreClient) GetCoreUrl(midUrl string, mapUrl map[string]string, entityT
 
 // get subscribe delete entity url
 func (c *CoreClient) GetDeleleEntityFromSubUrl(entityId string) string {
-	return fmt.Sprintf(subUrl, entityId )
+	return fmt.Sprintf(subUrl, entityId)
 }
 
 // get rule delete entity url
 func (c *CoreClient) GetDeleleEntityFromRuleUrl(entityId string) string {
-	return fmt.Sprintf(ruleUrl, entityId )
+	return fmt.Sprintf(ruleUrl, entityId)
 }
 
 //get token
@@ -493,7 +493,7 @@ func (c *CoreClient) setTemplateNameMapper(tm map[string]string, Id string, tId 
 	//fmt request
 	data := make(map[string]string)
 	data["name"] = "mapper_templateName_path"
-	data["tql"] = "insert into " + Id + " select " + tId + ".basicInfo.templateName + '/" + Id + "'  as " + "basicInfo.name"
+	data["tql"] = "insert into " + Id + " select " + tId + ".basicInfo.name + '/" + Id + "'  as " + "basicInfo.templateName"
 	log.Debug("data = ", data)
 
 	send, err := json.Marshal(data)
