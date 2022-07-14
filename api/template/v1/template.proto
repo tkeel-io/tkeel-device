@@ -172,7 +172,7 @@ service Template {
 	rpc AddTemplateTelemetry (AddTemplateTelemetryRequest) returns (google.protobuf.Empty) {
 		option (google.api.http) = {
 			post : "/templates/{uid}/telemetry"
-			body : "tele"
+			body : "body"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "添加模板遥测定义";
@@ -206,7 +206,7 @@ service Template {
 	rpc DeleteTemplateTelemetry (DeleteTemplateTelemetryRequest) returns (google.protobuf.Empty) {
 		option (google.api.http) = {
 			post : "/templates/{uid}/telemetry/delete"
-            body : "ids"
+      body : "body"
 		};
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "删除模板遥测定义";
@@ -496,17 +496,19 @@ message ListTemplateAttributeResponse {
     //telemetry
 message AddTemplateTelemetryRequest {
     //PropConfig tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
-    google.protobuf.Value tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
+//    google.protobuf.Value tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
+    AddTemplateTelemetryBody body = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板信息"}];
+//    string source = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测来源"}];
 }
 message UpdateTemplateTelemetryRequest { 
     //PropConfig tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
     google.protobuf.Value tele  = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
 }
-message DeleteTemplateTelemetryRequest { 
+message DeleteTemplateTelemetryRequest {
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
-    Ids  ids = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测ID 数组"}];
+    DeleteTemplateTelemetryBody body = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板信息"}];
 }
 message GetTemplateTelemetryRequest { 
     string uid = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "模板ID"}];
@@ -604,6 +606,17 @@ message Condition {
 	string field 		= 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "查询输出字段"}];
 	string value  	= 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "值"}];
 	string operator = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "操作符, $eq为相等，$neq为不等，$lt为小于，$gt为大于，$lne为小于等于， $gne为大于等于"}];
+}
+
+message AddTemplateTelemetryBody {
+  google.protobuf.Value tele  = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测"}];
+  string source = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测来源"}];
+}
+
+message DeleteTemplateTelemetryBody {
+//  Ids  ids = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测ID 数组"}];
+  repeated string ids = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测ID 数组"}];
+  string source = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "遥测来源"}];
 }
 //device <--->  core
 

@@ -289,7 +289,7 @@ func (s *DeviceService) DeleteDevice(ctx context.Context, req *pb.DeleteDeviceRe
 	// addons
 	openapiCli := NewDaprClientDefault(s.daprClient)
 	if err = openapiCli.SchemaChangeAddons(ctx, tm["tenantId"],
-		strings.Join(req.GetIds().GetIds(), ","), openapi.EventDeviceDelete, nil); err != nil {
+		strings.Join(req.GetIds().GetIds(), ","), "", "", openapi.EventDeviceDelete, nil); err != nil {
 		log.L().Error("call addons error")
 	}
 	return out, nil
