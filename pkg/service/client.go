@@ -493,7 +493,7 @@ func (c *CoreClient) setTemplateNameMapper(tm map[string]string, Id string, tId 
 	//fmt request
 	data := make(map[string]string)
 	data["name"] = "mapper_templateName_path"
-	data["tql"] = "insert into " + Id + " select " + tId + ".basicInfo.name + '/" + Id + "'  as " + "basicInfo.templateName"
+	data["tql"] = "insert into " + Id + " select " + tId + ".basicInfo.name as basicInfo.templateName"
 	log.Debug("data = ", data)
 
 	send, err := json.Marshal(data)
