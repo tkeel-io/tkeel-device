@@ -194,7 +194,7 @@ func (h *TemplateHTTPHandler) AddTemplateCommand(req *go_restful.Request, resp *
 
 func (h *TemplateHTTPHandler) AddTemplateTelemetry(req *go_restful.Request, resp *go_restful.Response) {
 	in := AddTemplateTelemetryRequest{}
-	if err := transportHTTP.GetBody(req, &in.Tele); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Body); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return
@@ -580,7 +580,7 @@ func (h *TemplateHTTPHandler) DeleteTemplateCommand(req *go_restful.Request, res
 
 func (h *TemplateHTTPHandler) DeleteTemplateTelemetry(req *go_restful.Request, resp *go_restful.Response) {
 	in := DeleteTemplateTelemetryRequest{}
-	if err := transportHTTP.GetBody(req, &in.Ids); err != nil {
+	if err := transportHTTP.GetBody(req, &in.Body); err != nil {
 		resp.WriteHeaderAndJson(http.StatusBadRequest,
 			result.Set(errors.InternalError.Reason, err.Error(), nil), "application/json")
 		return

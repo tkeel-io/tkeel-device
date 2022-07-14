@@ -1,21 +1,21 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/device/v1/device.proto",
+    "title": "api/group/v1/group.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "Device"
+      "name": "Group"
     },
     {
-      "name": "Group"
+      "name": "Template"
     },
     {
       "name": "Openapi"
     },
     {
-      "name": "Template"
+      "name": "Device"
     }
   ],
   "consumes": [
@@ -2093,12 +2093,12 @@
           },
           {
             "name": "body",
-            "description": "遥测",
+            "description": "模板信息",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "description": "遥测"
+              "$ref": "#/definitions/v1AddTemplateTelemetryBody",
+              "description": "模板信息"
             }
           }
         ],
@@ -2175,12 +2175,12 @@
           },
           {
             "name": "body",
-            "description": "遥测ID 数组",
+            "description": "模板信息",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/apitemplatev1Ids",
-              "description": "遥测ID 数组"
+              "$ref": "#/definitions/v1DeleteTemplateTelemetryBody",
+              "description": "模板信息"
             }
           }
         ],
@@ -2714,6 +2714,19 @@
         }
       }
     },
+    "v1AddTemplateTelemetryBody": {
+      "type": "object",
+      "properties": {
+        "tele": {
+          "type": "object",
+          "description": "遥测"
+        },
+        "source": {
+          "type": "string",
+          "description": "遥测来源"
+        }
+      }
+    },
     "v1AddonsIdentifyRequest": {
       "type": "object",
       "properties": {
@@ -2863,6 +2876,23 @@
             "$ref": "#/definitions/v1FaildDelTemplate"
           },
           "description": "模板删除失败 数组"
+        }
+      }
+    },
+    "v1DeleteTemplateTelemetryBody": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "遥测ID 数组",
+          "title": "Ids  ids = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: \"遥测ID 数组\"}];"
+        },
+        "source": {
+          "type": "string",
+          "description": "遥测来源"
         }
       }
     },
