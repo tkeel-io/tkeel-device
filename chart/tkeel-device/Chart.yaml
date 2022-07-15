@@ -2,7 +2,7 @@ annotations:
   tkeel.io/enable: "false"
 apiVersion: v2
 appVersion: 1.16.0
-description: A Helm chart for Kubernetes
+description: 设备管理插件
 name: tkeel-device
 type: application
 version: 0.4.1
