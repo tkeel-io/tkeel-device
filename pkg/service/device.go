@@ -1167,6 +1167,24 @@ func (s *DeviceService) SaveDeviceConfAsTemplteAndRef(ctx context.Context, req *
 		log.Error("error patch dev entity", err3)
 		return nil, err3
 	}
+
+	//patch entity template_id
+	midUrl := "/" + req.GetId()
+	url := s.client.GetCoreUrl(midUrl, tm, "device")
+	log.Debug("put url :", url)
+
+	data := make(map[string]interface{})
+	data["template_id"] = templateId
+	log.Debug(data)
+	dt, err31 := json.Marshal(data)
+	if err31 != nil {
+		return nil, err31
+	}
+	_, err32 := s.client.Put(url, dt)
+	if nil != err32 {
+		return nil, err32
+	}
+
 	// set templateName mapper
 	err61 := s.client.setTemplateNameMapper(tm, req.GetId(), templateId, "device")
 	if nil != err61 {
