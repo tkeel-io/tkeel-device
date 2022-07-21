@@ -1169,6 +1169,7 @@ func (s *DeviceService) SaveDeviceConfAsTemplteAndRef(ctx context.Context, req *
 	}
 
 	//patch entity template_id
+	time.Sleep(time.Duration(500) * time.Millisecond)
 	midUrl := "/" + req.GetId()
 	url := s.client.GetCoreUrl(midUrl, tm, "device")
 	log.Debug("put url :", url)
