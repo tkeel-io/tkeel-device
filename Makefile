@@ -169,15 +169,15 @@ else
 	@go test -v -cover -gcflags=all=-l -coverprofile=coverage.out ./...
 endif
 
-#docker-build: build
-#	docker build -t tkeelio/tkeel-device:0.2.0 .
-#docker-push:
-#	docker push tkeelio/tkeel-device:0.2.0
-
 docker-build: build
-	docker build -t tkeelio/tkeel-device:dev .
+	docker build -t tkeelio/tkeel-device:1.0.0 .
 docker-push:
-	docker push tkeelio/tkeel-device:dev
+	docker push tkeelio/tkeel-device:1.0.0
+
+#docker-build: build
+#	docker build -t tkeelio/tkeel-device:dev .
+#docker-push:
+#	docker push tkeelio/tkeel-device:dev
 ################################################################################
 # Target: lint                                                                 #
 ################################################################################
